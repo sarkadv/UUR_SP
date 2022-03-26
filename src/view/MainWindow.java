@@ -138,7 +138,7 @@ public class MainWindow extends Application {
 	private Node createTilePicker() {
 		GridPane tilePickerPane = new GridPane();
 		
-		Button tile1 = new Button();
+		ImageButton tile1 = new ImageButton(150, 150, "file:img/hades/Hades_Industrial_Den.png", "file:img/hades/Hades_Industrial_Noc.png");
 		tile1.setPrefSize(150, 150);
 		
 		Button tile2 = new Button();

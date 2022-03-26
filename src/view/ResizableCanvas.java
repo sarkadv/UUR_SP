@@ -36,8 +36,6 @@ public class ResizableCanvas extends Canvas {
     			super.setWidth(height);
     	        super.setHeight(height);
     	        paint();
-    	        
-    	        System.out.println("width: " + super.getWidth() + " height: " + super.getHeight());
     		}
     	}
     }
