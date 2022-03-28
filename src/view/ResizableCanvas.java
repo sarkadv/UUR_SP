@@ -35,14 +35,14 @@ public class ResizableCanvas extends Canvas {
     		if(height >= this.minHeight(width) || height <= this.maxHeight(width)) {
     			super.setWidth(height);
     	        super.setHeight(height);
-    	        paint();
+    	        paint(); 
     		}
     	}
     }
     
     private void paint() {
     	GraphicsContext gc = this.getGraphicsContext2D();
-    	gc.setFill(Color.BLUE);
+    	gc.setFill(Color.MEDIUMPURPLE);
     	gc.fillRect(0, 0, this.getWidth(), this.getHeight());
     }
 }

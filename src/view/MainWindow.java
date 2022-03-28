@@ -9,21 +9,23 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import util.Resources;
 
 public class MainWindow extends Application {
 	
-	private ResizableCanvas resizableCanvas = new ResizableCanvas(500, 500);
+	private Canvas resizableCanvas = new ResizableCanvas(650, 650);
 	private DoubleProperty windowHeight = new SimpleDoubleProperty(0);
 	private DoubleProperty windowWidth = new SimpleDoubleProperty(0);
 
 	public static void main(String[] args) {
 		launch(args);
-
 	}
 
 	@Override
@@ -34,7 +36,6 @@ public class MainWindow extends Application {
 		
 		stage.setMinHeight(700);
 		stage.show();
-		
 		
 		windowHeight.bind(stage.heightProperty());
 		windowWidth.bind(stage.widthProperty());
@@ -51,13 +52,14 @@ public class MainWindow extends Application {
 	}
 	
 	private Scene createScene() {
-		Scene scene = new Scene(createRootPane(), 700, 700);
+		Scene scene = new Scene(createRootPane(), 850, 700);
 		
 		return scene;
 	}
 	
 	private Parent createRootPane() {
 		HBox rootPane = new HBox();
+		rootPane.setAlignment(Pos.CENTER);
 		
 		rootPane.getChildren().add(createLeftContent());
 		rootPane.getChildren().add(createRightContent());
@@ -79,37 +81,19 @@ public class MainWindow extends Application {
 	
 	private Node createTopButtons() {
 		HBox buttons = new HBox(5);
-		buttons.setPadding(new Insets(10));
+		buttons.setPadding(new Insets(10, 5, 10, 5));
 		
-		Button newFile = new Button("New File");
-		newFile.setMinSize(50, 50);
-		newFile.setMaxSize(50, 50);
+		Button newFile = new ImageButton(50, 50, "Nová Mapa", Resources.NEW_LIGHT);
+		Button saveFile = new ImageButton(50, 50, "Uložit Mapu", Resources.SAVE_LIGHT);
+		Button back = new ImageButton(50, 50, "Zpět", Resources.BACK_LIGHT);
+		Button loadFile = new ImageButton(50, 50, "Načíst Mapu", Resources.LOAD_LIGHT);
+		Button exportFile = new ImageButton(50, 50, "Exportovat Jako Obrázek", Resources.EXPORT_LIGHT);
+		Button mode = new ImageButton(50, 50, "Tmavý Režim", Resources.MODE_LIGHT);
+		Button settings = new ImageButton(50, 50, "Nastavení", Resources.SETTINGS_LIGHT);
+		Button help = new ImageButton(50, 50, "Nápověda", Resources.HELP_LIGHT);
+		Button about = new ImageButton(50, 50, "O Aplikaci", Resources.ABOUT_LIGHT);
 		
-		Button saveFile = new Button("Save File");
-		saveFile.setMinSize(50, 50);
-		saveFile.setMaxSize(50, 50);
-		
-		Button back = new Button("Back");
-		back.setMinSize(50, 50);
-		back.setMaxSize(50, 50);
-		
-		Button loadFile = new Button("LoadFile");
-		loadFile.setMinSize(50, 50);
-		loadFile.setMaxSize(50, 50);
-		
-		Button exportFile = new Button("Export File");
-		exportFile.setMinSize(50, 50);
-		exportFile.setMaxSize(50, 50);
-		
-		Button mode = new Button("Light Mode / Dark Mode");
-		mode.setMinSize(50, 50);
-		mode.setMaxSize(50, 50);
-		
-		Button settings = new Button("Settings");
-		settings.setMinSize(50, 50);
-		settings.setMaxSize(50, 50);
-		
-		buttons.getChildren().addAll(newFile, saveFile, back, loadFile, exportFile, mode, settings);
+		buttons.getChildren().addAll(newFile, saveFile, back, loadFile, exportFile, mode, settings, help, about);
 		
 		return buttons;
 	}
@@ -118,13 +102,8 @@ public class MainWindow extends Application {
 		VBox rightContent = new VBox(5);
 		rightContent.setAlignment(Pos.CENTER);
 		
-		Button up = new Button();
-		up.setMinSize(30, 30);
-		up.setMaxSize(30, 30);
-		
-		Button down = new Button();
-		down.setMinSize(30, 30);
-		down.setMaxSize(30, 30);
+		Button up = new ImageButton(30, 30, "Nahoru", Resources.TRIANGLE_UP);
+		Button down = new ImageButton(30, 30, "Dolů", Resources.TRIANGLE_DOWN);
 		
 		rightContent.getChildren().add(up);
 		rightContent.getChildren().add(createTilePicker());
@@ -138,14 +117,9 @@ public class MainWindow extends Application {
 	private Node createTilePicker() {
 		GridPane tilePickerPane = new GridPane();
 		
-		ImageButton tile1 = new ImageButton(150, 150, "file:img/hades/Hades_Industrial_Den.png", "file:img/hades/Hades_Industrial_Noc.png");
-		tile1.setPrefSize(150, 150);
-		
-		Button tile2 = new Button();
-		tile2.setPrefSize(150, 150);
-		
-		Button tile3 = new Button();
-		tile3.setPrefSize(150, 150);
+		Button tile1 = new ImageButton(150, 150, "Dlaždice 1", Resources.HADES_FACTORY_D);
+		Button tile2 = new ImageButton(150, 150, "Dlaždice 2", Resources.HADES_PATH_D);
+		Button tile3 = new ImageButton(150, 150, "Dlaždice 3", Resources.HADES_PLANT_D);
 		
 		tilePickerPane.add(tile1, 0, 0);
 		tilePickerPane.add(tile2, 0, 1);
@@ -166,17 +140,9 @@ public class MainWindow extends Application {
 	private Node createFirstRowButtons() {
 		HBox buttons = new HBox(5);
 		
-		Button pick = new Button("Pick");
-		pick.setMinSize(50, 50);
-		pick.setMaxSize(50, 50);
-		
-		Button erase = new Button("Erase");
-		erase.setMinSize(50, 50);
-		erase.setMaxSize(50, 50);
-		
-		Button eyeDropper = new Button("Eye Dropper");
-		eyeDropper.setMinSize(50, 50);
-		eyeDropper.setMaxSize(50, 50);
+		Button pick = new ImageButton(50, 50, "Vybrat", Resources.PICK_LIGHT);
+		Button erase = new ImageButton(50, 50, "Vymazat", Resources.ERASE_LIGHT);
+		Button eyeDropper = new ImageButton(50, 50, "Kapátko", Resources.EYEDROPPER_LIGHT);
 		
 		buttons.getChildren().addAll(pick, erase, eyeDropper);
 		return buttons;
@@ -185,17 +151,9 @@ public class MainWindow extends Application {
 	private Node createSecondRowButtons() {
 		HBox buttons = new HBox(5);
 		
-		Button chooseArea = new Button("Choose Area");
-		chooseArea.setMinSize(50, 50);
-		chooseArea.setMaxSize(50, 50);
-		
-		Button fillArea = new Button("Fill Area");
-		fillArea.setMinSize(50, 50);
-		fillArea.setMaxSize(50, 50);
-		
-		Button fillBorders = new Button("Fill Borders");
-		fillBorders.setMinSize(50, 50);
-		fillBorders.setMaxSize(50, 50);
+		Button chooseArea = new ImageButton(50, 50, "Vybrat Oblast", Resources.CHOOSEAREA_LIGHT);
+		Button fillArea = new ImageButton(50, 50, "Výplň Oblasti", Resources.FILLAREA_LIGHT);
+		Button fillBorders = new ImageButton(50, 50, "Výplň Hranic", Resources.FILLBORDERS_LIGHT);
 		
 		buttons.getChildren().addAll(chooseArea, fillArea, fillBorders);
 		return buttons;
