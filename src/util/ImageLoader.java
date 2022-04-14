@@ -8,14 +8,17 @@ import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.scene.image.WritablePixelFormat;
+import javafx.scene.paint.Color;
 
-public class Resources {
+public class ImageLoader {
 	
 	private static final int TILE_SIZE = 500;
 	private static final int BUTTON_UPPER_SIZE = 155;
 	private static final int BUTTON_LOWER_SIZE = 95;
 	
-	private Resources() {};
+	public static final Color COLOR_PLANET_ONE = Color.rgb(211, 182, 228);
+	
+	private ImageLoader() {};
 	
 	private static Image spritesheetHades = new Image("file:img/spritesheet_hades.png");
 	private static Image spritesheetButtonsUpper = new Image("file:img/spritesheet_buttons_upper.png");
