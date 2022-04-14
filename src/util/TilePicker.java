@@ -21,31 +21,44 @@ public class TilePicker {
 	public static final Tile HADES_WALL_D = new Tile(70, ImageLoader.HADES_WALL_D, "wall_d");
 	public static final Tile HADES_WALL_N = new Tile(71, ImageLoader.HADES_WALL_N, "wall_n");
 	
-	private static final HashMap<Integer, Tile> tileMap = new HashMap<Integer, Tile>();
+	private static final HashMap<Integer, Tile> tileMapDay = new HashMap<Integer, Tile>();
+	private static final HashMap<Integer, Tile> tileMapNight = new HashMap<Integer, Tile>();
 	
 	public static void init() {
-		tileMap.put(HADES_PATH_D.id, HADES_PATH_D);
-		tileMap.put(HADES_PATH_N.id, HADES_PATH_N);
-		tileMap.put(HADES_FACTORY_D.id, HADES_FACTORY_D);
-		tileMap.put(HADES_FACTORY_N.id, HADES_FACTORY_N);
-		tileMap.put(HADES_PLANT_D.id, HADES_PLANT_D);
-		tileMap.put(HADES_PLANT_N.id, HADES_PLANT_N);
-		tileMap.put(HADES_SHOP_D.id, HADES_SHOP_D);
-		tileMap.put(HADES_SHOP_N.id, HADES_SHOP_N);
-		tileMap.put(HADES_WATER_D.id, HADES_WATER_D);
-		tileMap.put(HADES_WATER_N.id, HADES_WATER_N);
-		tileMap.put(HADES_HOUSE_D.id, HADES_HOUSE_D);
-		tileMap.put(HADES_HOUSE_N.id, HADES_HOUSE_N);
-		tileMap.put(HADES_WALL_D.id, HADES_WALL_D);
-		tileMap.put(HADES_WALL_N.id, HADES_WALL_N);
+		tileMapDay.put(HADES_PATH_D.id, HADES_PATH_D);
+		tileMapNight.put(HADES_PATH_N.id, HADES_PATH_N);
+		tileMapDay.put(HADES_FACTORY_D.id, HADES_FACTORY_D);
+		tileMapNight.put(HADES_FACTORY_N.id, HADES_FACTORY_N);
+		tileMapDay.put(HADES_PLANT_D.id, HADES_PLANT_D);
+		tileMapNight.put(HADES_PLANT_N.id, HADES_PLANT_N);
+		tileMapDay.put(HADES_SHOP_D.id, HADES_SHOP_D);
+		tileMapNight.put(HADES_SHOP_N.id, HADES_SHOP_N);
+		tileMapDay.put(HADES_WATER_D.id, HADES_WATER_D);
+		tileMapNight.put(HADES_WATER_N.id, HADES_WATER_N);
+		tileMapDay.put(HADES_HOUSE_D.id, HADES_HOUSE_D);
+		tileMapNight.put(HADES_HOUSE_N.id, HADES_HOUSE_N);
+		tileMapDay.put(HADES_WALL_D.id, HADES_WALL_D);
+		tileMapNight.put(HADES_WALL_N.id, HADES_WALL_N);
 	}
 	
 	public static Tile getTile(int tileId) {
-		if(tileMap.containsKey(tileId)) {
-			return tileMap.get(tileId);
+		if(tileMapDay.containsKey(tileId)) {
+			return tileMapDay.get(tileId);
+		}
+		else if(tileMapNight.containsKey(tileId)) {
+			return tileMapNight.get(tileId);
 		}
 		else {
 			return null;
 		}
 	}
+
+	public static HashMap<Integer, Tile> getTileMapDay() {
+		return tileMapDay;
+	}
+
+	public static HashMap<Integer, Tile> getTileMapNight() {
+		return tileMapNight;
+	}
+
 }

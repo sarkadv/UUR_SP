@@ -3,16 +3,13 @@ package view;
 import model.Tile;
 import controller.MainWindowController;
 import controller.MapController;
-import controller.ResizableCanvasController;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -20,20 +17,20 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import model.MainWindowModel;
 import model.MapModel;
-import model.ResizableCanvasModel;
 import util.ImageLoader;
 import util.TilePicker;
 
 
 public class MainWindowView extends Application {
 	
-	//private ResizableCanvasController resizableCanvasController = new ResizableCanvasController();
 	private MapModel mapModel = new MapModel();
 	private MapView mapView;
 	private MapController mapController;
 	
 	private MainWindowModel mainWindowModel = new MainWindowModel();
 	private MainWindowController mainWindowController = new MainWindowController(mainWindowModel);
+	
+	private TileMenu tileMenu;
 
 	public static void main(String[] args) {
 		launch(args);
@@ -47,7 +44,7 @@ public class MainWindowView extends Application {
 	public void start(Stage stage) throws Exception {
 		stage.setTitle("Sarka Dvorakova A21B0116P");
 		stage.setScene(createScene());
-		stage.setMinWidth(820);
+		stage.setMinWidth(850);
 		
 		stage.setMinHeight(700);
 		stage.show();
@@ -118,37 +115,24 @@ public class MainWindowView extends Application {
 		VBox rightContent = new VBox(5);
 		rightContent.setAlignment(Pos.CENTER);
 		
-		Button up = new ImageButton(30, 30, "Nahoru", ImageLoader.TRIANGLE_UP);
-		Button down = new ImageButton(30, 30, "Dolů", ImageLoader.TRIANGLE_DOWN);
+		Button upBtn = new ImageButton(30, 30, "Nahoru", ImageLoader.TRIANGLE_UP);
+		upBtn.setOnAction(e -> tileMenu.moveUp());
+		Button downBtn = new ImageButton(30, 30, "Dolů", ImageLoader.TRIANGLE_DOWN);
+		downBtn.setOnAction(e -> tileMenu.moveDown());
 		
-		rightContent.getChildren().add(up);
-		rightContent.getChildren().add(createTilePicker());
-		rightContent.getChildren().add(down);
+		rightContent.getChildren().add(upBtn);
+		rightContent.getChildren().add(createTileMenu());
+		rightContent.getChildren().add(downBtn);
 		rightContent.getChildren().add(createBottomButtons());
 		
 		return rightContent;
 		
 	}
 	
-	private Node createTilePicker() {
-		GridPane tilePickerPane = new GridPane();
+	private Node createTileMenu() {
+		tileMenu = new TileMenu(mainWindowController);
 		
-		Button tileBtn1 = new ImageButton(150, 150, "Dlaždice 1", ImageLoader.HADES_FACTORY_D);
-		Tile tile1 = TilePicker.HADES_FACTORY_D;
-		Button tileBtn2 = new ImageButton(150, 150, "Dlaždice 2", ImageLoader.HADES_SHOP_D);
-		Tile tile2 = TilePicker.HADES_SHOP_D;
-		Button tileBtn3 = new ImageButton(150, 150, "Dlaždice 3", ImageLoader.HADES_PLANT_D);
-		Tile tile3 = TilePicker.HADES_PLANT_D;
-		
-		tilePickerPane.add(tileBtn1, 0, 0);
-		tilePickerPane.add(tileBtn2, 0, 1);
-		tilePickerPane.add(tileBtn3, 0, 2);
-		
-		tileBtn1.setOnAction(e -> mainWindowController.changeCurrentTile(e, tile1));
-		tileBtn2.setOnAction(e -> mainWindowController.changeCurrentTile(e, tile2));
-		tileBtn3.setOnAction(e -> mainWindowController.changeCurrentTile(e, tile3));
-		
-		return tilePickerPane;
+		return tileMenu;
 	}
 
 	private Node createBottomButtons() {
