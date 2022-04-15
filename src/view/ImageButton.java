@@ -3,6 +3,7 @@ package view;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tooltip;
+import javafx.scene.effect.ColorAdjust;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -10,12 +11,15 @@ import javafx.scene.input.MouseEvent;
 public class ImageButton extends Button {
 	private Image normalImage;
 	private Image pressedImage;
-
     private final ImageView iv;
+    private ColorAdjust colorAdjustHighlight = new ColorAdjust(0, 0, 0.5, 0); 
+    private ColorAdjust colorAdjustBack = new ColorAdjust(0, 0, 0, 0); 
+    private String name;
 
     public ImageButton(double width, double height, String name, Image normal, Image pressed) {
     	super.setHeight(height);
     	super.setWidth(width);
+    	this.name = name;
     	super.setTooltip(new Tooltip(name));
     	super.setMinSize(width, height);
     	super.setMaxSize(width, height);
@@ -50,5 +54,17 @@ public class ImageButton extends Button {
     
     public ImageButton(double width, double height, String name, Image normal) {
     		this(width, height, name, normal, normal);
+    }
+    
+    public void highlightImage() {
+    	this.iv.setEffect(colorAdjustHighlight);
+    }
+    
+    public void imageBackToNormal() {
+    	this.iv.setEffect(colorAdjustBack);
+    }
+    
+    public String getName() {
+    	return this.name;
     }
 }

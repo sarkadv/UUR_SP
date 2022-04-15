@@ -4,6 +4,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import model.MapModel;
 import model.Tile;
+import util.TilePicker;
 import view.MapView;
 
 public class MapController {
@@ -69,6 +70,19 @@ public class MapController {
 			view.repaint();
 		}
 
+	}
+	
+	public Tile copyTile(MouseEvent e) {
+		int x = getTileCoordinate(e.getX()) + model.getFirstTileVisibleX().get();
+		int y = getTileCoordinate(e.getY()) + model.getFirstTileVisibleY().get();
+		
+		Tile copied = TilePicker.getTile(model.getTile(x, y));
+		if(copied.id == 00 || copied.id == 01) {
+			return null;
+		}
+		else {
+			return copied;
+		}
 	}
 	
 	private int getTileCoordinate(double clickedCoordinate) {

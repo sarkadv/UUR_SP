@@ -12,31 +12,40 @@ import util.TilePicker;
 
 public class TileMenu extends GridPane {
 	
-	private Button tileBtn1;
+	private ImageButton tileBtn1;
 	private Tile tile1;
-	private Button tileBtn2;
+	private ImageButton tileBtn2;
 	private Tile tile2;
-	private Button tileBtn3;
+	private ImageButton tileBtn3;
 	private Tile tile3;
 	private List<Tile> allTiles;
 	private MainWindowController controller;
 	private final int BTN_SIZE = 150;
-	private boolean darkMode = false;
-	private int currentFirst = 0;
+	private boolean darkMode;
+	private int currentFirst;
 	
 	public TileMenu(MainWindowController controller) {
+		this.darkMode = false;
+		this.currentFirst = 0;
 		
 		this.controller = controller;
 		
 		if(this.darkMode == false) {
 			this.allTiles = new ArrayList<Tile>(TilePicker.getTileMapDay().values());
+			this.allTiles.remove(TilePicker.getTile(00));
 		}
 		else {
 			this.allTiles = new ArrayList<Tile>(TilePicker.getTileMapNight().values());
+			this.allTiles.remove(TilePicker.getTile(01));
 		}
 		
 		this.init(currentFirst);
 		
+	}
+	
+	public void updateChoice() {
+		removeHighlight();
+		handleHighlight();
 	}
 	
 	private void init(int currentFirst) {
@@ -53,9 +62,22 @@ public class TileMenu extends GridPane {
 		tileBtn3 = new ImageButton(BTN_SIZE, BTN_SIZE, tile3.name, tile3.image);
 		this.add(tileBtn3, 0, 2);
 		
-		tileBtn1.setOnAction(e -> controller.changeCurrentTile(e, tile1));
-		tileBtn2.setOnAction(e -> controller.changeCurrentTile(e, tile2));
-		tileBtn3.setOnAction(e -> controller.changeCurrentTile(e, tile3));
+		this.handleHighlight();
+		
+		tileBtn1.setOnAction(e -> {
+			controller.changeCurrentTile(e, tile1);
+			this.handleHighlight();
+		});
+		
+		tileBtn2.setOnAction(e -> {
+			controller.changeCurrentTile(e, tile2);
+			this.handleHighlight();
+		});
+		
+		tileBtn3.setOnAction(e -> {
+			controller.changeCurrentTile(e, tile3);
+			this.handleHighlight();
+		});
 		
 	}
 
@@ -71,6 +93,33 @@ public class TileMenu extends GridPane {
 			this.currentFirst++;
 			init(currentFirst);
 		}
+	}
+	
+	private void handleHighlight() {
+		if(controller.getCurrentTile() != null) {
+			if(controller.getCurrentTile().name.equals(this.tileBtn1.getName())) {
+				tileBtn1.highlightImage();
+				tileBtn2.imageBackToNormal();
+				tileBtn3.imageBackToNormal();
+			}
+			else if(controller.getCurrentTile().name.equals(this.tileBtn2.getName())) {
+				tileBtn2.highlightImage();
+				tileBtn1.imageBackToNormal();
+				tileBtn3.imageBackToNormal();
+			}
+			else if(controller.getCurrentTile().name.equals(this.tileBtn3.getName())) {
+				tileBtn3.highlightImage();
+				tileBtn1.imageBackToNormal();
+				tileBtn2.imageBackToNormal();
+			}
+		}
+
+	}
+	
+	private void removeHighlight() {
+		tileBtn1.imageBackToNormal();
+		tileBtn2.imageBackToNormal();
+		tileBtn3.imageBackToNormal();
 	}
 
 }

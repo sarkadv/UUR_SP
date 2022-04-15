@@ -22,6 +22,7 @@ import javafx.stage.Stage;
 import model.MainWindowModel;
 import model.MapModel;
 import util.ImageLoader;
+import util.SpecialToolType;
 import util.TilePicker;
 
 
@@ -111,7 +112,16 @@ public class MainWindowView extends Application {
 		mapController = new MapController(mapView, mapModel);
 		leftContent.setCenter(mapView);
 		
-		mapView.setOnMouseReleased(e -> mapController.putTile(e, mainWindowModel.getCurrentTile().get()));
+		mapView.setOnMouseReleased(e -> {
+			if(mainWindowModel.getToolActive().get() == null) {
+				mapController.putTile(e, mainWindowModel.getCurrentTile().get());
+			}
+			else if (mainWindowModel.getToolActive().get() == SpecialToolType.EYEDROPPER) {
+				mainWindowModel.setCurrentTile(mapController.copyTile(e));
+				tileMenu.updateChoice();
+				mainWindowController.changeSpecialToolActive(null);
+			}
+		});
 		mapView.setOnKeyReleased(e -> {
 			if (e.getCode() == KeyCode.W) {
 				mapController.moveUp(e);
@@ -197,8 +207,23 @@ public class MainWindowView extends Application {
 		HBox buttons = new HBox(5);
 		
 		Button pick = new ImageButton(50, 50, "Vybrat", ImageLoader.PICK_LIGHT);
+		pick.setOnAction(e -> {
+			mainWindowController.changeSpecialToolActive(null);
+			mainWindowController.changeToNoTile(e);
+			tileMenu.updateChoice();
+		});
+		
 		Button erase = new ImageButton(50, 50, "Vymazat", ImageLoader.ERASE_LIGHT);
+		erase.setOnAction(e -> {
+			mainWindowController.changeSpecialToolActive(null);
+			mainWindowController.changeToEmptyTile(e);
+			tileMenu.updateChoice();
+		});
+		
 		Button eyeDropper = new ImageButton(50, 50, "Kapátko", ImageLoader.EYEDROPPER_LIGHT);
+		eyeDropper.setOnAction(e -> {
+			mainWindowController.changeSpecialToolActive(SpecialToolType.EYEDROPPER);
+		});
 		
 		buttons.getChildren().addAll(pick, erase, eyeDropper);
 		return buttons;
