@@ -18,29 +18,33 @@ public class MapModel {
 	private IntegerProperty allTilesWidth;
 	private IntegerProperty allTilesHeight;
 	private IntegerProperty tilesVisibleLine;
+	private IntegerProperty firstTileVisibleX;
+	private IntegerProperty firstTileVisibleY;
 	private ObjectProperty<Color> planetColor;
 	private BooleanProperty darkMode;
-	private ObjectProperty<Tile> chosenTile;
 	
 	private int[][] allTiles;
-	private int[][] tilesVisible;
 	
 	public MapModel() {
-		this.tileSize = new SimpleDoubleProperty(290);
-		this.allTilesWidth = new SimpleIntegerProperty(2);
-		this.allTilesHeight = new SimpleIntegerProperty(2);
-		this.tilesVisibleLine = new SimpleIntegerProperty(2);
+		this.tileSize = new SimpleDoubleProperty(145);
+		this.allTilesWidth = new SimpleIntegerProperty(0);
+		this.allTilesHeight = new SimpleIntegerProperty(0);
+		this.tilesVisibleLine = new SimpleIntegerProperty(0);
+		this.firstTileVisibleX = new SimpleIntegerProperty(0);
+		this.firstTileVisibleY = new SimpleIntegerProperty(0);
 		this.planetColor = new SimpleObjectProperty<Color>(ImageLoader.COLOR_PLANET_ONE);
 		this.darkMode = new SimpleBooleanProperty(false);
-		this.chosenTile = new SimpleObjectProperty<Tile>(TilePicker.HADES_FACTORY_D);
+	}
+	
+	public void initAllTiles() {
+		allTiles = new int[allTilesWidth.get()][allTilesHeight.get()];
 		
-		this.allTiles = new int[allTilesWidth.get()][allTilesHeight.get()];
-		this.tilesVisible = new int[tilesVisibleLine.get()][tilesVisibleLine.get()];
-		
-		setTile(0, 0, 10);
-		setTile(1, 0, 11);
-		setTile(0, 1, 20);
-		setTile(1, 1, 21);
+		int addition = darkMode.get()? 1 : 0;
+		for(int x = 0; x < allTilesWidth.get(); x++) {
+			for(int y = 0; y < allTilesHeight.get(); y++) {
+				allTiles[x][y] = 00 + addition;
+			}
+		}
 	}
 	
 	public void setTile(int x, int y, int id) {
@@ -107,20 +111,20 @@ public class MapModel {
 		this.allTiles = allTiles;
 	}
 
-	public int[][] getTilesVisible() {
-		return tilesVisible;
+	public IntegerProperty getFirstTileVisibleX() {
+		return firstTileVisibleX;
 	}
 
-	public void setTilesVisible(int[][] tilesVisible) {
-		this.tilesVisible = tilesVisible;
+	public void setFirstTileVisibleX(int firstTileVisibleX) {
+		this.firstTileVisibleX.set(firstTileVisibleX);
 	}
 
-	public ObjectProperty<Tile> getChosenTile() {
-		return chosenTile;
+	public IntegerProperty getFirstTileVisibleY() {
+		return firstTileVisibleY;
 	}
 
-	public void setChosenTile(Tile chosenTile) {
-		this.chosenTile.set(chosenTile);
+	public void setFirstTileVisibleY(int firstTileVisibleY) {
+		this.firstTileVisibleY.set(firstTileVisibleY);
 	}
 
 }

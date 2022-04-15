@@ -6,6 +6,8 @@ import model.Tile;
 
 public class TilePicker {
 	
+	public static final Tile HADES_EMPTY_D = new Tile(00, ImageLoader.HADES_EMPTY_D, "empty_d");
+	public static final Tile HADES_EMPTY_N = new Tile(01, ImageLoader.HADES_EMPTY_N, "empty_n");
 	public static final Tile HADES_PATH_D = new Tile(10, ImageLoader.HADES_PATH_D, "path_d");
 	public static final Tile HADES_PATH_N = new Tile(11, ImageLoader.HADES_PATH_N, "path_n");
 	public static final Tile HADES_FACTORY_D = new Tile(20, ImageLoader.HADES_FACTORY_D, "factory_d");
@@ -27,6 +29,8 @@ public class TilePicker {
 	public static void init() {
 		tileMapDay.put(HADES_PATH_D.id, HADES_PATH_D);
 		tileMapNight.put(HADES_PATH_N.id, HADES_PATH_N);
+		tileMapDay.put(HADES_EMPTY_D.id, HADES_EMPTY_D);
+		tileMapNight.put(HADES_EMPTY_N.id, HADES_EMPTY_N);
 		tileMapDay.put(HADES_FACTORY_D.id, HADES_FACTORY_D);
 		tileMapNight.put(HADES_FACTORY_N.id, HADES_FACTORY_N);
 		tileMapDay.put(HADES_PLANT_D.id, HADES_PLANT_D);

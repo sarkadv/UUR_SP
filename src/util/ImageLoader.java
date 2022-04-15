@@ -62,17 +62,19 @@ public class ImageLoader {
 	public static final Image HADES_PATH_D = crop(spritesheetHades, 0, 0, TILE_SIZE);
 	public static final Image HADES_PATH_N = crop(spritesheetHades, 1, 0, TILE_SIZE);
 	public static final Image HADES_FACTORY_D = crop(spritesheetHades, 2, 0, TILE_SIZE);
-	public static final Image HADES_FACTORY_N = crop(spritesheetHades, 0, 1, TILE_SIZE);
-	public static final Image HADES_PLANT_D = crop(spritesheetHades, 2, 2, TILE_SIZE);
-	public static final Image HADES_PLANT_N = crop(spritesheetHades, 3, 0, TILE_SIZE);
-	public static final Image HADES_SHOP_D = crop(spritesheetHades, 1, 1, TILE_SIZE);
-	public static final Image HADES_SHOP_N = crop(spritesheetHades, 2, 1, TILE_SIZE);
-	public static final Image HADES_WATER_D = crop(spritesheetHades, 3, 1, TILE_SIZE);
-	public static final Image HADES_WATER_N = crop(spritesheetHades, 3, 2, TILE_SIZE);
+	public static final Image HADES_FACTORY_N = crop(spritesheetHades, 3, 0, TILE_SIZE);
+	public static final Image HADES_SHOP_D = crop(spritesheetHades, 0, 1, TILE_SIZE);
+	public static final Image HADES_SHOP_N = crop(spritesheetHades, 1, 1, TILE_SIZE);
+	public static final Image HADES_EMPTY_D = crop(spritesheetHades, 2, 1, TILE_SIZE);
+	public static final Image HADES_EMPTY_N = crop(spritesheetHades, 3, 1, TILE_SIZE);
 	public static final Image HADES_HOUSE_D = crop(spritesheetHades, 0, 2, TILE_SIZE);
 	public static final Image HADES_HOUSE_N = crop(spritesheetHades, 1, 2, TILE_SIZE);
-	public static final Image HADES_WALL_D = crop(spritesheetHades, 0, 3, TILE_SIZE);
-	public static final Image HADES_WALL_N = crop(spritesheetHades, 1, 3, TILE_SIZE);
+	public static final Image HADES_PLANT_D = crop(spritesheetHades, 2, 2, TILE_SIZE);
+	public static final Image HADES_PLANT_N = crop(spritesheetHades, 3, 2, TILE_SIZE);
+	public static final Image HADES_WATER_D = crop(spritesheetHades, 0, 3, TILE_SIZE);
+	public static final Image HADES_WATER_N = crop(spritesheetHades, 1, 3, TILE_SIZE);
+	public static final Image HADES_WALL_D = crop(spritesheetHades, 2, 3, TILE_SIZE);
+	public static final Image HADES_WALL_N = crop(spritesheetHades, 3, 3, TILE_SIZE);
 	
 	private static Image crop(Image src, int col, int row, int imageSize) {
 	    PixelReader r = src.getPixelReader();

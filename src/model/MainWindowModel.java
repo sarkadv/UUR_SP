@@ -12,7 +12,7 @@ public class MainWindowModel {
 	
 	public MainWindowModel() {
 		this.darkMode = new SimpleBooleanProperty(false);
-		this.currentTile = new SimpleObjectProperty<Tile>(TilePicker.HADES_SHOP_D);
+		this.currentTile = new SimpleObjectProperty<Tile>();
 	}
 	
 	public BooleanProperty getDarkMode() {

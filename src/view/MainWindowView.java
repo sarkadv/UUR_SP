@@ -1,6 +1,5 @@
 package view;
 
-import model.Tile;
 import controller.MainWindowController;
 import controller.MapController;
 import javafx.application.Application;
@@ -10,8 +9,8 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -45,9 +44,12 @@ public class MainWindowView extends Application {
 		stage.setTitle("Sarka Dvorakova A21B0116P");
 		stage.setScene(createScene());
 		stage.setMinWidth(850);
-		
 		stage.setMinHeight(700);
 		stage.show();
+		
+		StarterWindow starter = new StarterWindow(stage, mapModel);
+		starter.showAndWait();
+		mapController.showNewMap(stage.getWidth(), stage.getHeight());
 		
 		stage.heightProperty().addListener((obs, oldValue, newValue) -> {
 			mapController.changeTileSize(stage.getWidth(), newValue.doubleValue());
@@ -61,6 +63,25 @@ public class MainWindowView extends Application {
 	
 	private Scene createScene() {
 		Scene scene = new Scene(createRootPane(), 850, 700);
+		
+		scene.setOnKeyReleased(e -> {
+			switch(e.getCode()) {
+			case W:
+				mapController.moveUp(e);
+				break;
+			case S:
+				mapController.moveDown(e);
+				break;
+			case A:
+				mapController.moveLeft(e);
+				break;
+			case D:
+				mapController.moveRight(e);
+				break;
+			default:
+				break;
+			}
+		});
 		
 		return scene;
 	}
@@ -87,6 +108,30 @@ public class MainWindowView extends Application {
 		leftContent.setCenter(mapView);
 		
 		mapView.setOnMouseReleased(e -> mapController.putTile(e, mainWindowModel.getCurrentTile().get()));
+		mapView.setOnKeyReleased(e -> {
+			if (e.getCode() == KeyCode.W) {
+				mapController.moveUp(e);
+				System.out.println("up");
+			}
+		});
+		
+		mapView.setOnKeyReleased(e -> {
+			if (e.getCode() == KeyCode.S) {
+				mapController.moveDown(e);
+			}
+		});
+		
+		mapView.setOnKeyReleased(e -> {
+			if (e.getCode() == KeyCode.D) {
+				mapController.moveRight(e);
+			}
+		});
+		
+		mapView.setOnKeyReleased(e -> {
+			if (e.getCode() == KeyCode.A) {
+				mapController.moveLeft(e);
+			}
+		});
 		
 		return leftContent;
 		
