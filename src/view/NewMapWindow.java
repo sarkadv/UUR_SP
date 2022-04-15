@@ -31,7 +31,7 @@ public class NewMapWindow extends Stage {
 	private TextField mapSizeHeightTF;
 	private ChoiceBox<Integer> tilesVisibleChoice;
 	
-	public NewMapWindow(Stage primaryStage, MapModel model) {
+	public NewMapWindow(MapModel model, Stage primaryStage) {
 		this.model = model;
 		
 		this.setScene(createScene());
@@ -43,8 +43,6 @@ public class NewMapWindow extends Stage {
 		this.setMaxHeight(250);
 		this.setMinWidth(400);
 		this.setMaxWidth(400);
-		
-		this.show();
 	}
 	
 	private Scene createScene() {
@@ -140,10 +138,8 @@ public class NewMapWindow extends Stage {
 			model.setAllTilesWidth(allTilesWidth);
 			model.setAllTilesHeight(allTilesHeight);
 			model.setTilesVisibleLine(tilesVisibleLine);
-			
 			model.initAllTiles();
-			Stage owner = (Stage)this.getOwner();
-			owner.close();
+			this.close();
 		}
 		
 	}

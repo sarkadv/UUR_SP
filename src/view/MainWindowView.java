@@ -1,5 +1,7 @@
 package view;
 
+import java.util.Optional;
+
 import controller.MainWindowController;
 import controller.MapController;
 import javafx.application.Application;
@@ -8,7 +10,10 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -47,9 +52,8 @@ public class MainWindowView extends Application {
 		stage.setMinHeight(700);
 		stage.show();
 		
-		StarterWindow starter = new StarterWindow(stage, mapModel);
-		starter.showAndWait();
-		mapController.showNewMap(stage.getWidth(), stage.getHeight());
+		showStartAlert(stage);
+		
 		
 		stage.heightProperty().addListener((obs, oldValue, newValue) -> {
 			mapController.changeTileSize(stage.getWidth(), newValue.doubleValue());
@@ -209,6 +213,28 @@ public class MainWindowView extends Application {
 		
 		buttons.getChildren().addAll(chooseArea, fillArea, fillBorders);
 		return buttons;
+	}
+	
+	private void showStartAlert(Stage stage) {
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Tiny Planet Builder");
+		alert.setHeaderText("Vyberte způsob zahájení stavby");
+
+		ButtonType newMapBtn = new ButtonType("Nová Mapa");
+		ButtonType loadMapBtn = new ButtonType("Načíst Mapu");
+
+		alert.getButtonTypes().setAll(newMapBtn, loadMapBtn);
+
+		Optional<ButtonType> result = alert.showAndWait();
+		
+		if (result.get() == newMapBtn){
+		    NewMapWindow newMap = new NewMapWindow(mapModel, stage);
+		    newMap.showAndWait();
+		    mapController.showNewMap(stage.getWidth(), stage.getHeight());
+		    
+		} else if (result.get() == loadMapBtn) {
+		    // ... user chose "Two"
+		}
 	}
 
 }
