@@ -18,6 +18,7 @@ import util.FileSaver;
 import util.SpecialToolType;
 import util.TilePicker;
 import view.NewMapWindow;
+import view.PictureExportWindow;
 
 public class MainWindowController {
 	
@@ -181,6 +182,11 @@ public class MainWindowController {
 		if(file != null) {
 			FileSaver.saveFile(file, mapModel);
 		}
+	}
+	
+	public void showExportWindow(Stage stage, int[][] tiles) {
+		PictureExportWindow exportWindow = new PictureExportWindow(tiles, stage);
+		exportWindow.showAndWait();
 	}
 	
 	public void setDarkMode(boolean darkMode) {

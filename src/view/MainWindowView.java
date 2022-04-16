@@ -171,6 +171,8 @@ public class MainWindowView extends Application {
 		loadFile.setOnAction(e -> mainWindowController.showSaveAlertLoad(primaryStage, mapModel, mapController));
 		
 		Button exportFile = new ImageButton(50, 50, "Exportovat Jako Obrázek", ImageLoader.EXPORT_LIGHT);
+		exportFile.setOnAction(e -> mainWindowController.showExportWindow(primaryStage, mapModel.getAllTiles()));
+		
 		Button mode = new ImageButton(50, 50, "Tmavý Režim", ImageLoader.MODE_LIGHT);
 		Button settings = new ImageButton(50, 50, "Nastavení", ImageLoader.SETTINGS_LIGHT);
 		Button help = new ImageButton(50, 50, "Nápověda", ImageLoader.HELP_LIGHT);
