@@ -1,5 +1,6 @@
 package view;
 
+import java.io.File;
 import java.util.Optional;
 
 import controller.MainWindowController;
@@ -18,9 +19,11 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.MainWindowModel;
 import model.MapModel;
+import util.FileLoader;
 import util.ImageLoader;
 import util.SpecialToolType;
 import util.TilePicker;
@@ -253,13 +256,39 @@ public class MainWindowView extends Application {
 		Optional<ButtonType> result = alert.showAndWait();
 		
 		if (result.get() == newMapBtn){
-		    NewMapWindow newMap = new NewMapWindow(mapModel, stage);
-		    newMap.showAndWait();
-		    mapController.showNewMap(stage.getWidth(), stage.getHeight());
+			showNewFileWindow(stage);
+		    
 		    
 		} else if (result.get() == loadMapBtn) {
-		    // ... user chose "Two"
+		    showLoadFileWindow(stage);
 		}
+	}
+	
+	private void showNewFileWindow(Stage stage) {
+		NewMapWindow newMap = new NewMapWindow(mapModel, stage);
+	    newMap.showAndWait();
+	    mapController.showNewMap(stage.getWidth(), stage.getHeight());
+	}
+	
+	private void showLoadFileWindow(Stage stage) {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
+		File selectedFile = fileChooser.showOpenDialog(stage);
+		
+		if(selectedFile == null) {
+			showStartAlert(stage);
+		}
+		
+		FileLoader.loadFile(selectedFile);
+		
+		if(!FileLoader.isSuccessful()) {
+			showStartAlert(stage);
+		}
+		else {
+			FileLoader.setMapModel(mapModel);
+			mapController.showNewMap(stage.getWidth(), stage.getHeight());
+		}
+		
 	}
 
 }
