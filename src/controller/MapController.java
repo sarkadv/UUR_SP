@@ -55,7 +55,7 @@ public class MapController {
 	}
 	
 	public void moveRight(KeyEvent e) {
-		if(model.getFirstTileVisibleX().get() < model.getAllTilesHeight().get() - model.getTilesVisibleLine().get()) {
+		if(model.getFirstTileVisibleX().get() < model.getAllTilesWidth().get() - model.getTilesVisibleLine().get()) {
 			model.setFirstTileVisibleX(model.getFirstTileVisibleX().get() + 1);
 			view.repaint();
 		}

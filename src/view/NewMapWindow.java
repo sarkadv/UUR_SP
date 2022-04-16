@@ -73,7 +73,7 @@ public class NewMapWindow extends Stage {
 		HBox mapSizeControls = new HBox(5);
 		mapSizeControls.setAlignment(Pos.CENTER);
 		mapSizeControls.setPadding(new Insets(10));
-		Label mapSizeWidthLabel = new Label("Výška: ");
+		Label mapSizeWidthLabel = new Label("Šířka: ");
 		mapSizeWidthTF = new TextField("8");
 		mapSizeWidthTF.setPrefColumnCount(3);
 		mapSizeWidthTF.textProperty().addListener((obs, oldValue, newValue) -> {
@@ -82,7 +82,7 @@ public class NewMapWindow extends Stage {
             }
 		});
 		
-		Label mapSizeHeightLabel = new Label("Šířka: ");
+		Label mapSizeHeightLabel = new Label("Výška: ");
 		mapSizeHeightTF = new TextField("8");
 		mapSizeHeightTF.setPrefColumnCount(3);
 		mapSizeHeightTF.textProperty().addListener((obs, oldValue, newValue) -> {

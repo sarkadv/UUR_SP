@@ -10,11 +10,11 @@ import model.MapModel;
 
 public class FileLoader {
 	
-	private static int mapWidth = 8;
-	private static int mapHeight = 8;
-	private static int tilesVisibleLine = 4;
+	private static int mapWidth;
+	private static int mapHeight;
+	private static int tilesVisibleLine;
 	private static int[][] tiles;
-	private static boolean darkMode = false;
+	private static boolean darkMode;
 	private static boolean successful = true;
 	
 	public static void loadFile(File file) {
@@ -54,11 +54,14 @@ public class FileLoader {
 
 			
 		} catch (IOException e) {
+			successful = false;
+			
 			System.out.println(e.getMessage());
+			
 			Alert alert = new Alert(AlertType.ERROR);
 			alert.setTitle("Načítání Souboru");
 			alert.setHeaderText("Chyba při načítání souboru");
-			alert.setContentText("Při čtení souboru nastala výjimka.");
+			alert.setContentText("Při čtení souboru došlo k neočekávané chybě.");
 			alert.showAndWait();
 		}
 	}

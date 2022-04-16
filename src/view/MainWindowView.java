@@ -1,8 +1,5 @@
 package view;
 
-import java.io.File;
-import java.util.Optional;
-
 import controller.MainWindowController;
 import controller.MapController;
 import javafx.application.Application;
@@ -11,25 +8,22 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.MainWindowModel;
 import model.MapModel;
-import util.FileLoader;
 import util.ImageLoader;
 import util.SpecialToolType;
 import util.TilePicker;
 
 
 public class MainWindowView extends Application {
+	
+	private Stage primaryStage;
 	
 	private MapModel mapModel = new MapModel();
 	private MapView mapView;
@@ -50,13 +44,15 @@ public class MainWindowView extends Application {
 	
 	@Override
 	public void start(Stage stage) throws Exception {
+		this.primaryStage = stage;
+		
 		stage.setTitle("Sarka Dvorakova A21B0116P");
 		stage.setScene(createScene());
 		stage.setMinWidth(850);
 		stage.setMinHeight(700);
 		stage.show();
 		
-		showStartAlert(stage);
+		mainWindowController.showStartAlert(stage, mapModel, mapController);
 		
 		
 		stage.heightProperty().addListener((obs, oldValue, newValue) -> {
@@ -65,6 +61,11 @@ public class MainWindowView extends Application {
 		
 		stage.widthProperty().addListener((obs, oldValue, newValue) -> {
 			mapController.changeTileSize(newValue.doubleValue(), stage.getHeight());
+		});
+		
+		stage.setOnCloseRequest(e -> {
+			e.consume();
+			mainWindowController.showSaveAlertClose(stage, mapModel);
 		});
 		
 	}
@@ -159,9 +160,16 @@ public class MainWindowView extends Application {
 		buttons.setPadding(new Insets(10, 5, 10, 5));
 		
 		Button newFile = new ImageButton(50, 50, "Nová Mapa", ImageLoader.NEW_LIGHT);
+		newFile.setOnAction(e -> mainWindowController.showSaveAlertNew(primaryStage, mapModel, mapController));
+		
 		Button saveFile = new ImageButton(50, 50, "Uložit Mapu", ImageLoader.SAVE_LIGHT);
+		saveFile.setOnAction(e -> mainWindowController.showFileSaveWindow(primaryStage, mapModel));
+		
 		Button back = new ImageButton(50, 50, "Zpět", ImageLoader.BACK_LIGHT);
+		
 		Button loadFile = new ImageButton(50, 50, "Načíst Mapu", ImageLoader.LOAD_LIGHT);
+		loadFile.setOnAction(e -> mainWindowController.showSaveAlertLoad(primaryStage, mapModel, mapController));
+		
 		Button exportFile = new ImageButton(50, 50, "Exportovat Jako Obrázek", ImageLoader.EXPORT_LIGHT);
 		Button mode = new ImageButton(50, 50, "Tmavý Režim", ImageLoader.MODE_LIGHT);
 		Button settings = new ImageButton(50, 50, "Nastavení", ImageLoader.SETTINGS_LIGHT);
@@ -243,52 +251,8 @@ public class MainWindowView extends Application {
 		return buttons;
 	}
 	
-	private void showStartAlert(Stage stage) {
-		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("Tiny Planet Builder");
-		alert.setHeaderText("Vyberte způsob zahájení stavby");
 
-		ButtonType newMapBtn = new ButtonType("Nová Mapa");
-		ButtonType loadMapBtn = new ButtonType("Načíst Mapu");
-
-		alert.getButtonTypes().setAll(newMapBtn, loadMapBtn);
-
-		Optional<ButtonType> result = alert.showAndWait();
-		
-		if (result.get() == newMapBtn){
-			showNewFileWindow(stage);
-		    
-		    
-		} else if (result.get() == loadMapBtn) {
-		    showLoadFileWindow(stage);
-		}
-	}
 	
-	private void showNewFileWindow(Stage stage) {
-		NewMapWindow newMap = new NewMapWindow(mapModel, stage);
-	    newMap.showAndWait();
-	    mapController.showNewMap(stage.getWidth(), stage.getHeight());
-	}
-	
-	private void showLoadFileWindow(Stage stage) {
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
-		File selectedFile = fileChooser.showOpenDialog(stage);
-		
-		if(selectedFile == null) {
-			showStartAlert(stage);
-		}
-		
-		FileLoader.loadFile(selectedFile);
-		
-		if(!FileLoader.isSuccessful()) {
-			showStartAlert(stage);
-		}
-		else {
-			FileLoader.setMapModel(mapModel);
-			mapController.showNewMap(stage.getWidth(), stage.getHeight());
-		}
-		
-	}
+
 
 }
