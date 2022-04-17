@@ -94,15 +94,16 @@ public class MainWindowController {
 		if(selectedFile == null) {
 			showStartAlert(stage, mapModel, mapController);
 		}
-		
-		FileLoader.loadFile(selectedFile);
-		
-		if(!FileLoader.isSuccessful()) {
-			showStartAlert(stage, mapModel, mapController);
-		}
 		else {
-			FileLoader.setMapModel(mapModel);
-			mapController.showNewMap(stage.getWidth(), stage.getHeight());
+			FileLoader.loadFile(selectedFile);
+			
+			if(!FileLoader.isSuccessful()) {
+				showStartAlert(stage, mapModel, mapController);
+			}
+			else {
+				FileLoader.setMapModel(mapModel);
+				mapController.showNewMap(stage.getWidth(), stage.getHeight());
+			}
 		}
 		
 	}

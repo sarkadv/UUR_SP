@@ -44,9 +44,9 @@ public class PictureExportWindow extends Stage {
 		this.tiles = tiles;
 		this.mapWidth = tiles.length;
 		this.mapHeight = tiles[0].length;
-		this.windowWidth = 800;
+		this.windowWidth = 700;
 		this.windowHeight = 800;
-		this.tileSize = Math.min((windowWidth - 100)/mapWidth, (windowHeight - 100)/mapHeight);
+		this.tileSize = Math.min(windowWidth/mapWidth, (windowHeight - 100)/mapHeight);
 		
 		this.setScene(createScene());
 		this.initModality(Modality.WINDOW_MODAL);
@@ -80,7 +80,6 @@ public class PictureExportWindow extends Stage {
 	
 	private Parent createPicturePane() {
 		picturePane = new GridPane();
-		picturePane.setAlignment(Pos.CENTER);
 		
     	for(int x = 0; x < mapWidth; x++) {
     		for(int y = 0; y < mapHeight; y++) {
@@ -108,12 +107,11 @@ public class PictureExportWindow extends Stage {
 		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Image Files", "*.png"));
 		File file = fileChooser.showSaveDialog(this);
 		
-		WritableImage writableImage = new WritableImage((int)Math.rint(3.0*(windowWidth - 100)), (int)Math.rint(3.0*(windowHeight - 100)));
+		WritableImage writableImage = new WritableImage((int)Math.rint(3.0*(tileSize*mapWidth)), (int)Math.rint(3.0*(tileSize*mapHeight)));
 	    SnapshotParameters spa = new SnapshotParameters();
 	    spa.setTransform(Transform.scale(3.0, 3.0));
 	    
 	    spa.setFill(ImageLoader.COLOR_PLANET_ONE);
-	    spa.setViewport(new Rectangle2D(150, 49, tileSize*mapWidth, tileSize*mapHeight));
 	    WritableImage img = picturePane.snapshot(spa, writableImage); 
 		
 		if(file != null) {
