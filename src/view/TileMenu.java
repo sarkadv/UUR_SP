@@ -122,8 +122,8 @@ public class TileMenu extends GridPane {
 		tileBtn3.imageBackToNormal();
 	}
 	
-	public void setDarkMode() {
-		this.darkMode = !this.darkMode;
+	public void setDarkMode(boolean darkMode) {
+		this.darkMode = darkMode;
 		
 		if(this.darkMode == false) {
 			this.allTiles = new ArrayList<Tile>(TilePicker.getTileMapDay().values());

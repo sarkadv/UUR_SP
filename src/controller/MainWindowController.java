@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
+import javafx.scene.image.Image;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
@@ -20,6 +21,7 @@ import util.FileLoader;
 import util.FileSaver;
 import util.SpecialToolType;
 import util.TilePicker;
+import view.ImageButton;
 import view.NewMapWindow;
 import view.PictureExportWindow;
 
@@ -143,6 +145,15 @@ public class MainWindowController {
 			else {
 				FileLoader.setMapModel(mapModel);
 				mapController.showNewMap(stage.getWidth(), stage.getHeight());
+				
+				setDarkMode(mapController.getDarkMode());
+				
+				if(getDarkMode()) {
+					stage.getScene().getStylesheets().add("file:resources/darkmode.css");
+				}
+				else {
+					stage.getScene().getStylesheets().remove("file:resources/darkmode.css");
+				}
 			}
 		}
 		
@@ -270,6 +281,8 @@ public class MainWindowController {
 			setCurrentTile(TilePicker.getTile(currentTileId + addition));
 		}
 		
+		changeButtonsMode(getDarkMode());
+		
 	}
 	
 	public void changeModeAppearanceDuringStart(Stage stage, MapController mapController) {
@@ -291,6 +304,27 @@ public class MainWindowController {
 			setCurrentTile(TilePicker.getTile(currentTileId + addition));
 		}
 		
+		changeButtonsMode(getDarkMode());
+		
+	}
+	
+	public void changeButtonsMode(boolean darkMode) {
+		if(darkMode) {
+			for(ImageButton btn : mainWindowModel.getButtons()) {
+				Image btnImage = btn.getImage();
+				int imgIndex = mainWindowModel.getButtonImagesLight().indexOf(btnImage);
+				Image newImage = mainWindowModel.getButtonImagesDark().get(imgIndex);
+				btn.setImage(newImage);
+			}
+		}
+		else {
+			for(ImageButton btn : mainWindowModel.getButtons()) {
+				Image btnImage = btn.getImage();
+				int imgIndex = mainWindowModel.getButtonImagesDark().indexOf(btnImage);
+				Image newImage = mainWindowModel.getButtonImagesLight().get(imgIndex);
+				btn.setImage(newImage);
+			}
+		}
 	}
 
 }

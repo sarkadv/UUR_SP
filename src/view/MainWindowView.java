@@ -1,5 +1,9 @@
 package view;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import controller.MainWindowController;
 import controller.MapController;
 import javafx.application.Application;
@@ -9,6 +13,7 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -33,6 +38,7 @@ public class MainWindowView extends Application {
 	private MainWindowController mainWindowController = new MainWindowController(mainWindowModel);
 	
 	private TileMenu tileMenu;
+	
 
 	public static void main(String[] args) {
 		launch(args);
@@ -57,7 +63,7 @@ public class MainWindowView extends Application {
 		
 		if(mainWindowController.getDarkMode()) {
 			mainWindowController.changeModeAppearanceDuringStart(stage, mapController);
-			tileMenu.setDarkMode();
+			tileMenu.setDarkMode(mainWindowController.getDarkMode());
 			
 		}
 		
@@ -162,36 +168,50 @@ public class MainWindowView extends Application {
 	}
 	
 	private Node createTopButtons() {
-		HBox buttons = new HBox(5);
-		buttons.setPadding(new Insets(10, 5, 10, 5));
+		HBox buttonsPane = new HBox(5);
+		buttonsPane.setPadding(new Insets(10, 5, 10, 5));
 		
-		Button newFile = new ImageButton(50, 50, "Nová Mapa", ImageLoader.NEW_LIGHT);
+		ImageButton newFile = new ImageButton(50, 50, "Nová Mapa", ImageLoader.NEW_LIGHT);
 		newFile.setOnAction(e -> mainWindowController.showSaveAlertNew(primaryStage, mapModel, mapController));
+		mainWindowModel.addButton(newFile);
 		
-		Button saveFile = new ImageButton(50, 50, "Uložit Mapu", ImageLoader.SAVE_LIGHT);
+		ImageButton saveFile = new ImageButton(50, 50, "Uložit Mapu", ImageLoader.SAVE_LIGHT);
 		saveFile.setOnAction(e -> mainWindowController.showFileSaveWindow(primaryStage, mapModel));
+		mainWindowModel.addButton(saveFile);
 		
-		Button back = new ImageButton(50, 50, "Zpět", ImageLoader.BACK_LIGHT);
+		ImageButton back = new ImageButton(50, 50, "Zpět", ImageLoader.BACK_LIGHT);
+		mainWindowModel.addButton(back);
 		
-		Button loadFile = new ImageButton(50, 50, "Načíst Mapu", ImageLoader.LOAD_LIGHT);
-		loadFile.setOnAction(e -> mainWindowController.showSaveAlertLoad(primaryStage, mapModel, mapController));
+		ImageButton loadFile = new ImageButton(50, 50, "Načíst Mapu", ImageLoader.LOAD_LIGHT);
+		loadFile.setOnAction(e -> {
+			mainWindowController.showSaveAlertLoad(primaryStage, mapModel, mapController);
+			tileMenu.setDarkMode(mainWindowController.getDarkMode());
+		});
+		mainWindowModel.addButton(loadFile);
 		
-		Button exportFile = new ImageButton(50, 50, "Exportovat Jako Obrázek", ImageLoader.EXPORT_LIGHT);
+		ImageButton exportFile = new ImageButton(50, 50, "Exportovat Jako Obrázek", ImageLoader.EXPORT_LIGHT);
 		exportFile.setOnAction(e -> mainWindowController.showExportWindow(primaryStage, mapModel.getAllTiles()));
+		mainWindowModel.addButton(exportFile);
 		
-		Button mode = new ImageButton(50, 50, "Tmavý Režim", ImageLoader.MODE_LIGHT);
+		ImageButton mode = new ImageButton(50, 50, "Změna Barevného Režimu", ImageLoader.MODE_LIGHT);
 		mode.setOnAction(e -> {
 			mainWindowController.changeModeAppearanceDuringRun(primaryStage, mapController);
-			tileMenu.setDarkMode();
+			tileMenu.setDarkMode(mainWindowController.getDarkMode());
 		});
+		mainWindowModel.addButton(mode);
 		
-		Button settings = new ImageButton(50, 50, "Nastavení", ImageLoader.SETTINGS_LIGHT);
-		Button help = new ImageButton(50, 50, "Nápověda", ImageLoader.HELP_LIGHT);
-		Button about = new ImageButton(50, 50, "O Aplikaci", ImageLoader.ABOUT_LIGHT);
+		ImageButton settings = new ImageButton(50, 50, "Nastavení", ImageLoader.SETTINGS_LIGHT);
+		mainWindowModel.addButton(settings);
 		
-		buttons.getChildren().addAll(newFile, saveFile, back, loadFile, exportFile, mode, settings, help, about);
+		ImageButton help = new ImageButton(50, 50, "Nápověda", ImageLoader.HELP_LIGHT);
+		mainWindowModel.addButton(help);
 		
-		return buttons;
+		ImageButton about = new ImageButton(50, 50, "O Aplikaci", ImageLoader.ABOUT_LIGHT);
+		mainWindowModel.addButton(about);
+		
+		buttonsPane.getChildren().addAll(newFile, saveFile, back, loadFile, exportFile, mode, settings, help, about);
+		
+		return buttonsPane;
 	}
 	
 	private Node createRightContent() {
@@ -200,6 +220,7 @@ public class MainWindowView extends Application {
 		
 		Button upBtn = new ImageButton(30, 30, "Nahoru", ImageLoader.TRIANGLE_UP);
 		upBtn.setOnAction(e -> tileMenu.moveUp());
+		
 		Button downBtn = new ImageButton(30, 30, "Dolů", ImageLoader.TRIANGLE_DOWN);
 		downBtn.setOnAction(e -> tileMenu.moveDown());
 		
@@ -228,43 +249,50 @@ public class MainWindowView extends Application {
 	}
 
 	private Node createFirstRowButtons() {
-		HBox buttons = new HBox(5);
+		HBox buttonsPane = new HBox(5);
 		
-		Button pick = new ImageButton(50, 50, "Vybrat", ImageLoader.PICK_LIGHT);
+		ImageButton pick = new ImageButton(50, 50, "Vybrat", ImageLoader.PICK_LIGHT);
 		pick.setOnAction(e -> {
 			mainWindowController.changeSpecialToolActive(null);
 			mainWindowController.changeToNoTile(e);
 			tileMenu.updateChoice();
 		});
-		pick.setId("pick");
+		mainWindowModel.addButton(pick);
 		
-		Button erase = new ImageButton(50, 50, "Vymazat", ImageLoader.ERASE_LIGHT);
+		ImageButton erase = new ImageButton(50, 50, "Vymazat", ImageLoader.ERASE_LIGHT);
 		erase.setOnAction(e -> {
 			mainWindowController.changeSpecialToolActive(null);
 			mainWindowController.changeToEmptyTile(e);
 			tileMenu.updateChoice();
 		});
+		mainWindowModel.addButton(erase);
 		
-		Button eyeDropper = new ImageButton(50, 50, "Kapátko", ImageLoader.EYEDROPPER_LIGHT);
+		ImageButton eyeDropper = new ImageButton(50, 50, "Kapátko", ImageLoader.EYEDROPPER_LIGHT);
 		eyeDropper.setOnAction(e -> {
 			mainWindowController.changeSpecialToolActive(SpecialToolType.EYEDROPPER);
 		});
+		mainWindowModel.addButton(eyeDropper);
 		
-		buttons.getChildren().addAll(pick, erase, eyeDropper);
+		buttonsPane.getChildren().addAll(pick, erase, eyeDropper);
 		
-		return buttons;
+		return buttonsPane;
 	}
 	
 	private Node createSecondRowButtons() {
-		HBox buttons = new HBox(5);
+		HBox buttonsPane = new HBox(5);
 		
-		Button chooseArea = new ImageButton(50, 50, "Vybrat Oblast", ImageLoader.CHOOSEAREA_LIGHT);
-		Button fillArea = new ImageButton(50, 50, "Výplň Oblasti", ImageLoader.FILLAREA_LIGHT);
-		Button fillBorders = new ImageButton(50, 50, "Výplň Hranic", ImageLoader.FILLBORDERS_LIGHT);
+		ImageButton chooseArea = new ImageButton(50, 50, "Vybrat Oblast", ImageLoader.CHOOSEAREA_LIGHT);
+		mainWindowModel.addButton(chooseArea);
 		
-		buttons.getChildren().addAll(chooseArea, fillArea, fillBorders);
+		ImageButton fillArea = new ImageButton(50, 50, "Výplň Oblasti", ImageLoader.FILLAREA_LIGHT);
+		mainWindowModel.addButton(fillArea);
 		
-		return buttons;
+		ImageButton fillBorders = new ImageButton(50, 50, "Výplň Hranic", ImageLoader.FILLBORDERS_LIGHT);
+		mainWindowModel.addButton(fillBorders);
+		
+		buttonsPane.getChildren().addAll(chooseArea, fillArea, fillBorders);
+		
+		return buttonsPane;
 	}
 	
 }
