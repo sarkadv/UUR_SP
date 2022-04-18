@@ -68,6 +68,10 @@ public class MapModel {
 		this.tilesHistory.add(history);
 	}
 	
+	public void clearMapHistory() {
+		this.tilesHistory = new ArrayList<Integer[][]>();
+	}
+	
 	public void setTile(int x, int y, int id) {
 		this.allTiles[x][y] = id;
 	}

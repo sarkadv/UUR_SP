@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -105,6 +106,7 @@ public class MainWindowController {
 		NewMapWindow newMap = new NewMapWindow(mapModel, stage, mainWindowModel.getDarkMode().get());
 	    newMap.showAndWait();
 	    mapController.showNewMap(stage.getWidth(), stage.getHeight());
+	    mapController.clearMapHistory();
 	}
 	
 	public void showLoadFileWindowStart(Stage stage, MapModel mapModel, MapController mapController) {
@@ -145,6 +147,7 @@ public class MainWindowController {
 			else {
 				FileLoader.setMapModel(mapModel);
 				mapController.showNewMap(stage.getWidth(), stage.getHeight());
+				mapController.clearMapHistory();
 				
 				setDarkMode(mapController.getDarkMode());
 				

@@ -102,6 +102,10 @@ public class MapController {
 		}
 	}
 	
+	public void clearMapHistory() {
+		model.clearMapHistory();
+	}
+	
 	public Tile copyTile(MouseEvent e) {
 		int x = getTileCoordinate(e.getX()) + model.getFirstTileVisibleX().get();
 		int y = getTileCoordinate(e.getY()) + model.getFirstTileVisibleY().get();
