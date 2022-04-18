@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
 import javafx.scene.control.Spinner;
@@ -37,14 +38,15 @@ public class NewMapWindow extends Stage {
 	private List<Integer> tilesVisibleChoiceList;
 	private Label mapSizeComputedNumber;
 	private final int MAX_TILE_NUMBER = 1600;
-	private int chosenTilesVisible;
+	private boolean darkMode;
 	
-	public NewMapWindow(MapModel model, Stage primaryStage) {
+	public NewMapWindow(MapModel model, Stage primaryStage, boolean darkMode) {
 		this.model = model;
 		this.mapSizeWidthTF = new TextField("8");
 		this.mapSizeHeightTF = new TextField("8");
 		this.mapSizeComputedNumber = new Label("64");
 		this.tilesVisibleChoiceList = FXCollections.observableArrayList(1, 4, 9, 16, 25, 36, 49, 64);
+		this.darkMode = darkMode;
 		
 		this.setScene(createScene());
 		this.initModality(Modality.WINDOW_MODAL);
@@ -59,6 +61,10 @@ public class NewMapWindow extends Stage {
 	
 	private Scene createScene() {
 		Scene scene = new Scene(createRootPane(), 400, 300);
+		
+		if(this.darkMode) {
+			scene.getStylesheets().add("file:resources/darkmode.css");
+		}
 		
 		return scene;
 	}
@@ -110,7 +116,7 @@ public class NewMapWindow extends Stage {
 		
 		HBox mapSizeComputedPane = new HBox(5);
 		mapSizeComputedPane.setAlignment(Pos.CENTER);
-		Label mapSizeComputedLabel = new Label("Počet dlaždic: ");
+		Label mapSizeComputedLabel = new Label("Počet Dlaždic: ");
 		
 		mapSizeComputedPane.getChildren().addAll(mapSizeComputedLabel, mapSizeComputedNumber);
 		
@@ -149,6 +155,13 @@ public class NewMapWindow extends Stage {
 			alert.setContentText("Celkový počet dlaždic nesmí být větší než " + MAX_TILE_NUMBER + " .");
 			alert.showAndWait();
 		}
+		else if(Integer.parseInt(mapSizeHeightTF.getText()) == 0 || Integer.parseInt(mapSizeWidthTF.getText()) == 0) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Nová mapa");
+			alert.setHeaderText("Nepodařilo se vytvořit novou mapu");
+			alert.setContentText("Ani jeden z rozměrů mapy nesmí být 0.");
+			alert.showAndWait();
+		}
 		else {
 			int allTilesWidth = Integer.parseInt(mapSizeWidthTF.getText());
 			int allTilesHeight = Integer.parseInt(mapSizeHeightTF.getText());
@@ -158,7 +171,7 @@ public class NewMapWindow extends Stage {
 			model.setAllTilesWidth(allTilesWidth);
 			model.setAllTilesHeight(allTilesHeight);
 			model.setTilesVisibleLine(tilesVisibleLine);
-			model.initAllTiles();
+			model.initAllTilesNewMap();
 			this.close();
 		}
 		

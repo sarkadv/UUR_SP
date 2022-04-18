@@ -39,14 +39,16 @@ public class PictureExportWindow extends Stage {
 	private final int windowHeight;
 	private GridPane picturePane;
 	private int tileSize;
+	private boolean darkMode;
 	
-	public PictureExportWindow(int[][] tiles, Stage primaryStage) {
+	public PictureExportWindow(int[][] tiles, Stage primaryStage, boolean darkMode) {
 		this.tiles = tiles;
 		this.mapWidth = tiles.length;
 		this.mapHeight = tiles[0].length;
 		this.windowWidth = 700;
 		this.windowHeight = 800;
 		this.tileSize = Math.min(windowWidth/mapWidth, (windowHeight - 100)/mapHeight);
+		this.darkMode = darkMode;
 		
 		this.setScene(createScene());
 		this.initModality(Modality.WINDOW_MODAL);
@@ -61,6 +63,10 @@ public class PictureExportWindow extends Stage {
 	
 	private Scene createScene() {
 		Scene scene = new Scene(createRootPane(), windowWidth, windowHeight);
+		
+		if(this.darkMode) {
+			scene.getStylesheets().add("file:resources/darkmode.css");
+		}
 		
 		return scene;
 	}

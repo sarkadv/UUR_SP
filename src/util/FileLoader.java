@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
 
+import controller.MainWindowController;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import model.MapModel;
@@ -67,11 +68,11 @@ public class FileLoader {
 	}
 	
 	public static void setMapModel(MapModel model) {
+		model.setDarkMode(darkMode);
 		model.setAllTiles(tiles);
 		model.setAllTilesHeight(mapHeight);
 		model.setAllTilesWidth(mapWidth);
 		model.setTilesVisibleLine(tilesVisibleLine);
-		model.setDarkMode(darkMode);
 	}
 
 	public static boolean isSuccessful() {

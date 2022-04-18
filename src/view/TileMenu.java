@@ -121,5 +121,20 @@ public class TileMenu extends GridPane {
 		tileBtn2.imageBackToNormal();
 		tileBtn3.imageBackToNormal();
 	}
+	
+	public void setDarkMode() {
+		this.darkMode = !this.darkMode;
+		
+		if(this.darkMode == false) {
+			this.allTiles = new ArrayList<Tile>(TilePicker.getTileMapDay().values());
+			this.allTiles.remove(TilePicker.getTile(00));
+		}
+		else {
+			this.allTiles = new ArrayList<Tile>(TilePicker.getTileMapNight().values());
+			this.allTiles.remove(TilePicker.getTile(01));
+		}
+		
+		this.init(currentFirst);
+	}
 
 }

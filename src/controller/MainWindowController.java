@@ -1,12 +1,15 @@
 package controller;
 
 import java.io.File;
+import java.util.List;
 import java.util.Optional;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.DialogPane;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -22,46 +25,63 @@ import view.PictureExportWindow;
 
 public class MainWindowController {
 	
-	private MainWindowModel model;
+	private MainWindowModel mainWindowModel;
 	
-	public MainWindowController (MainWindowModel model) {
-		this.model = model;
+	public MainWindowController (MainWindowModel mainWindowModel) {
+		this.mainWindowModel = mainWindowModel;
 	}
 	
 	public Tile getCurrentTile() {
-		return this.model.getCurrentTile().get();
+		return this.mainWindowModel.getCurrentTile().get();
+	}
+	
+	public void setCurrentTile(Tile tile) {
+		this.mainWindowModel.setCurrentTile(tile);
+	}
+	
+	public boolean getDarkMode() {
+		return this.mainWindowModel.getDarkMode().get();
+	}
+	
+	public void setDarkMode(boolean darkMode) {
+		this.mainWindowModel.setDarkMode(darkMode);
 	}
 	
 	public void changeCurrentTile(ActionEvent e, Tile newTile) {
-		this.model.setCurrentTile(newTile);
+		this.mainWindowModel.setCurrentTile(newTile);
 	}
 	
 	public void changeToEmptyTile(ActionEvent e) {
-		if(model.getDarkMode().get()) {
-			this.model.setCurrentTile(TilePicker.getTile(01));
+		if(getDarkMode()) {
+			this.mainWindowModel.setCurrentTile(TilePicker.getTile(01));
 		}
 		else {
-			this.model.setCurrentTile(TilePicker.getTile(00));
+			this.mainWindowModel.setCurrentTile(TilePicker.getTile(00));
 		}
 		
 	}
 	
 	public void changeToNoTile(ActionEvent e) {
-		this.model.setCurrentTile(null);
+		this.mainWindowModel.setCurrentTile(null);
 	}
 	
 	public void changeSpecialToolActive(SpecialToolType tool) {
-		model.setToolActive(tool);
+		mainWindowModel.setToolActive(tool);
 	}
 	
 	public void removeSpecialToolActive() {
-		model.setToolActive(null);
+		mainWindowModel.setToolActive(null);
 	}
 	
 	public void showStartAlert(Stage stage, MapModel mapModel, MapController mapController) {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Tiny Planet Builder");
 		alert.setHeaderText("Vyberte způsob zahájení stavby");
+		
+		if(mainWindowModel.getDarkMode().get()) {
+			DialogPane dialogPane = alert.getDialogPane();
+			dialogPane.getStylesheets().add("file:resources/darkmode.css");
+		}
 
 		ButtonType newMapBtn = new ButtonType("Nová Mapa");
 		ButtonType loadMapBtn = new ButtonType("Načíst Mapu");
@@ -75,17 +95,17 @@ public class MainWindowController {
 		    
 		    
 		} else if (result.get() == loadMapBtn) {
-		    showLoadFileWindow(stage, mapModel, mapController);
+		    showLoadFileWindowStart(stage, mapModel, mapController);
 		}
 	}
 	
 	public void showNewFileWindow(Stage stage, MapModel mapModel, MapController mapController) {
-		NewMapWindow newMap = new NewMapWindow(mapModel, stage);
+		NewMapWindow newMap = new NewMapWindow(mapModel, stage, mainWindowModel.getDarkMode().get());
 	    newMap.showAndWait();
 	    mapController.showNewMap(stage.getWidth(), stage.getHeight());
 	}
 	
-	public void showLoadFileWindow(Stage stage, MapModel mapModel, MapController mapController) {
+	public void showLoadFileWindowStart(Stage stage, MapModel mapModel, MapController mapController) {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Načtení Souboru");
 		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
@@ -108,10 +128,35 @@ public class MainWindowController {
 		
 	}
 	
+	public void showLoadFileWindowContinue(Stage stage, MapModel mapModel, MapController mapController) {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Načtení Souboru");
+		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
+		File selectedFile = fileChooser.showOpenDialog(stage);
+		
+		if(selectedFile != null) {
+			FileLoader.loadFile(selectedFile);
+			
+			if(!FileLoader.isSuccessful()) {
+				showStartAlert(stage, mapModel, mapController);
+			}
+			else {
+				FileLoader.setMapModel(mapModel);
+				mapController.showNewMap(stage.getWidth(), stage.getHeight());
+			}
+		}
+		
+	}
+	
 	public void showSaveAlertClose(Stage stage, MapModel mapModel) {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Tiny Planet Builder");
 		alert.setHeaderText("Přejete si před zavřením aplikace uložit soubor?");
+		
+		if(mainWindowModel.getDarkMode().get()) {
+			DialogPane dialogPane = alert.getDialogPane();
+			dialogPane.getStylesheets().add("file:resources/darkmode.css");
+		}
 
 		ButtonType saveBtn = new ButtonType("Ano");
 		ButtonType dontSaveBtn = new ButtonType("Ne");
@@ -134,6 +179,11 @@ public class MainWindowController {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Tiny Planet Builder");
 		alert.setHeaderText("Přejete si uložit aktuální soubor?");
+		
+		if(mainWindowModel.getDarkMode().get()) {
+			DialogPane dialogPane = alert.getDialogPane();
+			dialogPane.getStylesheets().add("file:resources/darkmode.css");
+		}
 
 		ButtonType saveBtn = new ButtonType("Ano");
 		ButtonType dontSaveBtn = new ButtonType("Ne");
@@ -152,10 +202,17 @@ public class MainWindowController {
 		}
 	}
 	
+	
+	
 	public void showSaveAlertLoad(Stage stage, MapModel mapModel, MapController mapController) {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Tiny Planet Builder");
 		alert.setHeaderText("Přejete si uložit aktuální soubor?");
+		
+		if(mainWindowModel.getDarkMode().get()) {
+			DialogPane dialogPane = alert.getDialogPane();
+			dialogPane.getStylesheets().add("file:resources/darkmode.css");
+		}
 
 		ButtonType saveBtn = new ButtonType("Ano");
 		ButtonType dontSaveBtn = new ButtonType("Ne");
@@ -167,10 +224,10 @@ public class MainWindowController {
 		
 		if (result.get() == saveBtn){
 			showFileSaveWindow(stage, mapModel); 
-			showLoadFileWindow(stage, mapModel, mapController);
+			showLoadFileWindowContinue(stage, mapModel, mapController);
 		}
 		else if (result.get() == dontSaveBtn) {
-			showLoadFileWindow(stage, mapModel, mapController);
+			showLoadFileWindowContinue(stage, mapModel, mapController);
 		}
 	}
 	
@@ -186,14 +243,54 @@ public class MainWindowController {
 	}
 	
 	public void showExportWindow(Stage stage, int[][] tiles) {
-		PictureExportWindow exportWindow = new PictureExportWindow(tiles, stage);
+		PictureExportWindow exportWindow = new PictureExportWindow(tiles, stage, this.mainWindowModel.getDarkMode().get());
 		exportWindow.showAndWait();
 	}
 	
-	public void setDarkMode(boolean darkMode) {
-		this.model.setDarkMode(darkMode);
+	public void changeModeAppearanceDuringRun(Stage stage, MapController mapController) {
+		boolean darkModeActive = getDarkMode();
+		
+		if(darkModeActive) {
+			stage.getScene().getStylesheets().remove("file:resources/darkmode.css");
+		}
+		else {
+			stage.getScene().getStylesheets().add("file:resources/darkmode.css");
+
+		}
+		setDarkMode(!getDarkMode());
+		mapController.setDarkMode(!mapController.getDarkMode());
+		mapController.reInitAllTiles();
+		mapController.repaint();
+		
+		int addition = getDarkMode()? 1 : -1;
+		Tile currentTile = getCurrentTile();
+		
+		if(currentTile != null) {
+			int currentTileId = currentTile.id;
+			setCurrentTile(TilePicker.getTile(currentTileId + addition));
+		}
+		
 	}
 	
-	
+	public void changeModeAppearanceDuringStart(Stage stage, MapController mapController) {
+		boolean darkModeActive = mainWindowModel.getDarkMode().get();
+		
+		if(darkModeActive) {
+			stage.getScene().getStylesheets().add("file:resources/darkmode.css");
+		}
+		else {
+			stage.getScene().getStylesheets().remove("file:resources/darkmode.css");
+
+		}
+		
+		int addition = getDarkMode()? 1 : -1;
+		Tile currentTile = getCurrentTile();
+		
+		if(currentTile != null) {
+			int currentTileId = currentTile.id;
+			setCurrentTile(TilePicker.getTile(currentTileId + addition));
+		}
+		
+	}
 
 }

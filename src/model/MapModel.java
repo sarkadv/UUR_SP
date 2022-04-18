@@ -36,13 +36,22 @@ public class MapModel {
 		this.darkMode = new SimpleBooleanProperty(false);
 	}
 	
-	public void initAllTiles() {
+	public void initAllTilesNewMap() {
 		allTiles = new int[allTilesWidth.get()][allTilesHeight.get()];
 		
 		int addition = darkMode.get()? 1 : 0;
 		for(int x = 0; x < allTilesWidth.get(); x++) {
 			for(int y = 0; y < allTilesHeight.get(); y++) {
 				allTiles[x][y] = 00 + addition;
+			}
+		}
+	}
+	
+	public void reInitAllTiles() {
+		int addition = darkMode.get()? 1 : -1;
+		for(int x = 0; x < allTilesWidth.get(); x++) {
+			for(int y = 0; y < allTilesHeight.get(); y++) {
+				allTiles[x][y] = allTiles[x][y] + addition;
 			}
 		}
 	}

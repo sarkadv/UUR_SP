@@ -9,14 +9,13 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 
 public class ImageButton extends Button {
-	private Image normalImage;
-	private Image pressedImage;
-    private final ImageView iv;
+	private Image image;
+    private ImageView imageView;
     private ColorAdjust colorAdjustHighlight = new ColorAdjust(0, 0, 0.5, 0); 
     private ColorAdjust colorAdjustBack = new ColorAdjust(0, 0, 0, 0); 
     private String name;
 
-    public ImageButton(double width, double height, String name, Image normal, Image pressed) {
+    public ImageButton(double width, double height, String name, Image normal) {
     	super.setHeight(height);
     	super.setWidth(width);
     	this.name = name;
@@ -24,47 +23,31 @@ public class ImageButton extends Button {
     	super.setMinSize(width, height);
     	super.setMaxSize(width, height);
     	
-    	this.normalImage = normal;
-    	this.pressedImage = pressed;
+    	this.image = normal;
     	
-        this.iv = new ImageView(normalImage);
-        iv.setFitHeight(height);
-        iv.setFitWidth(width);
-        iv.setPreserveRatio(true);
+        this.imageView = new ImageView(image);
+        imageView.setFitHeight(height);
+        imageView.setFitWidth(width);
+        imageView.setPreserveRatio(true);
         
-        this.setGraphic(this.iv);
-
-        this.setOnMousePressed(new EventHandler<MouseEvent>() {
-
-            public void handle(MouseEvent evt) {
-                iv.setImage(pressedImage);
-            }
-
-        });
-
-        this.setOnMouseReleased(new EventHandler<MouseEvent>() {
-
-            public void handle(MouseEvent evt) {
-                iv.setImage(normalImage);
-            }
-
-        });
+        this.setGraphic(this.imageView);
 
     } 
     
-    public ImageButton(double width, double height, String name, Image normal) {
-    		this(width, height, name, normal, normal);
-    }
-    
     public void highlightImage() {
-    	this.iv.setEffect(colorAdjustHighlight);
+    	this.imageView.setEffect(colorAdjustHighlight);
     }
     
     public void imageBackToNormal() {
-    	this.iv.setEffect(colorAdjustBack);
+    	this.imageView.setEffect(colorAdjustBack);
     }
     
     public String getName() {
     	return this.name;
     }
+
+	public void setImage(Image image) {
+		this.image = image;
+	}
+
 }

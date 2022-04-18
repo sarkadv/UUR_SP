@@ -30,34 +30,46 @@ public class MapController {
 		newTileSize = newTileSize / model.getTilesVisibleLine().get();
 		
 		model.setTileSize(newTileSize);
+		repaint();
+	}
+	
+	public void initAllTilesNewMap() {
+		model.initAllTilesNewMap();
+	}
+	
+	public void reInitAllTiles() {
+		model.reInitAllTiles();
+	}
+	
+	public void repaint() {
 		view.repaint();
 	}
 	
 	public void moveUp(KeyEvent e) {
 		if(model.getFirstTileVisibleY().get() > 0) {
 			model.setFirstTileVisibleY(model.getFirstTileVisibleY().get() - 1);
-			view.repaint();
+			repaint();
 		}
 	}
 	
 	public void moveDown(KeyEvent e) {
 		if(model.getFirstTileVisibleY().get() < model.getAllTilesHeight().get() - model.getTilesVisibleLine().get()) {
 			model.setFirstTileVisibleY(model.getFirstTileVisibleY().get() + 1);
-			view.repaint();
+			repaint();
 		}
 	}
 	
 	public void moveLeft(KeyEvent e) {
 		if(model.getFirstTileVisibleX().get() > 0) {
 			model.setFirstTileVisibleX(model.getFirstTileVisibleX().get() - 1);
-			view.repaint();
+			repaint();
 		}
 	}
 	
 	public void moveRight(KeyEvent e) {
 		if(model.getFirstTileVisibleX().get() < model.getAllTilesWidth().get() - model.getTilesVisibleLine().get()) {
 			model.setFirstTileVisibleX(model.getFirstTileVisibleX().get() + 1);
-			view.repaint();
+			repaint();
 		}
 	}
 	
@@ -67,7 +79,7 @@ public class MapController {
 			int y = getTileCoordinate(e.getY()) + model.getFirstTileVisibleY().get();
 			
 			model.setTile(x, y, tile.id);
-			view.repaint();
+			repaint();
 		}
 
 	}
@@ -94,6 +106,14 @@ public class MapController {
 		}
 		
 		return substractionCount;
+	}
+	
+	public void setDarkMode(boolean darkMode) {
+		model.setDarkMode(darkMode);
+	}
+	
+	public boolean getDarkMode() {
+		return model.getDarkMode().get();
 	}
 
 }

@@ -20,12 +20,12 @@ public class ImageLoader {
 	
 	private ImageLoader() {};
 	
-	private static Image spritesheetHades = new Image("file:img/spritesheet_hades.png");
-	private static Image spritesheetButtonsUpper = new Image("file:img/spritesheet_buttons_upper.png");
-	private static Image spritesheetButtonsLower = new Image("file:img/spritesheet_buttons_lower.png");
+	private static Image spritesheetHades = new Image("file:resources/spritesheet_hades.png");
+	private static Image spritesheetButtonsUpper = new Image("file:resources/spritesheet_buttons_upper.png");
+	private static Image spritesheetButtonsLower = new Image("file:resources/spritesheet_buttons_lower.png");
 	
-	public static final Image TRIANGLE_UP = new Image("file:img/triangle_up.png");
-	public static final Image TRIANGLE_DOWN = new Image("file:img/triangle_down.png");
+	public static final Image TRIANGLE_UP = new Image("file:resources/triangle_up.png");
+	public static final Image TRIANGLE_DOWN = new Image("file:resources/triangle_down.png");
 	
 	public static final Image ABOUT_LIGHT = crop(spritesheetButtonsUpper, 0, 0, BUTTON_UPPER_SIZE);
 	public static final Image ABOUT_DARK = crop(spritesheetButtonsUpper, 3, 0, BUTTON_UPPER_SIZE);

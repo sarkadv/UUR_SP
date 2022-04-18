@@ -53,7 +53,13 @@ public class MainWindowView extends Application {
 		stage.show();
 		
 		mainWindowController.showStartAlert(stage, mapModel, mapController);
+		mainWindowController.setDarkMode(mapController.getDarkMode());
 		
+		if(mainWindowController.getDarkMode()) {
+			mainWindowController.changeModeAppearanceDuringStart(stage, mapController);
+			tileMenu.setDarkMode();
+			
+		}
 		
 		stage.heightProperty().addListener((obs, oldValue, newValue) -> {
 			mapController.changeTileSize(stage.getWidth(), newValue.doubleValue());
@@ -174,6 +180,11 @@ public class MainWindowView extends Application {
 		exportFile.setOnAction(e -> mainWindowController.showExportWindow(primaryStage, mapModel.getAllTiles()));
 		
 		Button mode = new ImageButton(50, 50, "Tmavý Režim", ImageLoader.MODE_LIGHT);
+		mode.setOnAction(e -> {
+			mainWindowController.changeModeAppearanceDuringRun(primaryStage, mapController);
+			tileMenu.setDarkMode();
+		});
+		
 		Button settings = new ImageButton(50, 50, "Nastavení", ImageLoader.SETTINGS_LIGHT);
 		Button help = new ImageButton(50, 50, "Nápověda", ImageLoader.HELP_LIGHT);
 		Button about = new ImageButton(50, 50, "O Aplikaci", ImageLoader.ABOUT_LIGHT);
@@ -225,6 +236,7 @@ public class MainWindowView extends Application {
 			mainWindowController.changeToNoTile(e);
 			tileMenu.updateChoice();
 		});
+		pick.setId("pick");
 		
 		Button erase = new ImageButton(50, 50, "Vymazat", ImageLoader.ERASE_LIGHT);
 		erase.setOnAction(e -> {
@@ -239,6 +251,7 @@ public class MainWindowView extends Application {
 		});
 		
 		buttons.getChildren().addAll(pick, erase, eyeDropper);
+		
 		return buttons;
 	}
 	
@@ -250,11 +263,8 @@ public class MainWindowView extends Application {
 		Button fillBorders = new ImageButton(50, 50, "Výplň Hranic", ImageLoader.FILLBORDERS_LIGHT);
 		
 		buttons.getChildren().addAll(chooseArea, fillArea, fillBorders);
+		
 		return buttons;
 	}
 	
-
-	
-
-
 }
