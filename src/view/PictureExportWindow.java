@@ -32,7 +32,7 @@ import util.TilePicker;
 
 public class PictureExportWindow extends Stage {
 	
-	private int[][] tiles;
+	private Integer[][] tiles;
 	private int mapWidth;
 	private int mapHeight;
 	private final int windowWidth;
@@ -41,7 +41,7 @@ public class PictureExportWindow extends Stage {
 	private int tileSize;
 	private boolean darkMode;
 	
-	public PictureExportWindow(int[][] tiles, Stage primaryStage, boolean darkMode) {
+	public PictureExportWindow(Integer[][] tiles, Stage primaryStage, boolean darkMode) {
 		this.tiles = tiles;
 		this.mapWidth = tiles.length;
 		this.mapHeight = tiles[0].length;

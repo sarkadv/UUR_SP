@@ -180,6 +180,7 @@ public class MainWindowView extends Application {
 		mainWindowModel.addButton(saveFile);
 		
 		ImageButton back = new ImageButton(50, 50, "Zpět", ImageLoader.BACK_LIGHT);
+		back.setOnAction(e -> mapController.oneStepBack());
 		mainWindowModel.addButton(back);
 		
 		ImageButton loadFile = new ImageButton(50, 50, "Načíst Mapu", ImageLoader.LOAD_LIGHT);

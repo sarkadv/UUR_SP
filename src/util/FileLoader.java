@@ -14,7 +14,7 @@ public class FileLoader {
 	private static int mapWidth;
 	private static int mapHeight;
 	private static int tilesVisibleLine;
-	private static int[][] tiles;
+	private static Integer[][] tiles;
 	private static boolean darkMode;
 	private static boolean successful = true;
 	
@@ -23,7 +23,7 @@ public class FileLoader {
 			try {
 				mapWidth = Integer.parseInt(sc.nextLine());
 				mapHeight = Integer.parseInt(sc.nextLine());
-				tiles = new int[mapWidth][mapHeight];
+				tiles = new Integer[mapWidth][mapHeight];
 				
 				tilesVisibleLine = Integer.parseInt(sc.nextLine());
 				

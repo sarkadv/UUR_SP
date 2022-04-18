@@ -253,7 +253,7 @@ public class MainWindowController {
 		}
 	}
 	
-	public void showExportWindow(Stage stage, int[][] tiles) {
+	public void showExportWindow(Stage stage, Integer[][] tiles) {
 		PictureExportWindow exportWindow = new PictureExportWindow(tiles, stage, this.mainWindowModel.getDarkMode().get());
 		exportWindow.showAndWait();
 	}

@@ -1,5 +1,7 @@
 package controller;
 
+import java.util.Arrays;
+
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import model.MapModel;
@@ -80,8 +82,24 @@ public class MapController {
 			
 			model.setTile(x, y, tile.id);
 			repaint();
+			model.addToTilesHistory();
 		}
-
+	}
+	
+	public void oneStepBack() {
+		if(model.getTilesHistory().size() >= 2) {
+			int oneStepBeforeIndex = model.getTilesHistory().size() - 2;
+			Integer[][] oneStepBefore = model.getTilesHistory().get(oneStepBeforeIndex);
+			changeTilesToMode(getDarkMode(), oneStepBefore);
+			model.setAllTiles(oneStepBefore);
+			model.getTilesHistory().remove(oneStepBeforeIndex + 1);
+			view.repaint();
+		}
+		else if (model.getTilesHistory().size() == 1) {
+			model.getTilesHistory().remove(model.getTilesHistory().size() - 1);
+			model.initAllTilesNewMap();
+			view.repaint();
+		}
 	}
 	
 	public Tile copyTile(MouseEvent e) {
@@ -114,6 +132,25 @@ public class MapController {
 	
 	public boolean getDarkMode() {
 		return model.getDarkMode().get();
+	}
+	
+	private Integer[][] changeTilesToMode(boolean darkMode, Integer[][] tiles) {
+		if(getDarkMode() && tiles[0][0] % 10 == 0) {
+			for(int i = 0; i < tiles.length; i++) {
+				for(int j = 0; j < tiles[0].length; j++) {
+					tiles[i][j] = tiles[i][j] + 1;
+				}
+			}
+		}
+		else if(!getDarkMode() && tiles[0][0] % 10 == 1) {
+			for(int i = 0; i < tiles.length; i++) {
+				for(int j = 0; j < tiles[0].length; j++) {
+					tiles[i][j] = tiles[i][j] - 1;
+				}
+			}
+		}
+		
+		return tiles;
 	}
 
 }

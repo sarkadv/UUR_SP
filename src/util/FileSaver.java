@@ -12,7 +12,7 @@ public class FileSaver {
 	private static int mapWidth;
 	private static int mapHeight;
 	private static int tilesVisibleLine;
-	private static int[][] tiles;
+	private static Integer[][] tiles;
 	private static boolean darkMode;
 	private static boolean successful = true;
 	

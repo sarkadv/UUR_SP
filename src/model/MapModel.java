@@ -1,5 +1,9 @@
 package model;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.IntegerProperty;
@@ -22,8 +26,9 @@ public class MapModel {
 	private IntegerProperty firstTileVisibleY;
 	private ObjectProperty<Color> planetColor;
 	private BooleanProperty darkMode;
+	private List<Integer[][]> tilesHistory;
 	
-	private int[][] allTiles;
+	private Integer[][] allTiles;
 	
 	public MapModel() {
 		this.tileSize = new SimpleDoubleProperty(145);
@@ -34,10 +39,11 @@ public class MapModel {
 		this.firstTileVisibleY = new SimpleIntegerProperty(0);
 		this.planetColor = new SimpleObjectProperty<Color>(ImageLoader.COLOR_PLANET_ONE);
 		this.darkMode = new SimpleBooleanProperty(false);
+		this.tilesHistory = new ArrayList<Integer[][]>();
 	}
 	
 	public void initAllTilesNewMap() {
-		allTiles = new int[allTilesWidth.get()][allTilesHeight.get()];
+		allTiles = new Integer[allTilesWidth.get()][allTilesHeight.get()];
 		
 		int addition = darkMode.get()? 1 : 0;
 		for(int x = 0; x < allTilesWidth.get(); x++) {
@@ -45,6 +51,7 @@ public class MapModel {
 				allTiles[x][y] = 00 + addition;
 			}
 		}
+		
 	}
 	
 	public void reInitAllTiles() {
@@ -56,12 +63,21 @@ public class MapModel {
 		}
 	}
 	
+	public void addToTilesHistory() {
+		Integer[][] history = copyTwoDimensionalArray(allTiles);
+		this.tilesHistory.add(history);
+	}
+	
 	public void setTile(int x, int y, int id) {
 		this.allTiles[x][y] = id;
 	}
 	
 	public int getTile(int x, int y) {
 		return allTiles[x][y];
+	}
+
+	public List<Integer[][]> getTilesHistory() {
+		return tilesHistory;
 	}
 
 	public DoubleProperty getTileSize() {
@@ -112,11 +128,11 @@ public class MapModel {
 		this.darkMode.set(darkMode);
 	}
 
-	public int[][] getAllTiles() {
+	public Integer[][] getAllTiles() {
 		return allTiles;
 	}
 
-	public void setAllTiles(int[][] allTiles) {
+	public void setAllTiles(Integer[][] allTiles) {
 		this.allTiles = allTiles;
 	}
 
@@ -134,6 +150,18 @@ public class MapModel {
 
 	public void setFirstTileVisibleY(int firstTileVisibleY) {
 		this.firstTileVisibleY.set(firstTileVisibleY);
+	}
+	
+	private Integer[][] copyTwoDimensionalArray(Integer[][] old){
+		Integer[][] copied = new Integer[old.length][old[0].length];
+		
+		for (int i = 0; i < old.length; i++) {
+			for (int j = 0; j < old[0].length; j++) {
+				copied[i][j] = old[i][j];
+			}   
+		}
+		return copied;
+			  
 	}
 
 }
