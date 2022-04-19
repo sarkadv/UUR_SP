@@ -2,12 +2,9 @@ package view;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import controller.MainWindowController;
-import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import model.Tile;
-import util.ImageLoader;
 import util.TilePicker;
 
 public class TileMenu extends GridPane {

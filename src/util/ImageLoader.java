@@ -1,7 +1,6 @@
 package util;
 
 import java.nio.IntBuffer;
-
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelFormat;
 import javafx.scene.image.PixelReader;

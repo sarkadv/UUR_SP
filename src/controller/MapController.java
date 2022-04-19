@@ -1,7 +1,5 @@
 package controller;
 
-import java.util.Arrays;
-
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import model.MapModel;
@@ -14,13 +12,34 @@ public class MapController {
 	private MapView view;
 	private MapModel model;
 	
-	public MapController(MapView view, MapModel model) {
-		this.view = view;
-		this.model = model;
+	public MapController() {
+		this.model = new MapModel();
+		this.view = new MapView(model);
+		
 	}
 
 	public MapModel getModel() {
 		return model;
+	}
+	
+	public MapView getView() {
+		return view;
+	}
+	
+	public void setAllTilesWidth(int allTilesWidth) {
+		model.setAllTilesWidth(allTilesWidth);
+	}
+	
+	public void setAllTilesHeight(int allTilesHeight) {
+		model.setAllTilesHeight(allTilesHeight);
+	}
+	
+	public void setTilesVisibleLine(int tilesVisibleLine) {
+		model.setTilesVisibleLine(tilesVisibleLine);
+	}
+	
+	public Integer[][] getAllTiles(){
+		return model.getAllTiles();
 	}
 	
 	public void showNewMap(double stageWidth, double stageHeight) {
@@ -29,7 +48,7 @@ public class MapController {
 	
 	public void changeTileSize(double stageWidth, double stageHeight) {
 		double newTileSize = Math.min(stageWidth, stageHeight) - 150;
-		newTileSize = newTileSize / model.getTilesVisibleLine().get();
+		newTileSize = newTileSize / model.getTilesVisibleLine();
 		
 		model.setTileSize(newTileSize);
 		repaint();
@@ -48,37 +67,37 @@ public class MapController {
 	}
 	
 	public void moveUp(KeyEvent e) {
-		if(model.getFirstTileVisibleY().get() > 0) {
-			model.setFirstTileVisibleY(model.getFirstTileVisibleY().get() - 1);
+		if(model.getFirstTileVisibleY() > 0) {
+			model.setFirstTileVisibleY(model.getFirstTileVisibleY() - 1);
 			repaint();
 		}
 	}
 	
 	public void moveDown(KeyEvent e) {
-		if(model.getFirstTileVisibleY().get() < model.getAllTilesHeight().get() - model.getTilesVisibleLine().get()) {
-			model.setFirstTileVisibleY(model.getFirstTileVisibleY().get() + 1);
+		if(model.getFirstTileVisibleY() < model.getAllTilesHeight() - model.getTilesVisibleLine()) {
+			model.setFirstTileVisibleY(model.getFirstTileVisibleY() + 1);
 			repaint();
 		}
 	}
 	
 	public void moveLeft(KeyEvent e) {
-		if(model.getFirstTileVisibleX().get() > 0) {
-			model.setFirstTileVisibleX(model.getFirstTileVisibleX().get() - 1);
+		if(model.getFirstTileVisibleX() > 0) {
+			model.setFirstTileVisibleX(model.getFirstTileVisibleX() - 1);
 			repaint();
 		}
 	}
 	
 	public void moveRight(KeyEvent e) {
-		if(model.getFirstTileVisibleX().get() < model.getAllTilesWidth().get() - model.getTilesVisibleLine().get()) {
-			model.setFirstTileVisibleX(model.getFirstTileVisibleX().get() + 1);
+		if(model.getFirstTileVisibleX() < model.getAllTilesWidth() - model.getTilesVisibleLine()) {
+			model.setFirstTileVisibleX(model.getFirstTileVisibleX() + 1);
 			repaint();
 		}
 	}
 	
 	public void putTile(MouseEvent e, Tile tile) {
 		if(tile != null) {
-			int x = getTileCoordinate(e.getX()) + model.getFirstTileVisibleX().get();
-			int y = getTileCoordinate(e.getY()) + model.getFirstTileVisibleY().get();
+			int x = getTileCoordinate(e.getX()) + model.getFirstTileVisibleX();
+			int y = getTileCoordinate(e.getY()) + model.getFirstTileVisibleY();
 			
 			model.setTile(x, y, tile.id);
 			repaint();
@@ -107,8 +126,8 @@ public class MapController {
 	}
 	
 	public Tile copyTile(MouseEvent e) {
-		int x = getTileCoordinate(e.getX()) + model.getFirstTileVisibleX().get();
-		int y = getTileCoordinate(e.getY()) + model.getFirstTileVisibleY().get();
+		int x = getTileCoordinate(e.getX()) + model.getFirstTileVisibleX();
+		int y = getTileCoordinate(e.getY()) + model.getFirstTileVisibleY();
 		
 		Tile copied = TilePicker.getTile(model.getTile(x, y));
 		if(copied.id == 00 || copied.id == 01) {
@@ -122,8 +141,8 @@ public class MapController {
 	private int getTileCoordinate(double clickedCoordinate) {
 		int substractionCount = 0;
 		
-		while(clickedCoordinate - model.getTileSize().get() > 0) {
-			clickedCoordinate = clickedCoordinate - model.getTileSize().get();
+		while(clickedCoordinate - model.getTileSize() > 0) {
+			clickedCoordinate = clickedCoordinate - model.getTileSize();
 			substractionCount++;
 		}
 		
@@ -135,7 +154,7 @@ public class MapController {
 	}
 	
 	public boolean getDarkMode() {
-		return model.getDarkMode().get();
+		return model.getDarkMode();
 	}
 	
 	private Integer[][] changeTilesToMode(boolean darkMode, Integer[][] tiles) {

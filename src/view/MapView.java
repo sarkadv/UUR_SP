@@ -23,14 +23,14 @@ public class MapView extends GridPane {
 		this.getRowConstraints().clear();
 		this.getChildren().clear();
 		
-    	for(int x = model.getFirstTileVisibleX().get(); x < model.getFirstTileVisibleX().get() + model.getTilesVisibleLine().get(); x++) {
-    		for(int y = model.getFirstTileVisibleY().get(); y < model.getFirstTileVisibleY().get() + model.getTilesVisibleLine().get(); y++) {
+    	for(int x = model.getFirstTileVisibleX(); x < model.getFirstTileVisibleX() + model.getTilesVisibleLine(); x++) {
+    		for(int y = model.getFirstTileVisibleY(); y < model.getFirstTileVisibleY() + model.getTilesVisibleLine(); y++) {
     			int id = model.getTile(x, y);
     			
     			Tile tile = TilePicker.getTile(id);
     			ImageView tileImageView = new ImageView(tile.image);
-        		tileImageView.setFitHeight(model.getTileSize().get());
-        		tileImageView.setFitWidth(model.getTileSize().get());
+        		tileImageView.setFitHeight(model.getTileSize());
+        		tileImageView.setFitWidth(model.getTileSize());
         		tileImageView.setSmooth(true);
         			
         		this.add(tileImageView, x, y);

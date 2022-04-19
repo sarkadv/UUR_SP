@@ -3,7 +3,6 @@ package util;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import model.MapModel;
@@ -17,11 +16,11 @@ public class FileSaver {
 	private static boolean successful = true;
 	
 	private static void setMapModel(MapModel model) {
-		mapWidth = model.getAllTilesWidth().get();
-		mapHeight = model.getAllTilesHeight().get();
-		tilesVisibleLine = model.getTilesVisibleLine().get();
+		mapWidth = model.getAllTilesWidth();
+		mapHeight = model.getAllTilesHeight();
+		tilesVisibleLine = model.getTilesVisibleLine();
 		tiles = model.getAllTiles();
-		darkMode = model.getDarkMode().get();
+		darkMode = model.getDarkMode();
 	}
 	
 	public static void saveFile(File file, MapModel model) {

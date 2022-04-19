@@ -3,28 +3,23 @@ package model;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.image.Image;
 import util.ImageLoader;
 import util.SpecialToolType;
 import view.ImageButton;
 
 public class MainWindowModel {
-	private BooleanProperty darkMode;
-	private ObjectProperty<Tile> currentTile;
-	private ObjectProperty<SpecialToolType> specialToolActive;
+	private boolean darkMode;
+	private Tile currentTile;
+	private SpecialToolType specialToolActive;
 	private List<Image> buttonImagesLight;
 	private List<Image> buttonImagesDark;
 	private List<ImageButton> buttons;
 	
 	public MainWindowModel() {
-		this.darkMode = new SimpleBooleanProperty(false);
-		this.currentTile = new SimpleObjectProperty<Tile>();
-		this.specialToolActive = new SimpleObjectProperty<SpecialToolType>();
+		this.darkMode = false;
+		this.currentTile = null;
+		this.specialToolActive = null;
 		this.buttons = new ArrayList<ImageButton>();
 		this.buttonImagesLight = new ArrayList<Image>();
 		this.buttonImagesDark = new ArrayList<Image>();
@@ -42,28 +37,28 @@ public class MainWindowModel {
 				ImageLoader.CHOOSEAREA_DARK, ImageLoader.FILLAREA_DARK, ImageLoader.FILLBORDERS_DARK}));
 	}
 	
-	public BooleanProperty getDarkMode() {
+	public boolean getDarkMode() {
 		return darkMode;
 	}
 	
 	public void setDarkMode(boolean darkMode) {
-		this.darkMode.set(darkMode);
+		this.darkMode = darkMode;
 	}
 
-	public ObjectProperty<Tile> getCurrentTile() {
+	public Tile getCurrentTile() {
 		return currentTile;
 	}
 
 	public void setCurrentTile(Tile currentTile) {
-		this.currentTile.set(currentTile);
+		this.currentTile = currentTile;
 	}
 
-	public ObjectProperty<SpecialToolType> getToolActive() {
+	public SpecialToolType getToolActive() {
 		return specialToolActive;
 	}
 
 	public void setToolActive(SpecialToolType toolActive) {
-		this.specialToolActive.set(toolActive);
+		this.specialToolActive = toolActive;
 	}
 
 	public List<Image> getButtonImagesLight() {

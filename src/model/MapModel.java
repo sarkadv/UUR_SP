@@ -1,53 +1,42 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
 import javafx.scene.paint.Color;
 import util.ImageLoader;
-import util.TilePicker;
 
 public class MapModel {
 	
-	private DoubleProperty tileSize;
-	private IntegerProperty allTilesWidth;
-	private IntegerProperty allTilesHeight;
-	private IntegerProperty tilesVisibleLine;
-	private IntegerProperty firstTileVisibleX;
-	private IntegerProperty firstTileVisibleY;
-	private ObjectProperty<Color> planetColor;
-	private BooleanProperty darkMode;
+	private double tileSize;
+	private int allTilesWidth;
+	private int allTilesHeight;
+	private int tilesVisibleLine;
+	private int firstTileVisibleX;
+	private int firstTileVisibleY;
+	private Color planetColor;
+	private boolean darkMode;
 	private List<Integer[][]> tilesHistory;
 	
 	private Integer[][] allTiles;
 	
 	public MapModel() {
-		this.tileSize = new SimpleDoubleProperty(145);
-		this.allTilesWidth = new SimpleIntegerProperty(0);
-		this.allTilesHeight = new SimpleIntegerProperty(0);
-		this.tilesVisibleLine = new SimpleIntegerProperty(0);
-		this.firstTileVisibleX = new SimpleIntegerProperty(0);
-		this.firstTileVisibleY = new SimpleIntegerProperty(0);
-		this.planetColor = new SimpleObjectProperty<Color>(ImageLoader.COLOR_PLANET_ONE);
-		this.darkMode = new SimpleBooleanProperty(false);
+		this.tileSize = 145;
+		this.allTilesWidth = 0;
+		this.allTilesHeight = 0;
+		this.tilesVisibleLine = 0;
+		this.firstTileVisibleX = 0;
+		this.firstTileVisibleY = 0;
+		this.planetColor = ImageLoader.COLOR_PLANET_ONE;
+		this.darkMode = false;
 		this.tilesHistory = new ArrayList<Integer[][]>();
 	}
 	
 	public void initAllTilesNewMap() {
-		allTiles = new Integer[allTilesWidth.get()][allTilesHeight.get()];
+		allTiles = new Integer[allTilesWidth][allTilesHeight];
 		
-		int addition = darkMode.get()? 1 : 0;
-		for(int x = 0; x < allTilesWidth.get(); x++) {
-			for(int y = 0; y < allTilesHeight.get(); y++) {
+		int addition = darkMode? 1 : 0;
+		for(int x = 0; x < allTilesWidth; x++) {
+			for(int y = 0; y < allTilesHeight; y++) {
 				allTiles[x][y] = 00 + addition;
 			}
 		}
@@ -55,9 +44,9 @@ public class MapModel {
 	}
 	
 	public void reInitAllTiles() {
-		int addition = darkMode.get()? 1 : -1;
-		for(int x = 0; x < allTilesWidth.get(); x++) {
-			for(int y = 0; y < allTilesHeight.get(); y++) {
+		int addition = darkMode? 1 : -1;
+		for(int x = 0; x < allTilesWidth; x++) {
+			for(int y = 0; y < allTilesHeight; y++) {
 				allTiles[x][y] = allTiles[x][y] + addition;
 			}
 		}
@@ -84,52 +73,52 @@ public class MapModel {
 		return tilesHistory;
 	}
 
-	public DoubleProperty getTileSize() {
+	public double getTileSize() {
 		return tileSize;
 	}
 
 	public void setTileSize(double canvasSize) {
-		this.tileSize.set(canvasSize);
+		this.tileSize = canvasSize;
 	}
 
-	public IntegerProperty getAllTilesWidth() {
+	public int getAllTilesWidth() {
 		return allTilesWidth;
 	}
 
 	public void setAllTilesWidth(int allTilesWidth) {
-		this.allTilesWidth.set(allTilesWidth);
+		this.allTilesWidth = allTilesWidth;
 	}
 
-	public IntegerProperty getAllTilesHeight() {
+	public int getAllTilesHeight() {
 		return allTilesHeight;
 	}
 
 	public void setAllTilesHeight(int allTilesHeight) {
-		this.allTilesHeight.set(allTilesHeight);
+		this.allTilesHeight = allTilesHeight;
 	}
 
-	public IntegerProperty getTilesVisibleLine() {
+	public int getTilesVisibleLine() {
 		return tilesVisibleLine;
 	}
 
 	public void setTilesVisibleLine(int tilesVisibleLine) {
-		this.tilesVisibleLine.set(tilesVisibleLine);
+		this.tilesVisibleLine = tilesVisibleLine;
 	}
 
-	public ObjectProperty<Color> getPlanetColor() {
+	public Color getPlanetColor() {
 		return planetColor;
 	}
 
 	public void setPlanetColor(Color planetColor) {
-		this.planetColor.set(planetColor);
+		this.planetColor = planetColor;
 	}
 
-	public BooleanProperty getDarkMode() {
+	public boolean getDarkMode() {
 		return darkMode;
 	}
 
 	public void setDarkMode(boolean darkMode) {
-		this.darkMode.set(darkMode);
+		this.darkMode = darkMode;
 	}
 
 	public Integer[][] getAllTiles() {
@@ -140,20 +129,20 @@ public class MapModel {
 		this.allTiles = allTiles;
 	}
 
-	public IntegerProperty getFirstTileVisibleX() {
+	public int getFirstTileVisibleX() {
 		return firstTileVisibleX;
 	}
 
 	public void setFirstTileVisibleX(int firstTileVisibleX) {
-		this.firstTileVisibleX.set(firstTileVisibleX);
+		this.firstTileVisibleX = firstTileVisibleX;
 	}
 
-	public IntegerProperty getFirstTileVisibleY() {
+	public int getFirstTileVisibleY() {
 		return firstTileVisibleY;
 	}
 
 	public void setFirstTileVisibleY(int firstTileVisibleY) {
-		this.firstTileVisibleY.set(firstTileVisibleY);
+		this.firstTileVisibleY = firstTileVisibleY;
 	}
 	
 	private Integer[][] copyTwoDimensionalArray(Integer[][] old){

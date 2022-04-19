@@ -1,22 +1,17 @@
 package controller;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
-
 import javafx.event.ActionEvent;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.DialogPane;
 import javafx.scene.image.Image;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import model.MainWindowModel;
-import model.MapModel;
 import model.Tile;
 import util.FileLoader;
 import util.FileSaver;
@@ -30,12 +25,16 @@ public class MainWindowController {
 	
 	private MainWindowModel mainWindowModel;
 	
-	public MainWindowController (MainWindowModel mainWindowModel) {
-		this.mainWindowModel = mainWindowModel;
+	public MainWindowController () {
+		this.mainWindowModel = new MainWindowModel();
+	}
+	
+	public void addButton(ImageButton button) {
+		this.mainWindowModel.addButton(button);
 	}
 	
 	public Tile getCurrentTile() {
-		return this.mainWindowModel.getCurrentTile().get();
+		return this.mainWindowModel.getCurrentTile();
 	}
 	
 	public void setCurrentTile(Tile tile) {
@@ -43,11 +42,15 @@ public class MainWindowController {
 	}
 	
 	public boolean getDarkMode() {
-		return this.mainWindowModel.getDarkMode().get();
+		return this.mainWindowModel.getDarkMode();
 	}
 	
 	public void setDarkMode(boolean darkMode) {
 		this.mainWindowModel.setDarkMode(darkMode);
+	}
+	
+	public SpecialToolType getToolActive() {
+		return this.mainWindowModel.getToolActive();
 	}
 	
 	public void changeCurrentTile(ActionEvent e, Tile newTile) {
@@ -76,12 +79,12 @@ public class MainWindowController {
 		mainWindowModel.setToolActive(null);
 	}
 	
-	public void showStartAlert(Stage stage, MapModel mapModel, MapController mapController) {
+	public void showStartAlert(Stage stage, MapController mapController) {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Tiny Planet Builder");
 		alert.setHeaderText("Vyberte způsob zahájení stavby");
 		
-		if(mainWindowModel.getDarkMode().get()) {
+		if(mainWindowModel.getDarkMode()) {
 			DialogPane dialogPane = alert.getDialogPane();
 			dialogPane.getStylesheets().add("file:resources/darkmode.css");
 		}
@@ -94,45 +97,45 @@ public class MainWindowController {
 		Optional<ButtonType> result = alert.showAndWait();
 		
 		if (result.get() == newMapBtn){
-			showNewFileWindow(stage, mapModel, mapController);
+			showNewFileWindow(stage, mapController);
 		    
 		    
 		} else if (result.get() == loadMapBtn) {
-		    showLoadFileWindowStart(stage, mapModel, mapController);
+		    showLoadFileWindowStart(stage, mapController);
 		}
 	}
 	
-	public void showNewFileWindow(Stage stage, MapModel mapModel, MapController mapController) {
-		NewMapWindow newMap = new NewMapWindow(mapModel, stage, mainWindowModel.getDarkMode().get());
+	public void showNewFileWindow(Stage stage, MapController mapController) {
+		NewMapWindow newMap = new NewMapWindow(mapController, stage, mainWindowModel.getDarkMode());
 	    newMap.showAndWait();
 	    mapController.showNewMap(stage.getWidth(), stage.getHeight());
 	    mapController.clearMapHistory();
 	}
 	
-	public void showLoadFileWindowStart(Stage stage, MapModel mapModel, MapController mapController) {
+	public void showLoadFileWindowStart(Stage stage, MapController mapController) {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Načtení Souboru");
 		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
 		File selectedFile = fileChooser.showOpenDialog(stage);
 		
 		if(selectedFile == null) {
-			showStartAlert(stage, mapModel, mapController);
+			showStartAlert(stage, mapController);
 		}
 		else {
 			FileLoader.loadFile(selectedFile);
 			
 			if(!FileLoader.isSuccessful()) {
-				showStartAlert(stage, mapModel, mapController);
+				showStartAlert(stage, mapController);
 			}
 			else {
-				FileLoader.setMapModel(mapModel);
+				FileLoader.setMapModel(mapController.getModel());
 				mapController.showNewMap(stage.getWidth(), stage.getHeight());
 			}
 		}
 		
 	}
 	
-	public void showLoadFileWindowContinue(Stage stage, MapModel mapModel, MapController mapController) {
+	public void showLoadFileWindowContinue(Stage stage, MapController mapController) {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Načtení Souboru");
 		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
@@ -142,10 +145,10 @@ public class MainWindowController {
 			FileLoader.loadFile(selectedFile);
 			
 			if(!FileLoader.isSuccessful()) {
-				showStartAlert(stage, mapModel, mapController);
+				showStartAlert(stage, mapController);
 			}
 			else {
-				FileLoader.setMapModel(mapModel);
+				FileLoader.setMapModel(mapController.getModel());
 				mapController.showNewMap(stage.getWidth(), stage.getHeight());
 				mapController.clearMapHistory();
 				
@@ -162,12 +165,12 @@ public class MainWindowController {
 		
 	}
 	
-	public void showSaveAlertClose(Stage stage, MapModel mapModel) {
+	public void showSaveAlertClose(Stage stage, MapController mapController) {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Tiny Planet Builder");
 		alert.setHeaderText("Přejete si před zavřením aplikace uložit soubor?");
 		
-		if(mainWindowModel.getDarkMode().get()) {
+		if(mainWindowModel.getDarkMode()) {
 			DialogPane dialogPane = alert.getDialogPane();
 			dialogPane.getStylesheets().add("file:resources/darkmode.css");
 		}
@@ -181,7 +184,7 @@ public class MainWindowController {
 		Optional<ButtonType> result = alert.showAndWait();
 		
 		if (result.get() == saveBtn){
-			showFileSaveWindow(stage, mapModel); 
+			showFileSaveWindow(stage, mapController); 
 			stage.close();
 		}
 		else if (result.get() == dontSaveBtn) {
@@ -189,12 +192,12 @@ public class MainWindowController {
 		}
 	}
 	
-	public void showSaveAlertNew(Stage stage, MapModel mapModel, MapController mapController) {
+	public void showSaveAlertNew(Stage stage, MapController mapController) {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Tiny Planet Builder");
 		alert.setHeaderText("Přejete si uložit aktuální soubor?");
 		
-		if(mainWindowModel.getDarkMode().get()) {
+		if(mainWindowModel.getDarkMode()) {
 			DialogPane dialogPane = alert.getDialogPane();
 			dialogPane.getStylesheets().add("file:resources/darkmode.css");
 		}
@@ -208,22 +211,22 @@ public class MainWindowController {
 		Optional<ButtonType> result = alert.showAndWait();
 		
 		if (result.get() == saveBtn){
-			showFileSaveWindow(stage, mapModel); 
-			showNewFileWindow(stage, mapModel, mapController);
+			showFileSaveWindow(stage, mapController); 
+			showNewFileWindow(stage, mapController);
 		}
 		else if (result.get() == dontSaveBtn) {
-			showNewFileWindow(stage, mapModel, mapController);
+			showNewFileWindow(stage, mapController);
 		}
 	}
 	
 	
 	
-	public void showSaveAlertLoad(Stage stage, MapModel mapModel, MapController mapController) {
+	public void showSaveAlertLoad(Stage stage, MapController mapController) {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Tiny Planet Builder");
 		alert.setHeaderText("Přejete si uložit aktuální soubor?");
 		
-		if(mainWindowModel.getDarkMode().get()) {
+		if(mainWindowModel.getDarkMode()) {
 			DialogPane dialogPane = alert.getDialogPane();
 			dialogPane.getStylesheets().add("file:resources/darkmode.css");
 		}
@@ -237,27 +240,27 @@ public class MainWindowController {
 		Optional<ButtonType> result = alert.showAndWait();
 		
 		if (result.get() == saveBtn){
-			showFileSaveWindow(stage, mapModel); 
-			showLoadFileWindowContinue(stage, mapModel, mapController);
+			showFileSaveWindow(stage, mapController); 
+			showLoadFileWindowContinue(stage, mapController);
 		}
 		else if (result.get() == dontSaveBtn) {
-			showLoadFileWindowContinue(stage, mapModel, mapController);
+			showLoadFileWindowContinue(stage, mapController);
 		}
 	}
 	
-	public void showFileSaveWindow(Stage stage, MapModel mapModel) {
+	public void showFileSaveWindow(Stage stage, MapController mapController) {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Uložení souboru");
 		fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("Text Files", "*.txt"));
 		File file = fileChooser.showSaveDialog(stage);
 		
 		if(file != null) {
-			FileSaver.saveFile(file, mapModel);
+			FileSaver.saveFile(file, mapController.getModel());
 		}
 	}
 	
 	public void showExportWindow(Stage stage, Integer[][] tiles) {
-		PictureExportWindow exportWindow = new PictureExportWindow(tiles, stage, this.mainWindowModel.getDarkMode().get());
+		PictureExportWindow exportWindow = new PictureExportWindow(tiles, stage, this.mainWindowModel.getDarkMode());
 		exportWindow.showAndWait();
 	}
 	
@@ -289,7 +292,7 @@ public class MainWindowController {
 	}
 	
 	public void changeModeAppearanceDuringStart(Stage stage, MapController mapController) {
-		boolean darkModeActive = mainWindowModel.getDarkMode().get();
+		boolean darkModeActive = mainWindowModel.getDarkMode();
 		
 		if(darkModeActive) {
 			stage.getScene().getStylesheets().add("file:resources/darkmode.css");

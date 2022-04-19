@@ -1,7 +1,6 @@
 package util;
 
 import java.util.HashMap;
-
 import model.Tile;
 
 public class TilePicker {

@@ -3,8 +3,6 @@ package util;
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
-
-import controller.MainWindowController;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import model.MapModel;

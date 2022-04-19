@@ -1,9 +1,5 @@
 package view;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import controller.MainWindowController;
 import controller.MapController;
 import javafx.application.Application;
@@ -13,14 +9,11 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import model.MainWindowModel;
-import model.MapModel;
 import util.ImageLoader;
 import util.SpecialToolType;
 import util.TilePicker;
@@ -30,12 +23,8 @@ public class MainWindowView extends Application {
 	
 	private Stage primaryStage;
 	
-	private MapModel mapModel = new MapModel();
-	private MapView mapView;
-	private MapController mapController;
-	
-	private MainWindowModel mainWindowModel = new MainWindowModel();
-	private MainWindowController mainWindowController = new MainWindowController(mainWindowModel);
+	private MapController mapController = new MapController();
+	private MainWindowController mainWindowController = new MainWindowController();
 	
 	private TileMenu tileMenu;
 	
@@ -58,7 +47,7 @@ public class MainWindowView extends Application {
 		stage.setMinHeight(700);
 		stage.show();
 		
-		mainWindowController.showStartAlert(stage, mapModel, mapController);
+		mainWindowController.showStartAlert(stage, mapController);
 		mainWindowController.setDarkMode(mapController.getDarkMode());
 		
 		if(mainWindowController.getDarkMode()) {
@@ -77,7 +66,7 @@ public class MainWindowView extends Application {
 		
 		stage.setOnCloseRequest(e -> {
 			e.consume();
-			mainWindowController.showSaveAlertClose(stage, mapModel);
+			mainWindowController.showSaveAlertClose(stage, mapController);
 		});
 		
 	}
@@ -123,41 +112,38 @@ public class MainWindowView extends Application {
 		leftContent.setPadding(new Insets(10, 50, 10, 10));
 		
 		leftContent.setTop(createTopButtons());
+		leftContent.setCenter(mapController.getView());
 		
-		mapView = new MapView(mapModel);
-		mapController = new MapController(mapView, mapModel);
-		leftContent.setCenter(mapView);
-		
-		mapView.setOnMouseReleased(e -> {
-			if(mainWindowModel.getToolActive().get() == null) {
-				mapController.putTile(e, mainWindowModel.getCurrentTile().get());
+		mapController.getView().setOnMouseReleased(e -> {
+			if(mainWindowController.getToolActive() == null) {
+				mapController.putTile(e, mainWindowController.getCurrentTile());
 			}
-			else if (mainWindowModel.getToolActive().get() == SpecialToolType.EYEDROPPER) {
-				mainWindowModel.setCurrentTile(mapController.copyTile(e));
+			else if (mainWindowController.getToolActive() == SpecialToolType.EYEDROPPER) {
+				mainWindowController.setCurrentTile(mapController.copyTile(e));
 				tileMenu.updateChoice();
 				mainWindowController.changeSpecialToolActive(null);
 			}
 		});
-		mapView.setOnKeyReleased(e -> {
+		mapController.getView().setOnKeyReleased(e -> {
 			if (e.getCode() == KeyCode.W) {
 				mapController.moveUp(e);
 				System.out.println("up");
 			}
 		});
 		
-		mapView.setOnKeyReleased(e -> {
+		mapController.getView().setOnKeyReleased(e -> {
 			if (e.getCode() == KeyCode.S) {
 				mapController.moveDown(e);
 			}
 		});
 		
-		mapView.setOnKeyReleased(e -> {
+		mapController.getView().setOnKeyReleased(e -> {
 			if (e.getCode() == KeyCode.D) {
 				mapController.moveRight(e);
 			}
 		});
 		
-		mapView.setOnKeyReleased(e -> {
+		mapController.getView().setOnKeyReleased(e -> {
 			if (e.getCode() == KeyCode.A) {
 				mapController.moveLeft(e);
 			}
@@ -172,43 +158,43 @@ public class MainWindowView extends Application {
 		buttonsPane.setPadding(new Insets(10, 5, 10, 5));
 		
 		ImageButton newFile = new ImageButton(50, 50, "Nová Mapa", ImageLoader.NEW_LIGHT);
-		newFile.setOnAction(e -> mainWindowController.showSaveAlertNew(primaryStage, mapModel, mapController));
-		mainWindowModel.addButton(newFile);
+		newFile.setOnAction(e -> mainWindowController.showSaveAlertNew(primaryStage, mapController));
+		mainWindowController.addButton(newFile);
 		
 		ImageButton saveFile = new ImageButton(50, 50, "Uložit Mapu", ImageLoader.SAVE_LIGHT);
-		saveFile.setOnAction(e -> mainWindowController.showFileSaveWindow(primaryStage, mapModel));
-		mainWindowModel.addButton(saveFile);
+		saveFile.setOnAction(e -> mainWindowController.showFileSaveWindow(primaryStage, mapController));
+		mainWindowController.addButton(saveFile);
 		
 		ImageButton back = new ImageButton(50, 50, "Zpět", ImageLoader.BACK_LIGHT);
 		back.setOnAction(e -> mapController.oneStepBack());
-		mainWindowModel.addButton(back);
+		mainWindowController.addButton(back);
 		
 		ImageButton loadFile = new ImageButton(50, 50, "Načíst Mapu", ImageLoader.LOAD_LIGHT);
 		loadFile.setOnAction(e -> {
-			mainWindowController.showSaveAlertLoad(primaryStage, mapModel, mapController);
+			mainWindowController.showSaveAlertLoad(primaryStage, mapController);
 			tileMenu.setDarkMode(mainWindowController.getDarkMode());
 		});
-		mainWindowModel.addButton(loadFile);
+		mainWindowController.addButton(loadFile);
 		
 		ImageButton exportFile = new ImageButton(50, 50, "Exportovat Jako Obrázek", ImageLoader.EXPORT_LIGHT);
-		exportFile.setOnAction(e -> mainWindowController.showExportWindow(primaryStage, mapModel.getAllTiles()));
-		mainWindowModel.addButton(exportFile);
+		exportFile.setOnAction(e -> mainWindowController.showExportWindow(primaryStage, mapController.getAllTiles()));
+		mainWindowController.addButton(exportFile);
 		
 		ImageButton mode = new ImageButton(50, 50, "Změna Barevného Režimu", ImageLoader.MODE_LIGHT);
 		mode.setOnAction(e -> {
 			mainWindowController.changeModeAppearanceDuringRun(primaryStage, mapController);
 			tileMenu.setDarkMode(mainWindowController.getDarkMode());
 		});
-		mainWindowModel.addButton(mode);
+		mainWindowController.addButton(mode);
 		
 		ImageButton settings = new ImageButton(50, 50, "Nastavení", ImageLoader.SETTINGS_LIGHT);
-		mainWindowModel.addButton(settings);
+		mainWindowController.addButton(settings);
 		
 		ImageButton help = new ImageButton(50, 50, "Nápověda", ImageLoader.HELP_LIGHT);
-		mainWindowModel.addButton(help);
+		mainWindowController.addButton(help);
 		
 		ImageButton about = new ImageButton(50, 50, "O Aplikaci", ImageLoader.ABOUT_LIGHT);
-		mainWindowModel.addButton(about);
+		mainWindowController.addButton(about);
 		
 		buttonsPane.getChildren().addAll(newFile, saveFile, back, loadFile, exportFile, mode, settings, help, about);
 		
@@ -258,7 +244,7 @@ public class MainWindowView extends Application {
 			mainWindowController.changeToNoTile(e);
 			tileMenu.updateChoice();
 		});
-		mainWindowModel.addButton(pick);
+		mainWindowController.addButton(pick);
 		
 		ImageButton erase = new ImageButton(50, 50, "Vymazat", ImageLoader.ERASE_LIGHT);
 		erase.setOnAction(e -> {
@@ -266,13 +252,13 @@ public class MainWindowView extends Application {
 			mainWindowController.changeToEmptyTile(e);
 			tileMenu.updateChoice();
 		});
-		mainWindowModel.addButton(erase);
+		mainWindowController.addButton(erase);
 		
 		ImageButton eyeDropper = new ImageButton(50, 50, "Kapátko", ImageLoader.EYEDROPPER_LIGHT);
 		eyeDropper.setOnAction(e -> {
 			mainWindowController.changeSpecialToolActive(SpecialToolType.EYEDROPPER);
 		});
-		mainWindowModel.addButton(eyeDropper);
+		mainWindowController.addButton(eyeDropper);
 		
 		buttonsPane.getChildren().addAll(pick, erase, eyeDropper);
 		
@@ -283,13 +269,13 @@ public class MainWindowView extends Application {
 		HBox buttonsPane = new HBox(5);
 		
 		ImageButton chooseArea = new ImageButton(50, 50, "Vybrat Oblast", ImageLoader.CHOOSEAREA_LIGHT);
-		mainWindowModel.addButton(chooseArea);
+		mainWindowController.addButton(chooseArea);
 		
 		ImageButton fillArea = new ImageButton(50, 50, "Výplň Oblasti", ImageLoader.FILLAREA_LIGHT);
-		mainWindowModel.addButton(fillArea);
+		mainWindowController.addButton(fillArea);
 		
 		ImageButton fillBorders = new ImageButton(50, 50, "Výplň Hranic", ImageLoader.FILLBORDERS_LIGHT);
-		mainWindowModel.addButton(fillBorders);
+		mainWindowController.addButton(fillBorders);
 		
 		buttonsPane.getChildren().addAll(chooseArea, fillArea, fillBorders);
 		

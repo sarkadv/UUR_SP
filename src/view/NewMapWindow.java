@@ -1,37 +1,28 @@
 package view;
 
 import java.util.List;
-
+import controller.MapController;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.DialogPane;
 import javafx.scene.control.Label;
 import javafx.scene.control.Separator;
-import javafx.scene.control.Spinner;
 import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.StringConverter;
-import javafx.util.converter.IntegerStringConverter;
-import javafx.util.converter.NumberStringConverter;
-import model.MapModel;
 
 public class NewMapWindow extends Stage {
 	
-	private MapModel model;
+	private MapController mapController;
 	private TextField mapSizeWidthTF;
 	private TextField mapSizeHeightTF;
 	private ComboBox<Integer> tilesVisibleCombo;
@@ -40,8 +31,8 @@ public class NewMapWindow extends Stage {
 	private final int MAX_TILE_NUMBER = 1600;
 	private boolean darkMode;
 	
-	public NewMapWindow(MapModel model, Stage primaryStage, boolean darkMode) {
-		this.model = model;
+	public NewMapWindow(MapController mapController, Stage primaryStage, boolean darkMode) {
+		this.mapController = mapController;
 		this.mapSizeWidthTF = new TextField("8");
 		this.mapSizeHeightTF = new TextField("8");
 		this.mapSizeComputedNumber = new Label("64");
@@ -168,10 +159,10 @@ public class NewMapWindow extends Stage {
 			
 			int tilesVisibleLine = (int)Math.sqrt(tilesVisibleCombo.getValue());
 			
-			model.setAllTilesWidth(allTilesWidth);
-			model.setAllTilesHeight(allTilesHeight);
-			model.setTilesVisibleLine(tilesVisibleLine);
-			model.initAllTilesNewMap();
+			mapController.setAllTilesWidth(allTilesWidth);
+			mapController.setAllTilesHeight(allTilesHeight);
+			mapController.setTilesVisibleLine(tilesVisibleLine);
+			mapController.initAllTilesNewMap();
 			this.close();
 		}
 		
