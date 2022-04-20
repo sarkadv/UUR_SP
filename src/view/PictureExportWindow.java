@@ -3,6 +3,8 @@ package view;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+
+import controller.MapController;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -36,14 +38,14 @@ public class PictureExportWindow extends Stage {
 	private int tileSize;
 	private boolean darkMode;
 	
-	public PictureExportWindow(Integer[][] tiles, Stage primaryStage, boolean darkMode) {
-		this.tiles = tiles;
+	public PictureExportWindow(Stage primaryStage, MapController mapController) {
+		this.tiles = mapController.getAllTiles();
 		this.mapWidth = tiles.length;
 		this.mapHeight = tiles[0].length;
 		this.windowWidth = 700;
 		this.windowHeight = 800;
 		this.tileSize = Math.min(windowWidth/mapWidth, (windowHeight - 100)/mapHeight);
-		this.darkMode = darkMode;
+		this.darkMode = mapController.getDarkMode();
 		
 		this.setScene(createScene());
 		this.initModality(Modality.WINDOW_MODAL);
@@ -112,7 +114,13 @@ public class PictureExportWindow extends Stage {
 	    SnapshotParameters spa = new SnapshotParameters();
 	    spa.setTransform(Transform.scale(3.0, 3.0));
 	    
-	    spa.setFill(ImageLoader.COLOR_PLANET_ONE);
+	    if(darkMode) {
+	    	spa.setFill(ImageLoader.COLOR_PLANET_ONE_DARK);
+	    }
+	    else {
+	    	spa.setFill(ImageLoader.COLOR_PLANET_ONE_LIGHT);
+	    }
+	    
 	    WritableImage img = picturePane.snapshot(spa, writableImage); 
 		
 		if(file != null) {

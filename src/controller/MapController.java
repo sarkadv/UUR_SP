@@ -175,5 +175,16 @@ public class MapController {
 		
 		return tiles;
 	}
+	
+	public void setFirstTileVisibleX(int firstTileVisibleX) {
+		model.setFirstTileVisibleX(firstTileVisibleX);
+	}
 
+	public void setFirstTileVisibleY(int firstTileVisibleY) {
+		model.setFirstTileVisibleY(firstTileVisibleY);
+	}
+	
+	public void setAllTiles(Integer[][] tiles) {
+		model.setAllTiles(tiles);
+	}
 }

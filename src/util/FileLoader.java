@@ -3,9 +3,9 @@ package util;
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
+import controller.MapController;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import model.MapModel;
 
 public class FileLoader {
 	
@@ -65,12 +65,15 @@ public class FileLoader {
 		}
 	}
 	
-	public static void setMapModel(MapModel model) {
-		model.setDarkMode(darkMode);
-		model.setAllTiles(tiles);
-		model.setAllTilesHeight(mapHeight);
-		model.setAllTilesWidth(mapWidth);
-		model.setTilesVisibleLine(tilesVisibleLine);
+	public static void setMapModel(MapController controller) {
+		controller.setDarkMode(darkMode);
+		controller.setAllTiles(tiles);
+		controller.setAllTilesHeight(mapHeight);
+		controller.setAllTilesWidth(mapWidth);
+		controller.setTilesVisibleLine(tilesVisibleLine);
+		controller.setFirstTileVisibleX(0);
+		controller.setFirstTileVisibleY(0);
+		controller.repaint();
 	}
 
 	public static boolean isSuccessful() {

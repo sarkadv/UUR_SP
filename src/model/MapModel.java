@@ -26,7 +26,7 @@ public class MapModel {
 		this.tilesVisibleLine = 0;
 		this.firstTileVisibleX = 0;
 		this.firstTileVisibleY = 0;
-		this.planetColor = ImageLoader.COLOR_PLANET_ONE;
+		this.planetColor = ImageLoader.COLOR_PLANET_ONE_LIGHT;
 		this.darkMode = false;
 		this.tilesHistory = new ArrayList<Integer[][]>();
 	}

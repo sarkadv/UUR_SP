@@ -18,7 +18,6 @@ import util.ImageLoader;
 import util.SpecialToolType;
 import util.TilePicker;
 
-
 public class MainWindowView extends Application {
 	
 	private Stage primaryStage;
@@ -52,8 +51,7 @@ public class MainWindowView extends Application {
 		
 		if(mainWindowController.getDarkMode()) {
 			mainWindowController.changeModeAppearanceDuringStart(stage, mapController);
-			tileMenu.setDarkMode(mainWindowController.getDarkMode());
-			
+			tileMenu.setDarkMode(mainWindowController.getDarkMode());	
 		}
 		
 		stage.heightProperty().addListener((obs, oldValue, newValue) -> {
@@ -124,6 +122,7 @@ public class MainWindowView extends Application {
 				mainWindowController.changeSpecialToolActive(null);
 			}
 		});
+		
 		mapController.getView().setOnKeyReleased(e -> {
 			if (e.getCode() == KeyCode.W) {
 				mapController.moveUp(e);
@@ -177,7 +176,7 @@ public class MainWindowView extends Application {
 		mainWindowController.addButton(loadFile);
 		
 		ImageButton exportFile = new ImageButton(50, 50, "Exportovat Jako Obrázek", ImageLoader.EXPORT_LIGHT);
-		exportFile.setOnAction(e -> mainWindowController.showExportWindow(primaryStage, mapController.getAllTiles()));
+		exportFile.setOnAction(e -> mainWindowController.showExportWindow(primaryStage, mapController));
 		mainWindowController.addButton(exportFile);
 		
 		ImageButton mode = new ImageButton(50, 50, "Změna Barevného Režimu", ImageLoader.MODE_LIGHT);

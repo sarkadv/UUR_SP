@@ -163,6 +163,8 @@ public class NewMapWindow extends Stage {
 			mapController.setAllTilesHeight(allTilesHeight);
 			mapController.setTilesVisibleLine(tilesVisibleLine);
 			mapController.initAllTilesNewMap();
+			mapController.setFirstTileVisibleX(0);
+			mapController.setFirstTileVisibleY(0);
 			this.close();
 		}
 		

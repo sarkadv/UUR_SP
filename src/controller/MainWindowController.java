@@ -128,7 +128,7 @@ public class MainWindowController {
 				showStartAlert(stage, mapController);
 			}
 			else {
-				FileLoader.setMapModel(mapController.getModel());
+				FileLoader.setMapModel(mapController);
 				mapController.showNewMap(stage.getWidth(), stage.getHeight());
 			}
 		}
@@ -144,11 +144,8 @@ public class MainWindowController {
 		if(selectedFile != null) {
 			FileLoader.loadFile(selectedFile);
 			
-			if(!FileLoader.isSuccessful()) {
-				showStartAlert(stage, mapController);
-			}
-			else {
-				FileLoader.setMapModel(mapController.getModel());
+			if(FileLoader.isSuccessful()) {
+				FileLoader.setMapModel(mapController);
 				mapController.showNewMap(stage.getWidth(), stage.getHeight());
 				mapController.clearMapHistory();
 				
@@ -259,8 +256,8 @@ public class MainWindowController {
 		}
 	}
 	
-	public void showExportWindow(Stage stage, Integer[][] tiles) {
-		PictureExportWindow exportWindow = new PictureExportWindow(tiles, stage, this.mainWindowModel.getDarkMode());
+	public void showExportWindow(Stage stage, MapController mapController) {
+		PictureExportWindow exportWindow = new PictureExportWindow(stage, mapController);
 		exportWindow.showAndWait();
 	}
 	

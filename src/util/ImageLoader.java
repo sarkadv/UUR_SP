@@ -15,7 +15,8 @@ public class ImageLoader {
 	private static final int BUTTON_UPPER_SIZE = 155;
 	private static final int BUTTON_LOWER_SIZE = 95;
 	
-	public static final Color COLOR_PLANET_ONE = Color.rgb(211, 182, 228);
+	public static final Color COLOR_PLANET_ONE_LIGHT = Color.rgb(211, 182, 228);
+	public static final Color COLOR_PLANET_ONE_DARK = Color.rgb(45, 31, 51);
 	
 	private ImageLoader() {};
 	
