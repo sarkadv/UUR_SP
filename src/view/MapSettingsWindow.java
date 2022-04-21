@@ -1,6 +1,8 @@
 package view;
 
 import java.util.List;
+import java.util.Optional;
+
 import controller.MapController;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
@@ -9,10 +11,14 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.Separator;
 import javafx.scene.control.TextField;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.HBox;
@@ -20,7 +26,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class NewMapWindow extends Stage {
+public class MapSettingsWindow extends Stage {
 	
 	private MapController mapController;
 	private TextField mapSizeWidthTF;
@@ -30,28 +36,47 @@ public class NewMapWindow extends Stage {
 	private Label mapSizeComputedNumber;
 	private final int MAX_TILE_NUMBER = 1600;
 	private boolean darkMode;
+	private ToggleGroup mapColorRBGroup;
+	private CheckBox modeCheckBox;
+	private ToggleGroup modeRBGroup;
+	private boolean settings;
 	
-	public NewMapWindow(MapController mapController, Stage primaryStage, boolean darkMode) {
+	public MapSettingsWindow(MapController mapController, Stage primaryStage, boolean darkMode, boolean settings) {
 		this.mapController = mapController;
-		this.mapSizeWidthTF = new TextField("8");
-		this.mapSizeHeightTF = new TextField("8");
-		this.mapSizeComputedNumber = new Label("64");
-		this.tilesVisibleChoiceList = FXCollections.observableArrayList(1, 4, 9, 16, 25, 36, 49, 64);
-		this.darkMode = darkMode;
+		this.settings = settings;
+		this.tilesVisibleChoiceList = FXCollections.observableArrayList();
+		
+		if(settings) {
+			this.mapSizeWidthTF = new TextField(String.valueOf(mapController.getAllTilesWidth()));
+			this.mapSizeHeightTF = new TextField(String.valueOf(mapController.getAllTilesHeight()));
+			this.mapSizeComputedNumber = new Label(String.valueOf(mapController.getAllTilesWidth()*mapController.getAllTilesHeight()));
+			this.darkMode = mapController.getDarkMode();
+		}
+		else {
+			this.mapSizeWidthTF = new TextField("8");
+			this.mapSizeHeightTF = new TextField("8");
+			this.mapSizeComputedNumber = new Label("64");
+			this.darkMode = darkMode;
+		}
 		
 		this.setScene(createScene());
+		computeTilesVisibleChoiceList();
 		this.initModality(Modality.WINDOW_MODAL);
-		this.setTitle("Nová Mapa");
+		this.setTitle("Nastavení mapy");
 		this.initOwner(primaryStage);
-		this.setOnCloseRequest(e -> e.consume());
-		this.setMinHeight(275);
-		this.setMaxHeight(275);
+		
+		if(!settings) {
+			this.setOnCloseRequest(e -> e.consume());
+		}
+		
+		this.setMinHeight(500);
+		this.setMaxHeight(500);
 		this.setMinWidth(400);
 		this.setMaxWidth(400);
 	}
 	
 	private Scene createScene() {
-		Scene scene = new Scene(createRootPane(), 400, 300);
+		Scene scene = new Scene(createRootPane(), 400, 500);
 		
 		if(this.darkMode) {
 			scene.getStylesheets().add("file:resources/darkmode.css");
@@ -68,7 +93,9 @@ public class NewMapWindow extends Stage {
 		okBtn.setPrefWidth(100);
 		okBtn.setOnAction(e -> commit());
 		
-		rootPane.getChildren().addAll(createMapSizePane(), new Separator(), createVisibleTilesPane(), new Separator(), okBtn);
+		rootPane.getChildren().addAll(createMapSizePane(), new Separator(), createVisibleTilesPane(), 
+				new Separator(), createMapColorPane(), new Separator(), createModePane(), 
+				new Separator(), okBtn);
 		
 		return rootPane;
 	}
@@ -116,6 +143,79 @@ public class NewMapWindow extends Stage {
 		return mapSizePane;
 	}
 	
+	private Node createMapColorPane() {
+		VBox mapColorPane = new VBox(10);
+		mapColorPane.setPadding(new Insets(0, 10, 0, 10));
+		
+		Label mapColorLabel = new Label("Barva Mapy");
+		
+		VBox mapColorControls = new VBox(5);
+		mapColorControls.setPadding(new Insets(5));
+		
+		mapColorRBGroup = new ToggleGroup();
+
+		RadioButton purpleRB = new RadioButton("Fialová");
+		purpleRB.setToggleGroup(mapColorRBGroup);
+		purpleRB.setSelected(true);
+
+		RadioButton orangeRB = new RadioButton("Oranžová");
+		orangeRB.setToggleGroup(mapColorRBGroup);
+		 
+		RadioButton blueRB = new RadioButton("Modrá");
+		blueRB.setToggleGroup(mapColorRBGroup);
+		
+		mapColorControls.getChildren().addAll(purpleRB, orangeRB, blueRB);
+		
+		mapColorPane.getChildren().addAll(mapColorLabel, mapColorControls);
+		
+		return mapColorPane;
+	}
+	
+	private Node createModePane() {
+		VBox modePane = new VBox(10);
+		modePane.setPadding(new Insets(0, 10, 0, 10));
+		
+		HBox modeChangeControls = new HBox(5);
+		
+		Label modeLabel = new Label("Denní / Noční režim ovlivňuje vzhled okna");
+		
+		modeCheckBox = new CheckBox();
+		modeCheckBox.selectedProperty().setValue(true);
+		
+		modeChangeControls.getChildren().addAll(modeLabel, modeCheckBox);
+		
+		VBox modeColorControls = new VBox(5);
+		modeColorControls.setPadding(new Insets(5));
+		
+		modeRBGroup = new ToggleGroup();
+
+		RadioButton lightRB = new RadioButton("Světlý mód");
+		lightRB.setToggleGroup(modeRBGroup);
+		lightRB.setSelected(true);
+		lightRB.setDisable(true);
+
+		RadioButton darkRB = new RadioButton("Tmavý mód");
+		darkRB.setToggleGroup(modeRBGroup);
+		darkRB.setDisable(true);
+		
+		modeColorControls.getChildren().addAll(lightRB, darkRB);
+		
+		modePane.getChildren().addAll(modeChangeControls, modeColorControls);
+		
+		modeCheckBox.selectedProperty().addListener(e -> {
+			if(modeCheckBox.isSelected()) {
+				lightRB.setDisable(true);
+				darkRB.setDisable(true);
+			}
+			else {
+				lightRB.setDisable(false);
+				darkRB.setDisable(false);
+			}
+		});
+		
+		return modePane;
+	}
+	
 	private Node createVisibleTilesPane() {
 		HBox visibleTilesPane = new HBox(20);
 		visibleTilesPane.setPadding(new Insets(10));
@@ -153,10 +253,9 @@ public class NewMapWindow extends Stage {
 			alert.setContentText("Ani jeden z rozměrů mapy nesmí být 0.");
 			alert.showAndWait();
 		}
-		else {
+		else if (!settings) {
 			int allTilesWidth = Integer.parseInt(mapSizeWidthTF.getText());
 			int allTilesHeight = Integer.parseInt(mapSizeHeightTF.getText());
-			
 			int tilesVisibleLine = (int)Math.sqrt(tilesVisibleCombo.getValue());
 			
 			mapController.setAllTilesWidth(allTilesWidth);
@@ -166,6 +265,32 @@ public class NewMapWindow extends Stage {
 			mapController.setFirstTileVisibleX(0);
 			mapController.setFirstTileVisibleY(0);
 			this.close();
+		}
+		else if(settings) {
+			int allTilesWidth = Integer.parseInt(mapSizeWidthTF.getText());
+			int allTilesHeight = Integer.parseInt(mapSizeHeightTF.getText());
+			int tilesVisibleLine = (int)Math.sqrt(tilesVisibleCombo.getValue());
+			
+			if (allTilesWidth < mapController.getAllTilesWidth() || allTilesHeight < mapController.getAllTilesHeight()) {
+				Alert alert = new Alert(AlertType.CONFIRMATION);
+				alert.setTitle("Změna velikosti mapy");
+				alert.setHeaderText("Opravdu chcete mapu zmenšit?");
+				alert.setContentText("Některé části mapy budou muset být oříznuty.");
+
+				Optional<ButtonType> result = alert.showAndWait();
+				if (result.get() == ButtonType.OK){
+					mapController.resizeMap(this.getOwner().getWidth(), this.getOwner().getHeight(), allTilesWidth, allTilesHeight, tilesVisibleLine);
+					this.close();
+				} else {
+				    alert.close();
+				}
+			}
+			
+			else {
+				mapController.resizeMap(this.getOwner().getWidth(), this.getOwner().getHeight(), allTilesWidth, allTilesHeight, tilesVisibleLine);
+				this.close();
+			}
+			
 		}
 		
 	}

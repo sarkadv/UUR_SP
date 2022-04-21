@@ -31,6 +31,11 @@ public class MapModel {
 		this.tilesHistory = new ArrayList<Integer[][]>();
 	}
 	
+	public void initAllTilesResizedMap() {
+		Integer[][] allTilesNew = copyTwoDimensionalMap(allTiles, allTilesWidth, allTilesHeight);
+		this.allTiles = allTilesNew;
+	}
+	
 	public void initAllTilesNewMap() {
 		allTiles = new Integer[allTilesWidth][allTilesHeight];
 		
@@ -40,7 +45,6 @@ public class MapModel {
 				allTiles[x][y] = 00 + addition;
 			}
 		}
-		
 	}
 	
 	public void reInitAllTiles() {
@@ -53,7 +57,7 @@ public class MapModel {
 	}
 	
 	public void addToTilesHistory() {
-		Integer[][] history = copyTwoDimensionalArray(allTiles);
+		Integer[][] history = copyTwoDimensionalMap(allTiles, allTilesWidth, allTilesHeight);
 		this.tilesHistory.add(history);
 	}
 	
@@ -145,12 +149,20 @@ public class MapModel {
 		this.firstTileVisibleY = firstTileVisibleY;
 	}
 	
-	private Integer[][] copyTwoDimensionalArray(Integer[][] old){
-		Integer[][] copied = new Integer[old.length][old[0].length];
+	private Integer[][] copyTwoDimensionalMap(Integer[][] old, int dimensionOneLength, int dimensionTwoLength){
+		Integer[][] copied = new Integer[dimensionOneLength][dimensionTwoLength];
+
+		int addition = darkMode? 1 : 0;
 		
-		for (int i = 0; i < old.length; i++) {
-			for (int j = 0; j < old[0].length; j++) {
-				copied[i][j] = old[i][j];
+		for (int i = 0; i < dimensionOneLength; i++) {
+			for (int j = 0; j < dimensionTwoLength; j++) {
+				if(i >= old.length || j >= old[0].length) {
+					copied[i][j] = 00 + addition;
+				}
+				else {
+					copied[i][j] = old[i][j];
+				}
+				
 			}   
 		}
 		return copied;

@@ -38,6 +38,10 @@ public class MapController {
 		model.setTilesVisibleLine(tilesVisibleLine);
 	}
 	
+	public int getTilesVisibleLine() {
+		return model.getTilesVisibleLine();
+	}
+	
 	public Integer[][] getAllTiles(){
 		return model.getAllTiles();
 	}
@@ -54,12 +58,38 @@ public class MapController {
 		repaint();
 	}
 	
+	public void resizeMap(double stageWidth, double stageHeight, int allTilesWidth, int allTilesHeight, int tilesVisibleLine) {
+		if(tilesVisibleLine >= 1 && tilesVisibleLine <= allTilesWidth && tilesVisibleLine <= allTilesHeight) {
+			setAllTilesWidth(allTilesWidth);
+			setAllTilesHeight(allTilesHeight);
+			setTilesVisibleLine(tilesVisibleLine);
+			initAllTilesResizedMap();
+			
+			if(getFirstTileVisibleX() + tilesVisibleLine > getAllTilesWidth()) {
+				int subtraction = getAllTilesWidth() - (getFirstTileVisibleX() + tilesVisibleLine);
+				setFirstTileVisibleX(getFirstTileVisibleX() + subtraction);
+			}
+			
+			if(getFirstTileVisibleY() + tilesVisibleLine > getAllTilesHeight()) {
+				int subtraction = getAllTilesHeight() - (getFirstTileVisibleY() + tilesVisibleLine);
+				setFirstTileVisibleY(getFirstTileVisibleY() + subtraction);
+			}
+			
+			changeTileSize(stageWidth, stageHeight);
+			repaint();
+		}
+	}
+	
 	public void initAllTilesNewMap() {
 		model.initAllTilesNewMap();
 	}
 	
 	public void reInitAllTiles() {
 		model.reInitAllTiles();
+	}
+	
+	public void initAllTilesResizedMap() {
+		model.initAllTilesResizedMap();
 	}
 	
 	public void repaint() {
@@ -186,5 +216,21 @@ public class MapController {
 	
 	public void setAllTiles(Integer[][] tiles) {
 		model.setAllTiles(tiles);
+	}
+	
+	public int getAllTilesWidth () {
+		return model.getAllTilesWidth();
+	}
+	
+	public int getAllTilesHeight () {
+		return model.getAllTilesHeight();
+	}
+	
+	public int getFirstTileVisibleX() {
+		return model.getFirstTileVisibleX();
+	}
+	
+	public int getFirstTileVisibleY() {
+		return model.getFirstTileVisibleY();
 	}
 }

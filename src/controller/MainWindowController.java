@@ -18,7 +18,7 @@ import util.FileSaver;
 import util.SpecialToolType;
 import util.TilePicker;
 import view.ImageButton;
-import view.NewMapWindow;
+import view.MapSettingsWindow;
 import view.PictureExportWindow;
 
 public class MainWindowController {
@@ -84,7 +84,7 @@ public class MainWindowController {
 		alert.setTitle("Tiny Planet Builder");
 		alert.setHeaderText("Vyberte způsob zahájení stavby");
 		
-		if(mainWindowModel.getDarkMode()) {
+		if(getDarkMode()) {
 			DialogPane dialogPane = alert.getDialogPane();
 			dialogPane.getStylesheets().add("file:resources/darkmode.css");
 		}
@@ -106,7 +106,7 @@ public class MainWindowController {
 	}
 	
 	public void showNewFileWindow(Stage stage, MapController mapController) {
-		NewMapWindow newMap = new NewMapWindow(mapController, stage, mainWindowModel.getDarkMode());
+		MapSettingsWindow newMap = new MapSettingsWindow(mapController, stage, getDarkMode(), false);
 	    newMap.showAndWait();
 	    mapController.showNewMap(stage.getWidth(), stage.getHeight());
 	    mapController.clearMapHistory();
@@ -328,6 +328,11 @@ public class MainWindowController {
 				btn.setImage(newImage);
 			}
 		}
+	}
+	
+	public void showSettingsWindow(Stage stage, MapController mapController) {
+		MapSettingsWindow newMap = new MapSettingsWindow(mapController, stage, getDarkMode(), true);
+	    newMap.showAndWait();
 	}
 
 }

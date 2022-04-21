@@ -148,6 +148,17 @@ public class MainWindowView extends Application {
 			}
 		});
 		
+		mapController.getView().setOnZoom(e -> {
+			if (e.getTotalZoomFactor() > 1) {
+				mapController.resizeMap(primaryStage.getWidth(), primaryStage.getHeight(), 
+						mapController.getAllTilesWidth(), mapController.getAllTilesHeight(), mapController.getTilesVisibleLine() - 1);
+			}
+			else {
+				mapController.resizeMap(primaryStage.getWidth(), primaryStage.getHeight(), 
+						mapController.getAllTilesWidth(), mapController.getAllTilesHeight(), mapController.getTilesVisibleLine() + 1);
+			}
+		});
+		
 		return leftContent;
 		
 	}
@@ -187,6 +198,7 @@ public class MainWindowView extends Application {
 		mainWindowController.addButton(mode);
 		
 		ImageButton settings = new ImageButton(50, 50, "Nastavení", ImageLoader.SETTINGS_LIGHT);
+		settings.setOnAction(e -> mainWindowController.showSettingsWindow(primaryStage, mapController));
 		mainWindowController.addButton(settings);
 		
 		ImageButton help = new ImageButton(50, 50, "Nápověda", ImageLoader.HELP_LIGHT);
