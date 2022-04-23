@@ -3,9 +3,12 @@ package util;
 import java.io.File;
 import java.io.IOException;
 import java.util.Scanner;
+
+import controller.MainWindowController;
 import controller.MapController;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.stage.Stage;
 
 public class FileLoader {
 	
@@ -65,15 +68,21 @@ public class FileLoader {
 		}
 	}
 	
-	public static void setMapModel(MapController controller) {
-		controller.setDarkMode(darkMode);
-		controller.setAllTiles(tiles);
-		controller.setAllTilesHeight(mapHeight);
-		controller.setAllTilesWidth(mapWidth);
-		controller.setTilesVisibleLine(tilesVisibleLine);
-		controller.setFirstTileVisibleX(0);
-		controller.setFirstTileVisibleY(0);
-		controller.repaint();
+	public static void setMapModel(MapController mapController, MainWindowController mainWindowController, Stage stage) {
+		mapController.setDarkMode(darkMode);
+		mapController.setAllTiles(tiles);
+		mapController.setAllTilesHeight(mapHeight);
+		mapController.setAllTilesWidth(mapWidth);
+		mapController.setTilesVisibleLine(tilesVisibleLine);
+		mapController.setFirstTileVisibleX(0);
+		mapController.setFirstTileVisibleY(0);
+		mapController.repaint();
+		
+		if(mainWindowController.isWindowModeChanges()) {
+			mainWindowController.setDarkModeCSS(darkMode, stage);
+			mainWindowController.changeButtonsMode(darkMode);
+		}
+		
 	}
 
 	public static boolean isSuccessful() {

@@ -46,7 +46,18 @@ public class MainWindowController {
 	}
 	
 	public void setDarkMode(boolean darkMode) {
-		this.mainWindowModel.setDarkMode(darkMode);
+		if(mainWindowModel.isWindowModeChanges()) {
+			this.mainWindowModel.setDarkMode(darkMode);
+		}
+	}
+	
+	public void setDarkModeCSS(boolean darkMode, Stage stage) {
+		if(darkMode) {
+			stage.getScene().getStylesheets().add("file:resources/darkmode.css");
+		}
+		else {
+			stage.getScene().getStylesheets().clear();
+		}
 	}
 	
 	public SpecialToolType getToolActive() {
@@ -79,6 +90,14 @@ public class MainWindowController {
 		mainWindowModel.setToolActive(null);
 	}
 	
+	public boolean isWindowModeChanges() {
+		return mainWindowModel.isWindowModeChanges();
+	}
+	
+	public void setWindowModeChanges(boolean windowModeChanges) {
+		mainWindowModel.setWindowModeChanges(windowModeChanges);
+	}
+	
 	public void showStartAlert(Stage stage, MapController mapController) {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
 		alert.setTitle("Tiny Planet Builder");
@@ -106,7 +125,7 @@ public class MainWindowController {
 	}
 	
 	public void showNewFileWindow(Stage stage, MapController mapController) {
-		MapSettingsWindow newMap = new MapSettingsWindow(mapController, stage, getDarkMode(), false);
+		MapSettingsWindow newMap = new MapSettingsWindow(mapController, this, stage, getDarkMode(), false);
 	    newMap.showAndWait();
 	    mapController.showNewMap(stage.getWidth(), stage.getHeight());
 	    mapController.clearMapHistory();
@@ -128,7 +147,7 @@ public class MainWindowController {
 				showStartAlert(stage, mapController);
 			}
 			else {
-				FileLoader.setMapModel(mapController);
+				FileLoader.setMapModel(mapController, this, stage);
 				mapController.showNewMap(stage.getWidth(), stage.getHeight());
 			}
 		}
@@ -145,18 +164,15 @@ public class MainWindowController {
 			FileLoader.loadFile(selectedFile);
 			
 			if(FileLoader.isSuccessful()) {
-				FileLoader.setMapModel(mapController);
+				FileLoader.setMapModel(mapController, this, stage);
 				mapController.showNewMap(stage.getWidth(), stage.getHeight());
 				mapController.clearMapHistory();
 				
-				setDarkMode(mapController.getDarkMode());
+				if(isWindowModeChanges()) {
+					setDarkMode(mapController.getDarkMode());
+					setDarkModeCSS(getDarkMode(), stage);
+				}
 				
-				if(getDarkMode()) {
-					stage.getScene().getStylesheets().add("file:resources/darkmode.css");
-				}
-				else {
-					stage.getScene().getStylesheets().remove("file:resources/darkmode.css");
-				}
 			}
 		}
 		
@@ -262,16 +278,12 @@ public class MainWindowController {
 	}
 	
 	public void changeModeAppearanceDuringRun(Stage stage, MapController mapController) {
-		boolean darkModeActive = getDarkMode();
-		
-		if(darkModeActive) {
-			stage.getScene().getStylesheets().remove("file:resources/darkmode.css");
+		if(mainWindowModel.isWindowModeChanges()) {
+			setDarkMode(!getDarkMode());
+			setDarkModeCSS(getDarkMode(), stage);
+			changeButtonsMode(getDarkMode());
 		}
-		else {
-			stage.getScene().getStylesheets().add("file:resources/darkmode.css");
 
-		}
-		setDarkMode(!getDarkMode());
 		mapController.setDarkMode(!mapController.getDarkMode());
 		mapController.reInitAllTiles();
 		mapController.repaint();
@@ -284,20 +296,12 @@ public class MainWindowController {
 			setCurrentTile(TilePicker.getTile(currentTileId + addition));
 		}
 		
-		changeButtonsMode(getDarkMode());
-		
 	}
 	
 	public void changeModeAppearanceDuringStart(Stage stage, MapController mapController) {
 		boolean darkModeActive = mainWindowModel.getDarkMode();
 		
-		if(darkModeActive) {
-			stage.getScene().getStylesheets().add("file:resources/darkmode.css");
-		}
-		else {
-			stage.getScene().getStylesheets().remove("file:resources/darkmode.css");
-
-		}
+		setDarkModeCSS(darkModeActive, stage);
 		
 		int addition = getDarkMode()? 1 : -1;
 		Tile currentTile = getCurrentTile();
@@ -312,26 +316,37 @@ public class MainWindowController {
 	}
 	
 	public void changeButtonsMode(boolean darkMode) {
-		if(darkMode) {
-			for(ImageButton btn : mainWindowModel.getButtons()) {
-				Image btnImage = btn.getImage();
-				int imgIndex = mainWindowModel.getButtonImagesLight().indexOf(btnImage);
-				Image newImage = mainWindowModel.getButtonImagesDark().get(imgIndex);
-				btn.setImage(newImage);
+		if(mainWindowModel.isWindowModeChanges()) {
+			if(darkMode) {
+				for(ImageButton btn : mainWindowModel.getButtons()) {
+					Image btnImage = btn.getImage();
+					int imgIndex = mainWindowModel.getButtonImagesLight().indexOf(btnImage);
+					
+					if(imgIndex != -1) {
+						Image newImage = mainWindowModel.getButtonImagesDark().get(imgIndex);
+						btn.setImage(newImage);
+					}
+					
+				}
+			}
+			else {
+				for(ImageButton btn : mainWindowModel.getButtons()) {
+					Image btnImage = btn.getImage();
+					int imgIndex = mainWindowModel.getButtonImagesDark().indexOf(btnImage);
+					
+					if(imgIndex != -1) {
+						Image newImage = mainWindowModel.getButtonImagesLight().get(imgIndex);
+						btn.setImage(newImage);
+					}
+					
+				}
 			}
 		}
-		else {
-			for(ImageButton btn : mainWindowModel.getButtons()) {
-				Image btnImage = btn.getImage();
-				int imgIndex = mainWindowModel.getButtonImagesDark().indexOf(btnImage);
-				Image newImage = mainWindowModel.getButtonImagesLight().get(imgIndex);
-				btn.setImage(newImage);
-			}
-		}
+
 	}
 	
 	public void showSettingsWindow(Stage stage, MapController mapController) {
-		MapSettingsWindow newMap = new MapSettingsWindow(mapController, stage, getDarkMode(), true);
+		MapSettingsWindow newMap = new MapSettingsWindow(mapController, this, stage, getDarkMode(), true);
 	    newMap.showAndWait();
 	}
 

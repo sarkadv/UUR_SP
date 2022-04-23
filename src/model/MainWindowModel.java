@@ -15,6 +15,7 @@ public class MainWindowModel {
 	private List<Image> buttonImagesLight;
 	private List<Image> buttonImagesDark;
 	private List<ImageButton> buttons;
+	private boolean windowModeChanges;
 	
 	public MainWindowModel() {
 		this.darkMode = false;
@@ -23,6 +24,7 @@ public class MainWindowModel {
 		this.buttons = new ArrayList<ImageButton>();
 		this.buttonImagesLight = new ArrayList<Image>();
 		this.buttonImagesDark = new ArrayList<Image>();
+		this.windowModeChanges = true;
 		
 		this.buttonImagesLight.addAll(Arrays.asList(new Image[] {ImageLoader.NEW_LIGHT, ImageLoader.SAVE_LIGHT, 
 				ImageLoader.BACK_LIGHT, ImageLoader.LOAD_LIGHT, ImageLoader.EXPORT_LIGHT,
@@ -75,6 +77,14 @@ public class MainWindowModel {
 
 	public List<ImageButton> getButtons() {
 		return buttons;
+	}
+
+	public boolean isWindowModeChanges() {
+		return windowModeChanges;
+	}
+	
+	public void setWindowModeChanges(boolean windowModeChanges) {
+		this.windowModeChanges = windowModeChanges;
 	}
 	
 }

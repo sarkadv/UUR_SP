@@ -47,6 +47,7 @@ public class MainWindowView extends Application {
 		stage.show();
 		
 		mainWindowController.showStartAlert(stage, mapController);
+		
 		mainWindowController.setDarkMode(mapController.getDarkMode());
 		
 		if(mainWindowController.getDarkMode()) {
@@ -182,7 +183,7 @@ public class MainWindowView extends Application {
 		ImageButton loadFile = new ImageButton(50, 50, "Načíst Mapu", ImageLoader.LOAD_LIGHT);
 		loadFile.setOnAction(e -> {
 			mainWindowController.showSaveAlertLoad(primaryStage, mapController);
-			tileMenu.setDarkMode(mainWindowController.getDarkMode());
+			tileMenu.setDarkMode(mapController.getDarkMode());
 		});
 		mainWindowController.addButton(loadFile);
 		
@@ -193,7 +194,7 @@ public class MainWindowView extends Application {
 		ImageButton mode = new ImageButton(50, 50, "Změna Barevného Režimu", ImageLoader.MODE_LIGHT);
 		mode.setOnAction(e -> {
 			mainWindowController.changeModeAppearanceDuringRun(primaryStage, mapController);
-			tileMenu.setDarkMode(mainWindowController.getDarkMode());
+			tileMenu.setDarkMode(mapController.getDarkMode());
 		});
 		mainWindowController.addButton(mode);
 		

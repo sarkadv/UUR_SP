@@ -3,6 +3,7 @@ package view;
 import java.util.List;
 import java.util.Optional;
 
+import controller.MainWindowController;
 import controller.MapController;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
@@ -25,10 +26,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 public class MapSettingsWindow extends Stage {
 	
 	private MapController mapController;
+	private MainWindowController mainWindowController;
 	private TextField mapSizeWidthTF;
 	private TextField mapSizeHeightTF;
 	private ComboBox<Integer> tilesVisibleCombo;
@@ -39,10 +42,13 @@ public class MapSettingsWindow extends Stage {
 	private ToggleGroup mapColorRBGroup;
 	private CheckBox modeCheckBox;
 	private ToggleGroup modeRBGroup;
+	private RadioButton lightRB;
+	private RadioButton darkRB;
 	private boolean settings;
 	
-	public MapSettingsWindow(MapController mapController, Stage primaryStage, boolean darkMode, boolean settings) {
+	public MapSettingsWindow(MapController mapController, MainWindowController mainWindowController, Stage primaryStage, boolean darkMode, boolean settings) {
 		this.mapController = mapController;
+		this.mainWindowController = mainWindowController;
 		this.settings = settings;
 		this.tilesVisibleChoiceList = FXCollections.observableArrayList();
 		
@@ -180,7 +186,7 @@ public class MapSettingsWindow extends Stage {
 		Label modeLabel = new Label("Denní / Noční režim ovlivňuje vzhled okna");
 		
 		modeCheckBox = new CheckBox();
-		modeCheckBox.selectedProperty().setValue(true);
+		modeCheckBox.selectedProperty().setValue(mainWindowController.isWindowModeChanges());
 		
 		modeChangeControls.getChildren().addAll(modeLabel, modeCheckBox);
 		
@@ -189,14 +195,15 @@ public class MapSettingsWindow extends Stage {
 		
 		modeRBGroup = new ToggleGroup();
 
-		RadioButton lightRB = new RadioButton("Světlý mód");
+		lightRB = new RadioButton("Světlý mód");
 		lightRB.setToggleGroup(modeRBGroup);
-		lightRB.setSelected(true);
-		lightRB.setDisable(true);
+		lightRB.setSelected(!mainWindowController.getDarkMode());
+		lightRB.setDisable(mainWindowController.isWindowModeChanges());
 
-		RadioButton darkRB = new RadioButton("Tmavý mód");
+		darkRB = new RadioButton("Tmavý mód");
 		darkRB.setToggleGroup(modeRBGroup);
-		darkRB.setDisable(true);
+		darkRB.setSelected(mainWindowController.getDarkMode());
+		darkRB.setDisable(mainWindowController.isWindowModeChanges());
 		
 		modeColorControls.getChildren().addAll(lightRB, darkRB);
 		
@@ -264,6 +271,9 @@ public class MapSettingsWindow extends Stage {
 			mapController.initAllTilesNewMap();
 			mapController.setFirstTileVisibleX(0);
 			mapController.setFirstTileVisibleY(0);
+			
+			setMode();
+			
 			this.close();
 		}
 		else if(settings) {
@@ -291,8 +301,37 @@ public class MapSettingsWindow extends Stage {
 				this.close();
 			}
 			
+			setMode();
+			
 		}
 		
+	}
+	
+	private void setMode() {
+		mainWindowController.setWindowModeChanges(true);
+		
+		if(!modeCheckBox.isSelected()) {
+			RadioButton selectedRB = (RadioButton) modeRBGroup.getSelectedToggle();
+	
+			if(selectedRB == lightRB) {
+				mainWindowController.setDarkMode(false);
+				mainWindowController.setDarkModeCSS(false, (Stage)this.getOwner());
+				mainWindowController.changeButtonsMode(false);
+			}
+			else {
+				mainWindowController.setDarkMode(true);
+				mainWindowController.setDarkModeCSS(true, (Stage)this.getOwner());
+				mainWindowController.changeButtonsMode(true);
+			}
+			
+			mainWindowController.setWindowModeChanges(false);
+		}
+		else {
+			mainWindowController.setDarkMode(mapController.getDarkMode());
+			mainWindowController.setDarkModeCSS(mapController.getDarkMode(), (Stage)this.getOwner());
+			mainWindowController.changeButtonsMode(mapController.getDarkMode());
+		}
+
 	}
 	
 	private void computeMapSize() {
