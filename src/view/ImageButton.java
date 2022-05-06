@@ -48,6 +48,10 @@ public class ImageButton extends Button {
     public String getName() {
     	return this.name;
     }
+    
+    public void setName(String name) {
+    	this.name = name;
+    }
 
 	public void setImage(Image image) {
 		this.image = image;

@@ -3,6 +3,7 @@ package model;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.paint.Color;
+import util.DragCoordinates;
 import util.ImageLoader;
 
 public class MapModel {
@@ -16,8 +17,10 @@ public class MapModel {
 	private Color planetColor;
 	private boolean darkMode;
 	private List<Integer[][]> tilesHistory;
-	
 	private Integer[][] allTiles;
+	private boolean[][] chosenTiles;
+	private boolean[][] chosenBorders;
+	private DragCoordinates dragCoordinates;
 	
 	public MapModel() {
 		this.tileSize = 145;
@@ -167,6 +170,30 @@ public class MapModel {
 		}
 		return copied;
 			  
+	}
+
+	public DragCoordinates getDragCoordinates() {
+		return this.dragCoordinates;
+	}
+
+	public void setDragCoordinates(DragCoordinates dragCoordinates) {
+		this.dragCoordinates = dragCoordinates;
+	}
+
+	public boolean[][] getChosenTiles() {
+		return chosenTiles;
+	}
+
+	public void setChosenTiles(boolean[][] chosenTiles) {
+		this.chosenTiles = chosenTiles;
+	}
+	
+	public boolean[][] getChosenBorders() {
+		return chosenBorders;
+	}
+
+	public void setChosenBorders(boolean[][] chosenBorders) {
+		this.chosenBorders = chosenBorders;
 	}
 
 }

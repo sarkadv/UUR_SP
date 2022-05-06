@@ -4,6 +4,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import model.MapModel;
 import model.Tile;
+import util.DragCoordinates;
 import util.TilePicker;
 import view.MapView;
 
@@ -51,7 +52,7 @@ public class MapController {
 	}
 	
 	public void changeTileSize(double stageWidth, double stageHeight) {
-		double newTileSize = Math.min(stageWidth, stageHeight) - 150;
+		double newTileSize = Math.min(stageWidth, stageHeight) - 175;
 		newTileSize = newTileSize / model.getTilesVisibleLine();
 		
 		model.setTileSize(newTileSize);
@@ -75,9 +76,47 @@ public class MapController {
 				setFirstTileVisibleY(getFirstTileVisibleY() + subtraction);
 			}
 			
+			setDragCoordinates(null);
+			changeChosenTiles();
+			changeChosenBorders();
+			
 			changeTileSize(stageWidth, stageHeight);
 			repaint();
 		}
+	}
+	
+	public void fillArea(Tile tile) {
+		for(int x = 0; x < model.getAllTilesWidth(); x++) {
+			for(int y = 0; y < model.getAllTilesHeight(); y++) {
+        		if(model.getChosenTiles() != null) {
+        			if(model.getChosenTiles()[x][y]) {
+        				if(tile != null) {
+        					model.setTile(x, y, tile.id);
+        				}
+        			}
+        		}
+			}
+		}
+		
+		model.addToTilesHistory();
+		repaint();
+	}
+	
+	public void fillBorders(Tile tile) {
+		for(int x = 0; x < model.getAllTilesWidth(); x++) {
+			for(int y = 0; y < model.getAllTilesHeight(); y++) {
+        		if(model.getChosenBorders() != null) {
+        			if(model.getChosenBorders()[x][y]) {
+        				if(tile != null) {
+        					model.setTile(x, y, tile.id);
+        				}
+        			}
+        		}
+			}
+		}
+		
+		model.addToTilesHistory();
+		repaint();
 	}
 	
 	public void initAllTilesNewMap() {
@@ -101,6 +140,7 @@ public class MapController {
 			model.setFirstTileVisibleY(model.getFirstTileVisibleY() - 1);
 			repaint();
 		}
+		
 	}
 	
 	public void moveDown(KeyEvent e) {
@@ -168,15 +208,77 @@ public class MapController {
 		}
 	}
 	
-	private int getTileCoordinate(double clickedCoordinate) {
-		int substractionCount = 0;
+	public void changeChosenTiles() {
+		DragCoordinates dragCoordinates = getDragCoordinates();
+		boolean[][] chosenTiles = new boolean[model.getAllTilesWidth()][model.getAllTilesHeight()];
 		
-		while(clickedCoordinate - model.getTileSize() > 0) {
-			clickedCoordinate = clickedCoordinate - model.getTileSize();
-			substractionCount++;
+		if(dragCoordinates != null) {
+			int tileCoordinateStartX = model	.getFirstTileVisibleX() + getTileCoordinate(dragCoordinates.getStartX());
+			int tileCoordinateStartY = model	.getFirstTileVisibleY() + getTileCoordinate(dragCoordinates.getStartY());
+			
+			int tileCoordinateEndX = model.getFirstTileVisibleX() + getTileCoordinate(dragCoordinates.getEndX());
+			int tileCoordinateEndY = model.getFirstTileVisibleY() + getTileCoordinate(dragCoordinates.getEndY());
+			
+			for(int x = 0; x < chosenTiles.length; x++) {
+				for(int y = 0; y < chosenTiles[x].length; y++) {
+					if((x >= tileCoordinateStartX && x <= tileCoordinateEndX)||(x >= tileCoordinateEndX && x <= tileCoordinateStartX)) {
+						if((y >= tileCoordinateStartY && y <= tileCoordinateEndY)||(y >= tileCoordinateEndY && y <= tileCoordinateStartY)) {
+							chosenTiles[x][y] = true;
+						}
+					}
+					else {
+						chosenTiles[x][y] = false;
+					}
+				}
+			}
+			
+			model.setChosenTiles(chosenTiles);
 		}
 		
-		return substractionCount;
+		else {
+			model.setChosenTiles(null);
+		}
+
+	}
+	
+	public void changeChosenBorders() {
+		DragCoordinates dragCoordinates = getDragCoordinates();
+		boolean[][] chosenBorders = new boolean[model.getAllTilesWidth()][model.getAllTilesHeight()];
+		
+		if(dragCoordinates != null) {
+			int tileCoordinateStartX = model	.getFirstTileVisibleX() + getTileCoordinate(dragCoordinates.getStartX());
+			int tileCoordinateStartY = model	.getFirstTileVisibleY() + getTileCoordinate(dragCoordinates.getStartY());
+			
+			int tileCoordinateEndX = model.getFirstTileVisibleX() + getTileCoordinate(dragCoordinates.getEndX());
+			int tileCoordinateEndY = model.getFirstTileVisibleY() + getTileCoordinate(dragCoordinates.getEndY());
+			
+			for(int x = 0; x < chosenBorders.length; x++) {
+				for(int y = 0; y < chosenBorders[x].length; y++) {
+					if(x == tileCoordinateStartX || x == tileCoordinateEndX
+        					|| y == tileCoordinateStartY || y == tileCoordinateEndY) {
+						if((x >= tileCoordinateStartX && x <= tileCoordinateEndX)||(x >= tileCoordinateEndX && x <= tileCoordinateStartX)) {
+							if((y >= tileCoordinateStartY && y <= tileCoordinateEndY)||(y >= tileCoordinateEndY && y <= tileCoordinateStartY)) {
+								chosenBorders[x][y] = true;
+							}
+						}
+					}
+					else {
+						chosenBorders[x][y] = false;
+					}
+				}
+			}
+			
+			model.setChosenBorders(chosenBorders);
+		}
+		
+		else {
+			model.setChosenBorders(null);
+		}
+
+	}
+	
+	private int getTileCoordinate(double clickedCoordinate) {
+		return (int)((clickedCoordinate) / model.getTileSize());
 	}
 	
 	public void setDarkMode(boolean darkMode) {
@@ -233,4 +335,14 @@ public class MapController {
 	public int getFirstTileVisibleY() {
 		return model.getFirstTileVisibleY();
 	}
+	
+	public DragCoordinates getDragCoordinates() {
+		return model.getDragCoordinates();
+	}
+
+	public void setDragCoordinates(DragCoordinates dragCoordinates) {
+		model.setDragCoordinates(dragCoordinates);
+	}
+	
+	
 }

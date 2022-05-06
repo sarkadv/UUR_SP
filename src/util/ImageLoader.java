@@ -25,7 +25,17 @@ public class ImageLoader {
 	private static Image spritesheetButtonsLower = new Image("file:resources/spritesheet_buttons_lower.png");
 	
 	public static final Image TRIANGLE_UP = new Image("file:resources/triangle_up.png");
+	public static final Image TRIANGLE_UP_LEFT_HALF = new Image("file:resources/triangle_up_left_half.png");
+	public static final Image TRIANGLE_UP_RIGHT_HALF = new Image("file:resources/triangle_up_right_half.png");
 	public static final Image TRIANGLE_DOWN = new Image("file:resources/triangle_down.png");
+	public static final Image TRIANGLE_DOWN_LEFT_HALF = new Image("file:resources/triangle_down_left_half.png");
+	public static final Image TRIANGLE_DOWN_RIGHT_HALF = new Image("file:resources/triangle_down_right_half.png");
+	public static final Image TRIANGLE_LEFT = new Image("file:resources/triangle_left.png");
+	public static final Image TRIANGLE_LEFT_TOP_HALF = new Image("file:resources/triangle_left_top_half.png");
+	public static final Image TRIANGLE_LEFT_BOTTOM_HALF = new Image("file:resources/triangle_left_bottom_half.png");
+	public static final Image TRIANGLE_RIGHT = new Image("file:resources/triangle_right.png");
+	public static final Image TRIANGLE_RIGHT_TOP_HALF = new Image("file:resources/triangle_right_top_half.png");
+	public static final Image TRIANGLE_RIGHT_BOTTOM_HALF = new Image("file:resources/triangle_right_bottom_half.png");
 	
 	public static final Image ABOUT_LIGHT = crop(spritesheetButtonsUpper, 0, 0, BUTTON_UPPER_SIZE);
 	public static final Image ABOUT_DARK = crop(spritesheetButtonsUpper, 3, 0, BUTTON_UPPER_SIZE);

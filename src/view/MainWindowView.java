@@ -8,12 +8,15 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
+import javafx.scene.input.Mnemonic;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import util.DragCoordinates;
 import util.ImageLoader;
 import util.SpecialToolType;
 import util.TilePicker;
@@ -21,6 +24,25 @@ import util.TilePicker;
 public class MainWindowView extends Application {
 	
 	private Stage primaryStage;
+	private Scene primaryScene;
+	
+	private ImageButton newFile;
+	private ImageButton saveFile;
+	private ImageButton back;
+	private ImageButton loadFile;
+	private ImageButton exportFile;
+	private ImageButton mode;
+	private ImageButton options;
+	private ImageButton help;
+	private ImageButton about;
+	private ImageButton pick;
+	private ImageButton erase;
+	private ImageButton eyeDropper;
+	private ImageButton chooseArea;
+	private ImageButton fillArea;
+	private ImageButton fillBorders;
+	private ImageButton upBtn;
+	private ImageButton downBtn;
 	
 	private MapController mapController = new MapController();
 	private MainWindowController mainWindowController = new MainWindowController();
@@ -39,9 +61,10 @@ public class MainWindowView extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 		this.primaryStage = stage;
+		this.primaryScene = createScene();
 		
 		stage.setTitle("Sarka Dvorakova A21B0116P");
-		stage.setScene(createScene());
+		stage.setScene(primaryScene);
 		stage.setMinWidth(850);
 		stage.setMinHeight(700);
 		stage.show();
@@ -68,6 +91,68 @@ public class MainWindowView extends Application {
 			mainWindowController.showSaveAlertClose(stage, mapController);
 		});
 		
+		KeyCombination kcNew = new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN);
+		Runnable rnNew = () -> newFile.fire();
+		primaryScene.getAccelerators().put(kcNew, rnNew);
+		
+		KeyCombination kcSave = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
+		Runnable rnSave = () -> saveFile.fire();
+		primaryScene.getAccelerators().put(kcSave, rnSave);
+		
+		KeyCombination kcBack1 = new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN);
+		Runnable rnBack = () -> back.fire();
+		primaryScene.getAccelerators().put(kcBack1, rnBack);
+		KeyCombination kcBack2 = new KeyCodeCombination(KeyCode.Y, KeyCombination.CONTROL_DOWN);
+		primaryScene.getAccelerators().put(kcBack2, rnBack);
+		
+		KeyCombination kcLoad = new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN);
+		Runnable rnLoad = () -> loadFile.fire();
+		primaryScene.getAccelerators().put(kcLoad, rnLoad);
+		
+		KeyCombination kcExport = new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN);
+		Runnable rnExport = () -> exportFile.fire();
+		primaryScene.getAccelerators().put(kcExport, rnExport);
+		
+		KeyCombination kcMode = new KeyCodeCombination(KeyCode.M, KeyCombination.CONTROL_DOWN);
+		Runnable rnMode = () -> mode.fire();
+		primaryScene.getAccelerators().put(kcMode, rnMode);
+		
+		KeyCombination kcOptions = new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN);
+		Runnable rnOptions = () -> options.fire();
+		primaryScene.getAccelerators().put(kcOptions, rnOptions);
+		
+		KeyCombination kcHelp = new KeyCodeCombination(KeyCode.H, KeyCombination.CONTROL_DOWN);
+		Runnable rnHelp = () -> help.fire();
+		primaryScene.getAccelerators().put(kcHelp, rnHelp);
+		
+		KeyCombination kcAbout = new KeyCodeCombination(KeyCode.A, KeyCombination.CONTROL_DOWN);
+		Runnable rnAbout = () -> about.fire();
+		primaryScene.getAccelerators().put(kcAbout, rnAbout);
+		
+		KeyCombination kcPick = new KeyCodeCombination(KeyCode.ESCAPE);
+		Runnable rnPick = () -> pick.fire();
+		primaryScene.getAccelerators().put(kcPick, rnPick);
+		
+		KeyCombination kcErase = new KeyCodeCombination(KeyCode.BACK_SPACE);
+		Runnable rnErase = () -> erase.fire();
+		primaryScene.getAccelerators().put(kcErase, rnErase);
+		
+		KeyCombination kcEyeDropper = new KeyCodeCombination(KeyCode.E, KeyCombination.SHIFT_DOWN);
+		Runnable rnEyeDropper = () -> eyeDropper.fire();
+		primaryScene.getAccelerators().put(kcEyeDropper, rnEyeDropper);
+		
+		KeyCombination kcChoose = new KeyCodeCombination(KeyCode.C, KeyCombination.SHIFT_DOWN);
+		Runnable rnChoose = () -> chooseArea.fire();
+		primaryScene.getAccelerators().put(kcChoose, rnChoose);
+		
+		KeyCombination kcFillArea = new KeyCodeCombination(KeyCode.F, KeyCombination.SHIFT_DOWN);
+		Runnable rnFillArea = () -> fillArea.fire();
+		primaryScene.getAccelerators().put(kcFillArea, rnFillArea);
+		
+		KeyCombination kcFillBorders = new KeyCodeCombination(KeyCode.B, KeyCombination.SHIFT_DOWN);
+		Runnable rnFillBorders = () -> fillBorders.fire();
+		primaryScene.getAccelerators().put(kcFillBorders, rnFillBorders);
+		
 	}
 	
 	private Scene createScene() {
@@ -87,6 +172,11 @@ public class MainWindowView extends Application {
 			case D:
 				mapController.moveRight(e);
 				break;
+			case UP:
+				upBtn.fire();
+				break;
+			case DOWN:
+				downBtn.fire();
 			default:
 				break;
 			}
@@ -125,26 +215,25 @@ public class MainWindowView extends Application {
 		});
 		
 		mapController.getView().setOnKeyReleased(e -> {
-			if (e.getCode() == KeyCode.W) {
+			if (e.getCode() == KeyCode.W || e.getCode() == KeyCode.UP) {
 				mapController.moveUp(e);
-				System.out.println("up");
 			}
 		});
 		
 		mapController.getView().setOnKeyReleased(e -> {
-			if (e.getCode() == KeyCode.S) {
+			if (e.getCode() == KeyCode.S || e.getCode() == KeyCode.DOWN) {
 				mapController.moveDown(e);
 			}
 		});
 		
 		mapController.getView().setOnKeyReleased(e -> {
-			if (e.getCode() == KeyCode.D) {
+			if (e.getCode() == KeyCode.D || e.getCode() == KeyCode.RIGHT) {
 				mapController.moveRight(e);
 			}
 		});
 		
 		mapController.getView().setOnKeyReleased(e -> {
-			if (e.getCode() == KeyCode.A) {
+			if (e.getCode() == KeyCode.A || e.getCode() == KeyCode.LEFT) {
 				mapController.moveLeft(e);
 			}
 		});
@@ -160,6 +249,34 @@ public class MainWindowView extends Application {
 			}
 		});
 		
+		mapController.getView().setOnMouseDragged(e -> {
+			if(mainWindowController.getToolActive() == SpecialToolType.CHOOSEAREA) {
+				if(mapController.getDragCoordinates() != null) {
+					double startX = mapController.getDragCoordinates().getStartX();
+					double startY = mapController.getDragCoordinates().getStartY();
+					mapController.setDragCoordinates(new DragCoordinates(startX, startY, e.getX(), e.getY()));
+					mapController.changeChosenTiles();
+					mapController.changeChosenBorders();
+					mapController.repaint();
+				}
+				else {
+					mapController.setDragCoordinates(new DragCoordinates(e.getX(), e.getY(), e.getX(), e.getY()));
+					mapController.changeChosenTiles();
+					mapController.changeChosenBorders();
+					mapController.repaint();
+				}
+			}
+		});
+		
+		mapController.getView().setOnDragDetected(e -> {
+			if(mainWindowController.getToolActive() == SpecialToolType.CHOOSEAREA) {
+				mapController.setDragCoordinates(null);
+				mapController.changeChosenTiles();
+				mapController.changeChosenBorders();
+				mapController.repaint();
+			}
+		});
+		
 		return leftContent;
 		
 	}
@@ -168,47 +285,48 @@ public class MainWindowView extends Application {
 		HBox buttonsPane = new HBox(5);
 		buttonsPane.setPadding(new Insets(10, 5, 10, 5));
 		
-		ImageButton newFile = new ImageButton(50, 50, "Nová Mapa", ImageLoader.NEW_LIGHT);
+		newFile = new ImageButton(50, 50, "Nová Mapa", ImageLoader.NEW_LIGHT);
 		newFile.setOnAction(e -> mainWindowController.showSaveAlertNew(primaryStage, mapController));
 		mainWindowController.addButton(newFile);
+		newFile.setMnemonicParsing(true);
 		
-		ImageButton saveFile = new ImageButton(50, 50, "Uložit Mapu", ImageLoader.SAVE_LIGHT);
+		saveFile = new ImageButton(50, 50, "Uložit Mapu", ImageLoader.SAVE_LIGHT);
 		saveFile.setOnAction(e -> mainWindowController.showFileSaveWindow(primaryStage, mapController));
 		mainWindowController.addButton(saveFile);
 		
-		ImageButton back = new ImageButton(50, 50, "Zpět", ImageLoader.BACK_LIGHT);
+		back = new ImageButton(50, 50, "Zpět", ImageLoader.BACK_LIGHT);
 		back.setOnAction(e -> mapController.oneStepBack());
 		mainWindowController.addButton(back);
 		
-		ImageButton loadFile = new ImageButton(50, 50, "Načíst Mapu", ImageLoader.LOAD_LIGHT);
+		loadFile = new ImageButton(50, 50, "Načíst Mapu", ImageLoader.LOAD_LIGHT);
 		loadFile.setOnAction(e -> {
 			mainWindowController.showSaveAlertLoad(primaryStage, mapController);
 			tileMenu.setDarkMode(mapController.getDarkMode());
 		});
 		mainWindowController.addButton(loadFile);
 		
-		ImageButton exportFile = new ImageButton(50, 50, "Exportovat Jako Obrázek", ImageLoader.EXPORT_LIGHT);
+		exportFile = new ImageButton(50, 50, "Exportovat Jako Obrázek", ImageLoader.EXPORT_LIGHT);
 		exportFile.setOnAction(e -> mainWindowController.showExportWindow(primaryStage, mapController));
 		mainWindowController.addButton(exportFile);
 		
-		ImageButton mode = new ImageButton(50, 50, "Změna Barevného Režimu", ImageLoader.MODE_LIGHT);
+		mode = new ImageButton(50, 50, "Změna Barevného Režimu", ImageLoader.MODE_LIGHT);
 		mode.setOnAction(e -> {
 			mainWindowController.changeModeAppearanceDuringRun(primaryStage, mapController);
 			tileMenu.setDarkMode(mapController.getDarkMode());
 		});
 		mainWindowController.addButton(mode);
 		
-		ImageButton settings = new ImageButton(50, 50, "Nastavení", ImageLoader.SETTINGS_LIGHT);
-		settings.setOnAction(e -> mainWindowController.showSettingsWindow(primaryStage, mapController));
-		mainWindowController.addButton(settings);
+		options = new ImageButton(50, 50, "Nastavení", ImageLoader.SETTINGS_LIGHT);
+		options.setOnAction(e -> mainWindowController.showSettingsWindow(primaryStage, mapController));
+		mainWindowController.addButton(options);
 		
-		ImageButton help = new ImageButton(50, 50, "Nápověda", ImageLoader.HELP_LIGHT);
+		help = new ImageButton(50, 50, "Nápověda", ImageLoader.HELP_LIGHT);
 		mainWindowController.addButton(help);
 		
-		ImageButton about = new ImageButton(50, 50, "O Aplikaci", ImageLoader.ABOUT_LIGHT);
+		about = new ImageButton(50, 50, "O Aplikaci", ImageLoader.ABOUT_LIGHT);
 		mainWindowController.addButton(about);
 		
-		buttonsPane.getChildren().addAll(newFile, saveFile, back, loadFile, exportFile, mode, settings, help, about);
+		buttonsPane.getChildren().addAll(newFile, saveFile, back, loadFile, exportFile, mode, options, help, about);
 		
 		return buttonsPane;
 	}
@@ -217,25 +335,21 @@ public class MainWindowView extends Application {
 		VBox rightContent = new VBox(5);
 		rightContent.setAlignment(Pos.CENTER);
 		
-		Button upBtn = new ImageButton(30, 30, "Nahoru", ImageLoader.TRIANGLE_UP);
+		upBtn = new ImageButton(30, 30, "Nahoru", ImageLoader.TRIANGLE_UP);
 		upBtn.setOnAction(e -> tileMenu.moveUp());
 		
-		Button downBtn = new ImageButton(30, 30, "Dolů", ImageLoader.TRIANGLE_DOWN);
+		downBtn = new ImageButton(30, 30, "Dolů", ImageLoader.TRIANGLE_DOWN);
 		downBtn.setOnAction(e -> tileMenu.moveDown());
 		
+		tileMenu = new TileMenu(mainWindowController, upBtn, downBtn);
+		
 		rightContent.getChildren().add(upBtn);
-		rightContent.getChildren().add(createTileMenu());
+		rightContent.getChildren().add(tileMenu);
 		rightContent.getChildren().add(downBtn);
 		rightContent.getChildren().add(createBottomButtons());
 		
 		return rightContent;
 		
-	}
-	
-	private Node createTileMenu() {
-		tileMenu = new TileMenu(mainWindowController);
-		
-		return tileMenu;
 	}
 
 	private Node createBottomButtons() {
@@ -250,7 +364,7 @@ public class MainWindowView extends Application {
 	private Node createFirstRowButtons() {
 		HBox buttonsPane = new HBox(5);
 		
-		ImageButton pick = new ImageButton(50, 50, "Vybrat", ImageLoader.PICK_LIGHT);
+		pick = new ImageButton(50, 50, "Vybrat", ImageLoader.PICK_LIGHT);
 		pick.setOnAction(e -> {
 			mainWindowController.changeSpecialToolActive(null);
 			mainWindowController.changeToNoTile(e);
@@ -258,7 +372,7 @@ public class MainWindowView extends Application {
 		});
 		mainWindowController.addButton(pick);
 		
-		ImageButton erase = new ImageButton(50, 50, "Vymazat", ImageLoader.ERASE_LIGHT);
+		erase = new ImageButton(50, 50, "Vymazat", ImageLoader.ERASE_LIGHT);
 		erase.setOnAction(e -> {
 			mainWindowController.changeSpecialToolActive(null);
 			mainWindowController.changeToEmptyTile(e);
@@ -266,7 +380,7 @@ public class MainWindowView extends Application {
 		});
 		mainWindowController.addButton(erase);
 		
-		ImageButton eyeDropper = new ImageButton(50, 50, "Kapátko", ImageLoader.EYEDROPPER_LIGHT);
+		eyeDropper = new ImageButton(50, 50, "Kapátko", ImageLoader.EYEDROPPER_LIGHT);
 		eyeDropper.setOnAction(e -> {
 			mainWindowController.changeSpecialToolActive(SpecialToolType.EYEDROPPER);
 		});
@@ -280,13 +394,32 @@ public class MainWindowView extends Application {
 	private Node createSecondRowButtons() {
 		HBox buttonsPane = new HBox(5);
 		
-		ImageButton chooseArea = new ImageButton(50, 50, "Vybrat Oblast", ImageLoader.CHOOSEAREA_LIGHT);
+		chooseArea = new ImageButton(50, 50, "Vybrat Oblast", ImageLoader.CHOOSEAREA_LIGHT);
+		chooseArea.setOnAction(e -> {
+			mainWindowController.changeSpecialToolActive(SpecialToolType.CHOOSEAREA);
+		});
 		mainWindowController.addButton(chooseArea);
 		
-		ImageButton fillArea = new ImageButton(50, 50, "Výplň Oblasti", ImageLoader.FILLAREA_LIGHT);
+		fillArea = new ImageButton(50, 50, "Výplň Oblasti", ImageLoader.FILLAREA_LIGHT);
+		fillArea.setOnAction(e -> {
+			mainWindowController.changeSpecialToolActive(null);
+			mapController.fillArea(mainWindowController.getCurrentTile());
+			mapController.setDragCoordinates(null);
+			mapController.changeChosenTiles();
+			mapController.changeChosenBorders();
+			mapController.repaint();
+		});
 		mainWindowController.addButton(fillArea);
 		
-		ImageButton fillBorders = new ImageButton(50, 50, "Výplň Hranic", ImageLoader.FILLBORDERS_LIGHT);
+		fillBorders = new ImageButton(50, 50, "Výplň Hranic", ImageLoader.FILLBORDERS_LIGHT);
+		fillBorders.setOnAction(e -> {
+			mainWindowController.changeSpecialToolActive(null);
+			mapController.fillBorders(mainWindowController.getCurrentTile());
+			mapController.setDragCoordinates(null);
+			mapController.changeChosenTiles();
+			mapController.changeChosenBorders();
+			mapController.repaint();
+		});
 		mainWindowController.addButton(fillBorders);
 		
 		buttonsPane.getChildren().addAll(chooseArea, fillArea, fillBorders);
