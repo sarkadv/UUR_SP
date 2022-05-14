@@ -11,7 +11,6 @@ import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
-import javafx.scene.input.Mnemonic;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -324,6 +323,7 @@ public class MainWindowView extends Application {
 		mainWindowController.addButton(help);
 		
 		about = new ImageButton(50, 50, "O Aplikaci", ImageLoader.ABOUT_LIGHT);
+		about.setOnAction(e -> new AboutWindow(primaryStage));
 		mainWindowController.addButton(about);
 		
 		buttonsPane.getChildren().addAll(newFile, saveFile, back, loadFile, exportFile, mode, options, help, about);
@@ -376,6 +376,11 @@ public class MainWindowView extends Application {
 		erase.setOnAction(e -> {
 			mainWindowController.changeSpecialToolActive(null);
 			mainWindowController.changeToEmptyTile(e);
+			mapController.fillArea(mainWindowController.getCurrentTile());
+			mapController.setDragCoordinates(null);
+			mapController.changeChosenTiles();
+			mapController.changeChosenBorders();
+			mapController.repaint();
 			tileMenu.updateChoice();
 		});
 		mainWindowController.addButton(erase);

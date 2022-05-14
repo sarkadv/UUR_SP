@@ -2,7 +2,6 @@ package view;
 
 import java.util.List;
 import java.util.Optional;
-
 import controller.MainWindowController;
 import controller.MapController;
 import javafx.collections.FXCollections;
@@ -26,7 +25,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 
 public class MapSettingsWindow extends Stage {
 	

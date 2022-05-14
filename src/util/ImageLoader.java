@@ -37,6 +37,8 @@ public class ImageLoader {
 	public static final Image TRIANGLE_RIGHT_TOP_HALF = new Image("file:resources/triangle_right_top_half.png");
 	public static final Image TRIANGLE_RIGHT_BOTTOM_HALF = new Image("file:resources/triangle_right_bottom_half.png");
 	
+	public static final Image ALIEN_LOGO = new Image("file:resources/alien.png");
+	
 	public static final Image ABOUT_LIGHT = crop(spritesheetButtonsUpper, 0, 0, BUTTON_UPPER_SIZE);
 	public static final Image ABOUT_DARK = crop(spritesheetButtonsUpper, 3, 0, BUTTON_UPPER_SIZE);
 	public static final Image BACK_LIGHT = crop(spritesheetButtonsUpper, 1, 0, BUTTON_UPPER_SIZE);
