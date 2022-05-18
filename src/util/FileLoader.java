@@ -17,6 +17,7 @@ public class FileLoader {
 	private static int tilesVisibleLine;
 	private static Integer[][] tiles;
 	private static boolean darkMode;
+	private static int activePlanet;
 	private static boolean successful = true;
 	
 	public static void loadFile(File file) {
@@ -27,6 +28,7 @@ public class FileLoader {
 				tiles = new Integer[mapWidth][mapHeight];
 				
 				tilesVisibleLine = Integer.parseInt(sc.nextLine());
+				activePlanet = Integer.parseInt(sc.nextLine());
 				
 				String darkModeLine = sc.nextLine();
 				if(darkModeLine.equals("D")) {
@@ -70,6 +72,7 @@ public class FileLoader {
 	
 	public static void setMapModel(MapController mapController, MainWindowController mainWindowController, Stage stage) {
 		mapController.setDarkMode(darkMode);
+		mapController.setActivePlanet(activePlanet);
 		mapController.setAllTiles(tiles);
 		mapController.setAllTilesHeight(mapHeight);
 		mapController.setAllTilesWidth(mapWidth);

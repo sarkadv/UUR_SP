@@ -13,19 +13,23 @@ import util.ImageLoader;
 
 public class AboutWindow extends Stage {
 	
-	public AboutWindow(Stage primaryStage) {
+	public AboutWindow(Stage primaryStage, boolean darkMode) {
 		
-		this.setScene(createScene());
+		this.setScene(createScene(darkMode));
 		this.initModality(Modality.WINDOW_MODAL);
-		this.setTitle("O Aplikaci");
+		this.setTitle("O aplikaci");
 		this.initOwner(primaryStage);
 		this.setMinHeight(400);
 		this.setMinWidth(300);
 		this.show();
 	}
 	
-	private Scene createScene() {
+	private Scene createScene(boolean darkMode) {
 		Scene scene = new Scene(createRootPane(), 300, 400);
+		
+		if(darkMode) {
+			scene.getStylesheets().add("file:resources/darkmode.css");
+		}
 		
 		return scene;
 	}

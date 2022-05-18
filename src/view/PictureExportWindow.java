@@ -37,15 +37,17 @@ public class PictureExportWindow extends Stage {
 	private GridPane picturePane;
 	private int tileSize;
 	private boolean darkMode;
+	private int activePlanet;
 	
-	public PictureExportWindow(Stage primaryStage, MapController mapController) {
+	public PictureExportWindow(Stage primaryStage, MapController mapController, boolean darkMode) {
 		this.tiles = mapController.getAllTiles();
 		this.mapWidth = tiles.length;
 		this.mapHeight = tiles[0].length;
 		this.windowWidth = 700;
 		this.windowHeight = 800;
 		this.tileSize = Math.min(windowWidth/mapWidth, (windowHeight - 100)/mapHeight);
-		this.darkMode = mapController.getDarkMode();
+		this.darkMode = darkMode;
+		this.activePlanet = mapController.getActivePlanet();
 		
 		this.setScene(createScene());
 		this.initModality(Modality.WINDOW_MODAL);
@@ -88,7 +90,7 @@ public class PictureExportWindow extends Stage {
     		for(int y = 0; y < mapHeight; y++) {
     			int id = tiles[x][y];
     			
-    			Tile tile = TilePicker.getTile(id);
+    			Tile tile = TilePicker.getTile(id, activePlanet);
     			
     			ImageView tileImageView = new ImageView(tile.image);
     			
@@ -115,10 +117,20 @@ public class PictureExportWindow extends Stage {
 	    spa.setTransform(Transform.scale(3.0, 3.0));
 	    
 	    if(darkMode) {
-	    	spa.setFill(ImageLoader.COLOR_PLANET_ONE_DARK);
+	    	if(activePlanet == 0) {
+	    		spa.setFill(ImageLoader.COLOR_PLANET_ONE_DARK);
+	    	}
+	    	else {
+	    		spa.setFill(ImageLoader.COLOR_PLANET_TWO_DARK);
+	    	}
 	    }
 	    else {
-	    	spa.setFill(ImageLoader.COLOR_PLANET_ONE_LIGHT);
+	    	if(activePlanet == 0) {
+	    		spa.setFill(ImageLoader.COLOR_PLANET_ONE_LIGHT);
+	    	}
+	    	else {
+	    		spa.setFill(ImageLoader.COLOR_PLANET_TWO_LIGHT);
+	    	}
 	    }
 	    
 	    WritableImage img = picturePane.snapshot(spa, writableImage); 

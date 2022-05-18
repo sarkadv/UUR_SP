@@ -34,7 +34,7 @@ public class MapView extends GridPane {
     		for(int y = model.getFirstTileVisibleY(); y < model.getFirstTileVisibleY() + model.getTilesVisibleLine(); y++) {
     			int id = model.getTile(x, y);
     			
-    			Tile tile = TilePicker.getTile(id);
+    			Tile tile = TilePicker.getTile(id, model.getActivePlanet());
     			ImageView tileImageView = new ImageView(tile.image);
         		tileImageView.setFitHeight(model.getTileSize());
         		tileImageView.setFitWidth(model.getTileSize());
@@ -73,7 +73,7 @@ public class MapView extends GridPane {
         		
         		int id1 = model.getTile(model.getFirstTileVisibleX(), model.getFirstTileVisibleY() + arrowIndex1);
         		
-        		Tile tile1 = TilePicker.getTile(id1);
+        		Tile tile1 = TilePicker.getTile(id1, model.getActivePlanet());
     			ImageView tileImageView1 = new ImageView(tile1.image);
         		tileImageView1.setFitHeight(model.getTileSize());
         		tileImageView1.setFitWidth(model.getTileSize());
@@ -103,7 +103,7 @@ public class MapView extends GridPane {
         		
         		int id2 = model.getTile(model.getFirstTileVisibleX(), model.getFirstTileVisibleY() + arrowIndex2);
         		
-        		Tile tile2 = TilePicker.getTile(id2);
+        		Tile tile2 = TilePicker.getTile(id2, model.getActivePlanet());
     			ImageView tileImageView2 = new ImageView(tile2.image);
     			tileImageView2.setFitHeight(model.getTileSize());
     			tileImageView2.setFitWidth(model.getTileSize());
@@ -135,7 +135,7 @@ public class MapView extends GridPane {
         		
         		int id1 = model.getTile(model.getFirstTileVisibleX() + arrowIndex1, model.getFirstTileVisibleY());
         		
-        		Tile tile1 = TilePicker.getTile(id1);
+        		Tile tile1 = TilePicker.getTile(id1, model.getActivePlanet());
     			ImageView tileImageView1 = new ImageView(tile1.image);
         		tileImageView1.setFitHeight(model.getTileSize());
         		tileImageView1.setFitWidth(model.getTileSize());
@@ -164,7 +164,7 @@ public class MapView extends GridPane {
         		
         		int id2 = model.getTile(model.getFirstTileVisibleX() + arrowIndex2, model.getFirstTileVisibleY());
         		
-        		Tile tile2 = TilePicker.getTile(id2);
+        		Tile tile2 = TilePicker.getTile(id2, model.getActivePlanet());
     			ImageView tileImageView2 = new ImageView(tile2.image);
         		tileImageView2.setFitHeight(model.getTileSize());
         		tileImageView2.setFitWidth(model.getTileSize());
@@ -195,7 +195,7 @@ public class MapView extends GridPane {
         		
         		int id1 = model.getTile(model.getFirstTileVisibleX() + arrowIndex1, model.getFirstTileVisibleY() + model.getTilesVisibleLine() - 1);
         		
-        		Tile tile1 = TilePicker.getTile(id1);
+        		Tile tile1 = TilePicker.getTile(id1, model.getActivePlanet());
     			ImageView tileImageView1 = new ImageView(tile1.image);
         		tileImageView1.setFitHeight(model.getTileSize());
         		tileImageView1.setFitWidth(model.getTileSize());
@@ -224,7 +224,7 @@ public class MapView extends GridPane {
         		
         		int id2 = model.getTile(model.getFirstTileVisibleX() + arrowIndex2, model.getFirstTileVisibleY() + model.getTilesVisibleLine() - 1);
         		
-        		Tile tile2 = TilePicker.getTile(id2);
+        		Tile tile2 = TilePicker.getTile(id2, model.getActivePlanet());
     			ImageView tileImageView2 = new ImageView(tile2.image);
         		tileImageView2.setFitHeight(model.getTileSize());
         		tileImageView2.setFitWidth(model.getTileSize());
@@ -255,7 +255,7 @@ public class MapView extends GridPane {
         		
         		int id1 = model.getTile(model.getFirstTileVisibleX() + model.getTilesVisibleLine() - 1, model.getFirstTileVisibleY() + arrowIndex1);
         		
-        		Tile tile1 = TilePicker.getTile(id1);
+        		Tile tile1 = TilePicker.getTile(id1, model.getActivePlanet());
     			ImageView tileImageView1 = new ImageView(tile1.image);
         		tileImageView1.setFitHeight(model.getTileSize());
         		tileImageView1.setFitWidth(model.getTileSize());
@@ -284,7 +284,7 @@ public class MapView extends GridPane {
         		
         		int id2 = model.getTile(model.getFirstTileVisibleX() + model.getTilesVisibleLine() - 1, model.getFirstTileVisibleY() + arrowIndex2);
         		
-        		Tile tile2 = TilePicker.getTile(id2);
+        		Tile tile2 = TilePicker.getTile(id2, model.getActivePlanet());
     			ImageView tileImageView2 = new ImageView(tile2.image);
         		tileImageView2.setFitHeight(model.getTileSize());
         		tileImageView2.setFitWidth(model.getTileSize());
@@ -318,7 +318,7 @@ public class MapView extends GridPane {
         		
         		int id = model.getTile(model.getFirstTileVisibleX(), model.getFirstTileVisibleY() + arrowIndex);
         		
-        		Tile tile = TilePicker.getTile(id);
+        		Tile tile = TilePicker.getTile(id, model.getActivePlanet());
     			ImageView tileImageView = new ImageView(tile.image);
         		tileImageView.setFitHeight(model.getTileSize());
         		tileImageView.setFitWidth(model.getTileSize());
@@ -348,7 +348,7 @@ public class MapView extends GridPane {
         		
         		int id = model.getTile(model.getFirstTileVisibleX() + arrowIndex, model.getFirstTileVisibleY());
         		
-        		Tile tile = TilePicker.getTile(id);
+        		Tile tile = TilePicker.getTile(id, model.getActivePlanet());
     			ImageView tileImageView = new ImageView(tile.image);
         		tileImageView.setFitHeight(model.getTileSize());
         		tileImageView.setFitWidth(model.getTileSize());
@@ -378,7 +378,7 @@ public class MapView extends GridPane {
         		
         		int id = model.getTile(model.getFirstTileVisibleX() + arrowIndex, model.getFirstTileVisibleY() + model.getTilesVisibleLine() - 1);
         		
-        		Tile tile = TilePicker.getTile(id);
+        		Tile tile = TilePicker.getTile(id, model.getActivePlanet());
     			ImageView tileImageView = new ImageView(tile.image);
         		tileImageView.setFitHeight(model.getTileSize());
         		tileImageView.setFitWidth(model.getTileSize());
@@ -408,7 +408,7 @@ public class MapView extends GridPane {
         		
         		int id = model.getTile(model.getFirstTileVisibleX() + model.getTilesVisibleLine() - 1, model.getFirstTileVisibleY() + arrowIndex);
         		
-        		Tile tile = TilePicker.getTile(id);
+        		Tile tile = TilePicker.getTile(id, model.getActivePlanet());
     			ImageView tileImageView = new ImageView(tile.image);
         		tileImageView.setFitHeight(model.getTileSize());
         		tileImageView.setFitWidth(model.getTileSize());

@@ -68,12 +68,12 @@ public class MainWindowController {
 		this.mainWindowModel.setCurrentTile(newTile);
 	}
 	
-	public void changeToEmptyTile(ActionEvent e) {
+	public void changeToEmptyTile(int activePlanet) {
 		if(getDarkMode()) {
-			this.mainWindowModel.setCurrentTile(TilePicker.getTile(01));
+			this.mainWindowModel.setCurrentTile(TilePicker.getTile(activePlanet*80 + 1, activePlanet));
 		}
 		else {
-			this.mainWindowModel.setCurrentTile(TilePicker.getTile(00));
+			this.mainWindowModel.setCurrentTile(TilePicker.getTile(activePlanet*80, activePlanet));
 		}
 		
 	}
@@ -273,7 +273,7 @@ public class MainWindowController {
 	}
 	
 	public void showExportWindow(Stage stage, MapController mapController) {
-		PictureExportWindow exportWindow = new PictureExportWindow(stage, mapController);
+		PictureExportWindow exportWindow = new PictureExportWindow(stage, mapController, getDarkMode());
 		exportWindow.showAndWait();
 	}
 	
@@ -293,7 +293,7 @@ public class MainWindowController {
 		
 		if(currentTile != null) {
 			int currentTileId = currentTile.id;
-			setCurrentTile(TilePicker.getTile(currentTileId + addition));
+			setCurrentTile(TilePicker.getTile(currentTileId + addition, mapController.getActivePlanet()));
 		}
 		
 	}
@@ -308,7 +308,7 @@ public class MainWindowController {
 		
 		if(currentTile != null) {
 			int currentTileId = currentTile.id;
-			setCurrentTile(TilePicker.getTile(currentTileId + addition));
+			setCurrentTile(TilePicker.getTile(currentTileId + addition, mapController.getActivePlanet()));
 		}
 		
 		changeButtonsMode(getDarkMode());

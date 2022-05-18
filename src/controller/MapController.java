@@ -47,6 +47,14 @@ public class MapController {
 		return model.getAllTiles();
 	}
 	
+	public int getActivePlanet() {
+		return model.getActivePlanet();
+	}
+	
+	public void setActivePlanet(int activePlanet) {
+		model.setActivePlanet(activePlanet);
+	}
+	
 	public void showNewMap(double stageWidth, double stageHeight) {
 		changeTileSize(stageWidth, stageHeight);
 	}
@@ -199,8 +207,8 @@ public class MapController {
 		int x = getTileCoordinate(e.getX()) + model.getFirstTileVisibleX();
 		int y = getTileCoordinate(e.getY()) + model.getFirstTileVisibleY();
 		
-		Tile copied = TilePicker.getTile(model.getTile(x, y));
-		if(copied.id == 00 || copied.id == 01) {
+		Tile copied = TilePicker.getTile(model.getTile(x, y), getActivePlanet());
+		if(copied.id == getActivePlanet()*80 || copied.id == getActivePlanet()*80 + 1) {
 			return null;
 		}
 		else {
@@ -308,6 +316,27 @@ public class MapController {
 		return tiles;
 	}
 	
+	public void changePlanet(int newPlanet) {
+		if(newPlanet != this.getActivePlanet()) {
+			
+			for(int x = 0; x < model.getAllTilesWidth(); x++) {
+				for(int y = 0; y < model.getAllTilesHeight(); y++) {
+					model.getAllTiles()[x][y] = model.getAllTiles()[x][y] + (newPlanet - model.getActivePlanet())*80;
+				}
+			}
+			
+			for(int i = 0; i < model.getTilesHistory().size(); i++) {
+				for(int x = 0; x < model.getAllTilesWidth(); x++) {
+					for(int y = 0; y < model.getAllTilesHeight(); y++) {
+						model.getTilesHistory().get(i)[x][y] = model.getTilesHistory().get(i)[x][y] + (newPlanet - model.getActivePlanet())*80;
+					}
+				}
+			}
+			
+			model.setActivePlanet(newPlanet);
+		}
+	}
+	
 	public void setFirstTileVisibleX(int firstTileVisibleX) {
 		model.setFirstTileVisibleX(firstTileVisibleX);
 	}
@@ -343,6 +372,5 @@ public class MapController {
 	public void setDragCoordinates(DragCoordinates dragCoordinates) {
 		model.setDragCoordinates(dragCoordinates);
 	}
-	
 	
 }

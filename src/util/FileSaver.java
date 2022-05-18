@@ -12,6 +12,7 @@ public class FileSaver {
 	private static int mapHeight;
 	private static int tilesVisibleLine;
 	private static Integer[][] tiles;
+	private static int activePlanet;
 	private static boolean darkMode;
 	private static boolean successful = true;
 	
@@ -20,6 +21,7 @@ public class FileSaver {
 		mapHeight = model.getAllTilesHeight();
 		tilesVisibleLine = model.getTilesVisibleLine();
 		tiles = model.getAllTiles();
+		activePlanet = model.getActivePlanet();
 		darkMode = model.getDarkMode();
 	}
 	
@@ -30,6 +32,7 @@ public class FileSaver {
 			fw.write(mapWidth + "\n");
 			fw.write(mapHeight + "\n");
 			fw.write(tilesVisibleLine + "\n");
+			fw.write(activePlanet + "\n");
 				
 			if(darkMode) {
 				fw.write("N");

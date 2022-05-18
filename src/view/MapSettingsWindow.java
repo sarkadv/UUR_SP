@@ -38,6 +38,9 @@ public class MapSettingsWindow extends Stage {
 	private final int MAX_TILE_NUMBER = 1600;
 	private boolean darkMode;
 	private ToggleGroup mapColorRBGroup;
+	private RadioButton purpleRB;
+	private RadioButton greenRB;
+	private RadioButton orangeRB;
 	private CheckBox modeCheckBox;
 	private ToggleGroup modeRBGroup;
 	private RadioButton lightRB;
@@ -158,17 +161,26 @@ public class MapSettingsWindow extends Stage {
 		
 		mapColorRBGroup = new ToggleGroup();
 
-		RadioButton purpleRB = new RadioButton("Fialová");
+		purpleRB = new RadioButton("Fialová");
 		purpleRB.setToggleGroup(mapColorRBGroup);
-		purpleRB.setSelected(true);
 
-		RadioButton orangeRB = new RadioButton("Oranžová");
-		orangeRB.setToggleGroup(mapColorRBGroup);
+		greenRB = new RadioButton("Zelená");
+		greenRB.setToggleGroup(mapColorRBGroup);
 		 
-		RadioButton blueRB = new RadioButton("Modrá");
-		blueRB.setToggleGroup(mapColorRBGroup);
+		orangeRB = new RadioButton("Oranžová");
+		orangeRB.setToggleGroup(mapColorRBGroup);
 		
-		mapColorControls.getChildren().addAll(purpleRB, orangeRB, blueRB);
+		if(mapController.getActivePlanet() == 0) {
+			purpleRB.setSelected(true);
+		}
+		else if(mapController.getActivePlanet() == 1) {
+			greenRB.setSelected(true);
+		}
+		else if(mapController.getActivePlanet() == 2) {
+			orangeRB.setSelected(true);
+		}
+		
+		mapColorControls.getChildren().addAll(purpleRB, greenRB, orangeRB);
 		
 		mapColorPane.getChildren().addAll(mapColorLabel, mapColorControls);
 		
@@ -263,6 +275,16 @@ public class MapSettingsWindow extends Stage {
 			int allTilesHeight = Integer.parseInt(mapSizeHeightTF.getText());
 			int tilesVisibleLine = (int)Math.sqrt(tilesVisibleCombo.getValue());
 			
+			if(purpleRB.isSelected()) {
+				mapController.changePlanet(0);
+			}
+			else if(greenRB.isSelected()) {
+				mapController.changePlanet(1);
+			}
+			//else if(orangeRB.isSelected()) {
+				//mapController.changePlanet(2);
+			//}
+			
 			mapController.setAllTilesWidth(allTilesWidth);
 			mapController.setAllTilesHeight(allTilesHeight);
 			mapController.setTilesVisibleLine(tilesVisibleLine);
@@ -278,6 +300,16 @@ public class MapSettingsWindow extends Stage {
 			int allTilesWidth = Integer.parseInt(mapSizeWidthTF.getText());
 			int allTilesHeight = Integer.parseInt(mapSizeHeightTF.getText());
 			int tilesVisibleLine = (int)Math.sqrt(tilesVisibleCombo.getValue());
+			
+			if(purpleRB.isSelected()) {
+				mapController.changePlanet(0);
+			}
+			else if(greenRB.isSelected()) {
+				mapController.changePlanet(1);
+			}
+			//else if(orangeRB.isSelected()) {
+				//mapController.changePlanet(2);
+			//}
 			
 			if (allTilesWidth < mapController.getAllTilesWidth() || allTilesHeight < mapController.getAllTilesHeight()) {
 				Alert alert = new Alert(AlertType.CONFIRMATION);

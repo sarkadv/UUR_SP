@@ -69,6 +69,7 @@ public class MainWindowView extends Application {
 		stage.show();
 		
 		mainWindowController.showStartAlert(stage, mapController);
+		tileMenu.changePlanet(mapController.getActivePlanet());
 		
 		mainWindowController.setDarkMode(mapController.getDarkMode());
 		
@@ -301,6 +302,7 @@ public class MainWindowView extends Application {
 		loadFile.setOnAction(e -> {
 			mainWindowController.showSaveAlertLoad(primaryStage, mapController);
 			tileMenu.setDarkMode(mapController.getDarkMode());
+			tileMenu.changePlanet(mapController.getActivePlanet());
 		});
 		mainWindowController.addButton(loadFile);
 		
@@ -316,14 +318,18 @@ public class MainWindowView extends Application {
 		mainWindowController.addButton(mode);
 		
 		options = new ImageButton(50, 50, "Nastavení", ImageLoader.SETTINGS_LIGHT);
-		options.setOnAction(e -> mainWindowController.showSettingsWindow(primaryStage, mapController));
+		options.setOnAction(e -> {
+			mainWindowController.showSettingsWindow(primaryStage, mapController);
+			tileMenu.changePlanet(mapController.getActivePlanet());
+		});
 		mainWindowController.addButton(options);
 		
 		help = new ImageButton(50, 50, "Nápověda", ImageLoader.HELP_LIGHT);
+		help.setOnAction(e -> new HelpWindow(primaryStage, mainWindowController.getDarkMode()));
 		mainWindowController.addButton(help);
 		
 		about = new ImageButton(50, 50, "O Aplikaci", ImageLoader.ABOUT_LIGHT);
-		about.setOnAction(e -> new AboutWindow(primaryStage));
+		about.setOnAction(e -> new AboutWindow(primaryStage, mainWindowController.getDarkMode()));
 		mainWindowController.addButton(about);
 		
 		buttonsPane.getChildren().addAll(newFile, saveFile, back, loadFile, exportFile, mode, options, help, about);
@@ -341,7 +347,7 @@ public class MainWindowView extends Application {
 		downBtn = new ImageButton(30, 30, "Dolů", ImageLoader.TRIANGLE_DOWN);
 		downBtn.setOnAction(e -> tileMenu.moveDown());
 		
-		tileMenu = new TileMenu(mainWindowController, upBtn, downBtn);
+		tileMenu = new TileMenu(mainWindowController, upBtn, downBtn, mapController.getActivePlanet());
 		
 		rightContent.getChildren().add(upBtn);
 		rightContent.getChildren().add(tileMenu);
@@ -375,7 +381,7 @@ public class MainWindowView extends Application {
 		erase = new ImageButton(50, 50, "Vymazat", ImageLoader.ERASE_LIGHT);
 		erase.setOnAction(e -> {
 			mainWindowController.changeSpecialToolActive(null);
-			mainWindowController.changeToEmptyTile(e);
+			mainWindowController.changeToEmptyTile(mapController.getActivePlanet());
 			mapController.fillArea(mainWindowController.getCurrentTile());
 			mapController.setDragCoordinates(null);
 			mapController.changeChosenTiles();

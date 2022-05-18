@@ -3,7 +3,6 @@ package view;
 import java.util.ArrayList;
 import java.util.List;
 import controller.MainWindowController;
-import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import model.Tile;
 import util.TilePicker;
@@ -25,23 +24,25 @@ public class TileMenu extends GridPane {
 	private final int BTN_SIZE = 150;
 	private boolean darkMode;
 	private int currentFirst;
+	private int activePlanet;
 	
-	public TileMenu(MainWindowController controller, ImageButton upBtn, ImageButton downBtn) {
+	public TileMenu(MainWindowController controller, ImageButton upBtn, ImageButton downBtn, int activePlanet) {
 		this.upBtn = upBtn;
 		this.downBtn = downBtn;
 		
 		this.darkMode = false;
 		this.currentFirst = 3;
+		this.activePlanet = activePlanet;
 		
 		this.controller = controller;
 		
 		if(this.darkMode == false) {
-			this.allTiles = new ArrayList<Tile>(TilePicker.getTileMapDay().values());
-			this.allTiles.remove(TilePicker.getTile(00));
+			this.allTiles = new ArrayList<Tile>(TilePicker.getTileMapDay(activePlanet).values());
+			this.allTiles.remove(TilePicker.getTile(80* activePlanet, activePlanet));
 		}
 		else {
-			this.allTiles = new ArrayList<Tile>(TilePicker.getTileMapNight().values());
-			this.allTiles.remove(TilePicker.getTile(01));
+			this.allTiles = new ArrayList<Tile>(TilePicker.getTileMapNight(activePlanet).values());
+			this.allTiles.remove(TilePicker.getTile(80 * activePlanet + 1, activePlanet));
 		}
 		
 		tile1 = this.allTiles.get(currentFirst);
@@ -155,15 +156,43 @@ public class TileMenu extends GridPane {
 		this.darkMode = darkMode;
 		
 		if(this.darkMode == false) {
-			this.allTiles = new ArrayList<Tile>(TilePicker.getTileMapDay().values());
-			this.allTiles.remove(TilePicker.getTile(00));
+			this.allTiles = new ArrayList<Tile>(TilePicker.getTileMapDay(activePlanet).values());
+			this.allTiles.remove(TilePicker.getTile(80* activePlanet, activePlanet));
 		}
 		else {
-			this.allTiles = new ArrayList<Tile>(TilePicker.getTileMapNight().values());
-			this.allTiles.remove(TilePicker.getTile(01));
+			this.allTiles = new ArrayList<Tile>(TilePicker.getTileMapNight(activePlanet).values());
+			this.allTiles.remove(TilePicker.getTile(80* activePlanet + 1, activePlanet));
 		}
 		
 		this.init(currentFirst);
+	}
+	
+	public void changePlanet(int newPlanet) {
+		if(newPlanet != this.activePlanet) {
+			if(this.darkMode == false) {
+				this.allTiles = new ArrayList<Tile>(TilePicker.getTileMapDay(newPlanet).values());
+				this.allTiles.remove(TilePicker.getTile(80* newPlanet, newPlanet));
+			}
+			else {
+				this.allTiles = new ArrayList<Tile>(TilePicker.getTileMapNight(newPlanet).values());
+				this.allTiles.remove(TilePicker.getTile(80 * newPlanet + 1, newPlanet));
+			}
+			
+			tile1 = this.allTiles.get(currentFirst);
+			tileBtn1 = new ImageButton(BTN_SIZE, BTN_SIZE, tile1.name, tile1.image);
+			this.add(tileBtn1, 0, 0);
+			
+			tile2 = this.allTiles.get(currentFirst + 1);
+			tileBtn2 = new ImageButton(BTN_SIZE, BTN_SIZE, tile2.name, tile2.image);
+			this.add(tileBtn2, 0, 1);
+			
+			tile3 = this.allTiles.get(currentFirst + 2);
+			tileBtn3 = new ImageButton(BTN_SIZE, BTN_SIZE, tile3.name, tile3.image);
+			this.add(tileBtn3, 0, 2);
+			
+			this.init(currentFirst);
+			this.activePlanet = newPlanet;
+		}
 	}
 
 }

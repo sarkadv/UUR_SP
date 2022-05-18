@@ -21,6 +21,7 @@ public class MapModel {
 	private boolean[][] chosenTiles;
 	private boolean[][] chosenBorders;
 	private DragCoordinates dragCoordinates;
+	private int activePlanet;
 	
 	public MapModel() {
 		this.tileSize = 145;
@@ -32,6 +33,7 @@ public class MapModel {
 		this.planetColor = ImageLoader.COLOR_PLANET_ONE_LIGHT;
 		this.darkMode = false;
 		this.tilesHistory = new ArrayList<Integer[][]>();
+		this.activePlanet = 0;
 	}
 	
 	public void initAllTilesResizedMap() {
@@ -45,7 +47,7 @@ public class MapModel {
 		int addition = darkMode? 1 : 0;
 		for(int x = 0; x < allTilesWidth; x++) {
 			for(int y = 0; y < allTilesHeight; y++) {
-				allTiles[x][y] = 00 + addition;
+				allTiles[x][y] = activePlanet * 80 + addition;
 			}
 		}
 	}
@@ -68,12 +70,21 @@ public class MapModel {
 		this.tilesHistory = new ArrayList<Integer[][]>();
 	}
 	
+	
 	public void setTile(int x, int y, int id) {
 		this.allTiles[x][y] = id;
 	}
 	
 	public int getTile(int x, int y) {
 		return allTiles[x][y];
+	}
+	
+	public int getActivePlanet() {
+		return activePlanet;
+	}
+	
+	public void setActivePlanet(int activePlanet) {
+		this.activePlanet = activePlanet;
 	}
 
 	public List<Integer[][]> getTilesHistory() {
@@ -160,7 +171,7 @@ public class MapModel {
 		for (int i = 0; i < dimensionOneLength; i++) {
 			for (int j = 0; j < dimensionTwoLength; j++) {
 				if(i >= old.length || j >= old[0].length) {
-					copied[i][j] = 00 + addition;
+					copied[i][j] = activePlanet*80 + addition;
 				}
 				else {
 					copied[i][j] = old[i][j];
