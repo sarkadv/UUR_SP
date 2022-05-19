@@ -286,7 +286,10 @@ public class MainWindowView extends Application {
 		buttonsPane.setPadding(new Insets(10, 5, 10, 5));
 		
 		newFile = new ImageButton(50, 50, "Nová Mapa", ImageLoader.NEW_LIGHT);
-		newFile.setOnAction(e -> mainWindowController.showSaveAlertNew(primaryStage, mapController));
+		newFile.setOnAction(e -> {
+			mainWindowController.showSaveAlertNew(primaryStage, mapController);
+			tileMenu.changePlanet(mapController.getActivePlanet());
+		});
 		mainWindowController.addButton(newFile);
 		newFile.setMnemonicParsing(true);
 		

@@ -240,7 +240,14 @@ public class MapSettingsWindow extends Stage {
 		Label visibleTilesLabel = new Label("Počet Viditelných Dlaždic");
 		tilesVisibleCombo = new ComboBox<Integer>();
 		tilesVisibleCombo.setItems(FXCollections.observableArrayList(tilesVisibleChoiceList));
-		tilesVisibleCombo.setValue(16);
+		
+		if(settings) {
+			tilesVisibleCombo.setValue(mapController.getTilesVisibleLine() * mapController.getTilesVisibleLine());
+		}
+		else {
+			tilesVisibleCombo.setValue(16);
+		}
+		
 		
 		visibleTilesPane.getChildren().addAll(visibleTilesLabel, tilesVisibleCombo);
 		
@@ -275,20 +282,22 @@ public class MapSettingsWindow extends Stage {
 			int allTilesHeight = Integer.parseInt(mapSizeHeightTF.getText());
 			int tilesVisibleLine = (int)Math.sqrt(tilesVisibleCombo.getValue());
 			
-			if(purpleRB.isSelected()) {
-				mapController.changePlanet(0);
-			}
-			else if(greenRB.isSelected()) {
-				mapController.changePlanet(1);
-			}
-			//else if(orangeRB.isSelected()) {
-				//mapController.changePlanet(2);
-			//}
-			
 			mapController.setAllTilesWidth(allTilesWidth);
 			mapController.setAllTilesHeight(allTilesHeight);
 			mapController.setTilesVisibleLine(tilesVisibleLine);
+			
+			if(purpleRB.isSelected()) {
+				mapController.setActivePlanet(0);
+			}
+			else if(greenRB.isSelected()) {
+				mapController.setActivePlanet(1);
+			}
+			else if(orangeRB.isSelected()) {
+				mapController.setActivePlanet(2);
+			}
+			
 			mapController.initAllTilesNewMap();
+			mapController.changePlanet(mapController.getActivePlanet());
 			mapController.setFirstTileVisibleX(0);
 			mapController.setFirstTileVisibleY(0);
 			
@@ -307,9 +316,9 @@ public class MapSettingsWindow extends Stage {
 			else if(greenRB.isSelected()) {
 				mapController.changePlanet(1);
 			}
-			//else if(orangeRB.isSelected()) {
-				//mapController.changePlanet(2);
-			//}
+			else if(orangeRB.isSelected()) {
+				mapController.changePlanet(2);
+			}
 			
 			if (allTilesWidth < mapController.getAllTilesWidth() || allTilesHeight < mapController.getAllTilesHeight()) {
 				Alert alert = new Alert(AlertType.CONFIRMATION);

@@ -120,16 +120,22 @@ public class PictureExportWindow extends Stage {
 	    	if(activePlanet == 0) {
 	    		spa.setFill(ImageLoader.COLOR_PLANET_ONE_DARK);
 	    	}
-	    	else {
+	    	else if (activePlanet == 1) {
 	    		spa.setFill(ImageLoader.COLOR_PLANET_TWO_DARK);
+	    	}
+	    	else {
+	    		spa.setFill(ImageLoader.COLOR_PLANET_THREE_DARK);
 	    	}
 	    }
 	    else {
 	    	if(activePlanet == 0) {
 	    		spa.setFill(ImageLoader.COLOR_PLANET_ONE_LIGHT);
 	    	}
-	    	else {
+	    	else if (activePlanet == 1) {
 	    		spa.setFill(ImageLoader.COLOR_PLANET_TWO_LIGHT);
+	    	}
+	    	else {
+	    		spa.setFill(ImageLoader.COLOR_PLANET_THREE_LIGHT);
 	    	}
 	    }
 	    

@@ -14,7 +14,6 @@ public class MapModel {
 	private int tilesVisibleLine;
 	private int firstTileVisibleX;
 	private int firstTileVisibleY;
-	private Color planetColor;
 	private boolean darkMode;
 	private List<Integer[][]> tilesHistory;
 	private Integer[][] allTiles;
@@ -30,7 +29,6 @@ public class MapModel {
 		this.tilesVisibleLine = 0;
 		this.firstTileVisibleX = 0;
 		this.firstTileVisibleY = 0;
-		this.planetColor = ImageLoader.COLOR_PLANET_ONE_LIGHT;
 		this.darkMode = false;
 		this.tilesHistory = new ArrayList<Integer[][]>();
 		this.activePlanet = 0;
@@ -121,14 +119,6 @@ public class MapModel {
 
 	public void setTilesVisibleLine(int tilesVisibleLine) {
 		this.tilesVisibleLine = tilesVisibleLine;
-	}
-
-	public Color getPlanetColor() {
-		return planetColor;
-	}
-
-	public void setPlanetColor(Color planetColor) {
-		this.planetColor = planetColor;
 	}
 
 	public boolean getDarkMode() {

@@ -21,11 +21,14 @@ public class ImageLoader {
 	public static final Color COLOR_PLANET_ONE_DARK = Color.rgb(45, 31, 51);
 	public static final Color COLOR_PLANET_TWO_LIGHT = Color.rgb(160, 237, 229);
 	public static final Color COLOR_PLANET_TWO_DARK = Color.rgb(51, 135, 127);
+	public static final Color COLOR_PLANET_THREE_LIGHT = Color.rgb(252, 182, 94);
+	public static final Color COLOR_PLANET_THREE_DARK = Color.rgb(149, 79, 0);
 	
 	private ImageLoader() {};
 	
 	private static Image spritesheetHades = new Image("file:resources/spritesheet_hades.png");
 	private static Image spritesheetChronos = new Image("file:resources/spritesheet_chronos.png");
+	private static Image spritesheetApollon = new Image("file:resources/spritesheet_apollon.png");
 	private static Image spritesheetButtonsUpper = new Image("file:resources/spritesheet_buttons_upper.png");
 	private static Image spritesheetButtonsLower = new Image("file:resources/spritesheet_buttons_lower.png");
 	private static Image spritesheetHint = new Image("file:resources/spritesheet_hint.png");
@@ -110,6 +113,23 @@ public class ImageLoader {
 	public static final Image CHRONOS_WATER_N = crop(spritesheetChronos, 1, 2, TILE_SIZE, TILE_SIZE);
 	public static final Image CHRONOS_WALL_D = crop(spritesheetChronos, 2, 2, TILE_SIZE, TILE_SIZE);
 	public static final Image CHRONOS_WALL_N = crop(spritesheetChronos, 3, 2, TILE_SIZE, TILE_SIZE);
+	
+	public static final Image APOLLON_PATH_D = crop(spritesheetApollon, 0, 0, TILE_SIZE, TILE_SIZE);
+	public static final Image APOLLON_PATH_N = crop(spritesheetApollon, 1, 0, TILE_SIZE, TILE_SIZE);
+	public static final Image APOLLON_FACTORY_D = crop(spritesheetApollon, 2, 0, TILE_SIZE, TILE_SIZE);
+	public static final Image APOLLON_FACTORY_N = crop(spritesheetApollon, 3, 0, TILE_SIZE, TILE_SIZE);
+	public static final Image APOLLON_SHOP_D = crop(spritesheetApollon, 0, 1, TILE_SIZE, TILE_SIZE);
+	public static final Image APOLLON_SHOP_N = crop(spritesheetApollon, 1, 1, TILE_SIZE, TILE_SIZE);
+	public static final Image APOLLON_EMPTY_D = crop(spritesheetApollon, 2, 1, TILE_SIZE, TILE_SIZE);
+	public static final Image APOLLON_EMPTY_N = crop(spritesheetApollon, 3, 1, TILE_SIZE, TILE_SIZE);
+	public static final Image APOLLON_HOUSE_D = crop(spritesheetApollon, 0, 2, TILE_SIZE, TILE_SIZE);
+	public static final Image APOLLON_HOUSE_N = crop(spritesheetApollon, 1, 2, TILE_SIZE, TILE_SIZE);
+	public static final Image APOLLON_PLANT_D = crop(spritesheetApollon, 2, 2, TILE_SIZE, TILE_SIZE);
+	public static final Image APOLLON_PLANT_N = crop(spritesheetApollon, 3, 2, TILE_SIZE, TILE_SIZE);
+	public static final Image APOLLON_WATER_D = crop(spritesheetApollon, 0, 3, TILE_SIZE, TILE_SIZE);
+	public static final Image APOLLON_WATER_N = crop(spritesheetApollon, 1, 3, TILE_SIZE, TILE_SIZE);
+	public static final Image APOLLON_WALL_D = crop(spritesheetApollon, 2, 3, TILE_SIZE, TILE_SIZE);
+	public static final Image APOLLON_WALL_N = crop(spritesheetApollon, 3, 3, TILE_SIZE, TILE_SIZE);
 	
 	public static final Image HINT_DEFAULT = crop(spritesheetHint, 0, 0, HINT_PICTURE_WIDTH, HINT_PICTURE_HEIGHT);
 	public static final Image HINT_ABOUT = crop(spritesheetHint, 1, 0, HINT_PICTURE_WIDTH, HINT_PICTURE_HEIGHT);
