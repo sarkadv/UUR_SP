@@ -1,13 +1,18 @@
 package view;
 
+import java.io.IOException;
+
 import controller.MainWindowController;
 import controller.MapController;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
@@ -52,106 +57,117 @@ public class MainWindowView extends Application {
 	public static void main(String[] args) {
 		launch(args);
 	}
-
-	public void init() {
-		TilePicker.init();
-	}
 	
 	@Override
 	public void start(Stage stage) throws Exception {
 		this.primaryStage = stage;
-		this.primaryScene = createScene();
 		
-		stage.setTitle("Sarka Dvorakova A21B0116P");
-		stage.setScene(primaryScene);
-		stage.setMinWidth(850);
-		stage.setMinHeight(700);
-		stage.show();
-		
-		mainWindowController.showStartAlert(stage, mapController);
-		tileMenu.changePlanet(mapController.getActivePlanet());
-		
-		mainWindowController.setDarkMode(mapController.getDarkMode());
-		
-		if(mainWindowController.getDarkMode()) {
-			mainWindowController.changeModeAppearanceDuringStart(stage, mapController);
-			tileMenu.setDarkMode(mainWindowController.getDarkMode());	
+		try {
+			ImageLoader.init();
+			TilePicker.init();
+			
+			this.primaryScene = createScene();
+			
+			stage.setTitle("Sarka Dvorakova A21B0116P");
+			stage.setScene(primaryScene);
+			stage.setMinWidth(850);
+			stage.setMinHeight(700);
+			stage.show();
+			
+			mainWindowController.showStartAlert(stage, mapController);
+			
+			tileMenu.changePlanet(mapController.getActivePlanet());
+			
+			mainWindowController.setDarkMode(mapController.getDarkMode());
+			
+			if(mainWindowController.getDarkMode()) {
+				mainWindowController.changeModeAppearanceDuringStart(stage, mapController);
+				tileMenu.setDarkMode(mainWindowController.getDarkMode());	
+			}
+			
+			stage.heightProperty().addListener((obs, oldValue, newValue) -> {
+				mapController.changeTileSize(stage.getWidth(), newValue.doubleValue());
+			});
+			
+			stage.widthProperty().addListener((obs, oldValue, newValue) -> {
+				mapController.changeTileSize(newValue.doubleValue(), stage.getHeight());
+			});
+			
+			stage.setOnCloseRequest(e -> {
+				e.consume();
+				mainWindowController.showSaveAlertClose(stage, mapController);
+			});
+			
+			KeyCombination kcNew = new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN);
+			Runnable rnNew = () -> newFile.fire();
+			primaryScene.getAccelerators().put(kcNew, rnNew);
+			
+			KeyCombination kcSave = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
+			Runnable rnSave = () -> saveFile.fire();
+			primaryScene.getAccelerators().put(kcSave, rnSave);
+			
+			KeyCombination kcBack1 = new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN);
+			Runnable rnBack = () -> back.fire();
+			primaryScene.getAccelerators().put(kcBack1, rnBack);
+			KeyCombination kcBack2 = new KeyCodeCombination(KeyCode.Y, KeyCombination.CONTROL_DOWN);
+			primaryScene.getAccelerators().put(kcBack2, rnBack);
+			
+			KeyCombination kcLoad = new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN);
+			Runnable rnLoad = () -> loadFile.fire();
+			primaryScene.getAccelerators().put(kcLoad, rnLoad);
+			
+			KeyCombination kcExport = new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN);
+			Runnable rnExport = () -> exportFile.fire();
+			primaryScene.getAccelerators().put(kcExport, rnExport);
+			
+			KeyCombination kcMode = new KeyCodeCombination(KeyCode.M, KeyCombination.CONTROL_DOWN);
+			Runnable rnMode = () -> mode.fire();
+			primaryScene.getAccelerators().put(kcMode, rnMode);
+			
+			KeyCombination kcOptions = new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN);
+			Runnable rnOptions = () -> options.fire();
+			primaryScene.getAccelerators().put(kcOptions, rnOptions);
+			
+			KeyCombination kcHelp = new KeyCodeCombination(KeyCode.H, KeyCombination.CONTROL_DOWN);
+			Runnable rnHelp = () -> help.fire();
+			primaryScene.getAccelerators().put(kcHelp, rnHelp);
+			
+			KeyCombination kcAbout = new KeyCodeCombination(KeyCode.A, KeyCombination.CONTROL_DOWN);
+			Runnable rnAbout = () -> about.fire();
+			primaryScene.getAccelerators().put(kcAbout, rnAbout);
+			
+			KeyCombination kcPick = new KeyCodeCombination(KeyCode.ESCAPE);
+			Runnable rnPick = () -> pick.fire();
+			primaryScene.getAccelerators().put(kcPick, rnPick);
+			
+			KeyCombination kcErase = new KeyCodeCombination(KeyCode.BACK_SPACE);
+			Runnable rnErase = () -> erase.fire();
+			primaryScene.getAccelerators().put(kcErase, rnErase);
+			
+			KeyCombination kcEyeDropper = new KeyCodeCombination(KeyCode.E, KeyCombination.SHIFT_DOWN);
+			Runnable rnEyeDropper = () -> eyeDropper.fire();
+			primaryScene.getAccelerators().put(kcEyeDropper, rnEyeDropper);
+			
+			KeyCombination kcChoose = new KeyCodeCombination(KeyCode.C, KeyCombination.SHIFT_DOWN);
+			Runnable rnChoose = () -> chooseArea.fire();
+			primaryScene.getAccelerators().put(kcChoose, rnChoose);
+			
+			KeyCombination kcFillArea = new KeyCodeCombination(KeyCode.F, KeyCombination.SHIFT_DOWN);
+			Runnable rnFillArea = () -> fillArea.fire();
+			primaryScene.getAccelerators().put(kcFillArea, rnFillArea);
+			
+			KeyCombination kcFillBorders = new KeyCodeCombination(KeyCode.B, KeyCombination.SHIFT_DOWN);
+			Runnable rnFillBorders = () -> fillBorders.fire();
+			primaryScene.getAccelerators().put(kcFillBorders, rnFillBorders);
 		}
-		
-		stage.heightProperty().addListener((obs, oldValue, newValue) -> {
-			mapController.changeTileSize(stage.getWidth(), newValue.doubleValue());
-		});
-		
-		stage.widthProperty().addListener((obs, oldValue, newValue) -> {
-			mapController.changeTileSize(newValue.doubleValue(), stage.getHeight());
-		});
-		
-		stage.setOnCloseRequest(e -> {
-			e.consume();
-			mainWindowController.showSaveAlertClose(stage, mapController);
-		});
-		
-		KeyCombination kcNew = new KeyCodeCombination(KeyCode.N, KeyCombination.CONTROL_DOWN);
-		Runnable rnNew = () -> newFile.fire();
-		primaryScene.getAccelerators().put(kcNew, rnNew);
-		
-		KeyCombination kcSave = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_DOWN);
-		Runnable rnSave = () -> saveFile.fire();
-		primaryScene.getAccelerators().put(kcSave, rnSave);
-		
-		KeyCombination kcBack1 = new KeyCodeCombination(KeyCode.Z, KeyCombination.CONTROL_DOWN);
-		Runnable rnBack = () -> back.fire();
-		primaryScene.getAccelerators().put(kcBack1, rnBack);
-		KeyCombination kcBack2 = new KeyCodeCombination(KeyCode.Y, KeyCombination.CONTROL_DOWN);
-		primaryScene.getAccelerators().put(kcBack2, rnBack);
-		
-		KeyCombination kcLoad = new KeyCodeCombination(KeyCode.L, KeyCombination.CONTROL_DOWN);
-		Runnable rnLoad = () -> loadFile.fire();
-		primaryScene.getAccelerators().put(kcLoad, rnLoad);
-		
-		KeyCombination kcExport = new KeyCodeCombination(KeyCode.E, KeyCombination.CONTROL_DOWN);
-		Runnable rnExport = () -> exportFile.fire();
-		primaryScene.getAccelerators().put(kcExport, rnExport);
-		
-		KeyCombination kcMode = new KeyCodeCombination(KeyCode.M, KeyCombination.CONTROL_DOWN);
-		Runnable rnMode = () -> mode.fire();
-		primaryScene.getAccelerators().put(kcMode, rnMode);
-		
-		KeyCombination kcOptions = new KeyCodeCombination(KeyCode.O, KeyCombination.CONTROL_DOWN);
-		Runnable rnOptions = () -> options.fire();
-		primaryScene.getAccelerators().put(kcOptions, rnOptions);
-		
-		KeyCombination kcHelp = new KeyCodeCombination(KeyCode.H, KeyCombination.CONTROL_DOWN);
-		Runnable rnHelp = () -> help.fire();
-		primaryScene.getAccelerators().put(kcHelp, rnHelp);
-		
-		KeyCombination kcAbout = new KeyCodeCombination(KeyCode.A, KeyCombination.CONTROL_DOWN);
-		Runnable rnAbout = () -> about.fire();
-		primaryScene.getAccelerators().put(kcAbout, rnAbout);
-		
-		KeyCombination kcPick = new KeyCodeCombination(KeyCode.ESCAPE);
-		Runnable rnPick = () -> pick.fire();
-		primaryScene.getAccelerators().put(kcPick, rnPick);
-		
-		KeyCombination kcErase = new KeyCodeCombination(KeyCode.BACK_SPACE);
-		Runnable rnErase = () -> erase.fire();
-		primaryScene.getAccelerators().put(kcErase, rnErase);
-		
-		KeyCombination kcEyeDropper = new KeyCodeCombination(KeyCode.E, KeyCombination.SHIFT_DOWN);
-		Runnable rnEyeDropper = () -> eyeDropper.fire();
-		primaryScene.getAccelerators().put(kcEyeDropper, rnEyeDropper);
-		
-		KeyCombination kcChoose = new KeyCodeCombination(KeyCode.C, KeyCombination.SHIFT_DOWN);
-		Runnable rnChoose = () -> chooseArea.fire();
-		primaryScene.getAccelerators().put(kcChoose, rnChoose);
-		
-		KeyCombination kcFillArea = new KeyCodeCombination(KeyCode.F, KeyCombination.SHIFT_DOWN);
-		Runnable rnFillArea = () -> fillArea.fire();
-		primaryScene.getAccelerators().put(kcFillArea, rnFillArea);
-		
-		KeyCombination kcFillBorders = new KeyCodeCombination(KeyCode.B, KeyCombination.SHIFT_DOWN);
-		Runnable rnFillBorders = () -> fillBorders.fire();
-		primaryScene.getAccelerators().put(kcFillBorders, rnFillBorders);
+		catch (Exception e) {
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Načítání Zdrojů");
+			alert.setHeaderText("Chyba při načítání obrázkových zdrojů");
+			alert.setContentText("Aplikaci se nepodařilo najít a načíst obrázkové zdroje. Bez nich nemůže pracovat, a proto bude nyní ukočena.");
+			alert.showAndWait();
+			Platform.exit();
+		}
 		
 	}
 	
